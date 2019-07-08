@@ -1,24 +1,25 @@
 <template>
-  <div class="test-page1">
-    test-page1
+  <div class="two-page">
+    two-page
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  const PAGE_NAME = 'TEST_PAGE1'
+  const PAGE_NAME = 'TWO_PAGE'
+  const TITLE = 'a'
 
   export default {
     name: PAGE_NAME,
-    data() {
-      return {}
+    page: {
+      title: TITLE
     },
-    beforeRouteEnter(to, from, next) {
-      console.log('test-1')
-      setTimeout(() => {
-        next()
-      }, 6000)
+    data() {
+      return {
+
+      }
     },
     created() {
+      console.log('two page created')
     }
   }
 </script>
@@ -26,6 +27,6 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
 
-  .test-page1
+  .two-page
     width: 100%
 </style>

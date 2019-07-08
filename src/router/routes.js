@@ -1,42 +1,62 @@
 export default [
   {
-    path: '/home',
-    name: 'home',
-    component: () => import('@pages/home/home'),
+    path: '/',
+    component: () => import('@pages/basic-layout/basic-layout'),
+    redirect: '/test-page',
     children: [
-      // 测试页面配置
-      {
-        path: '/test-page1',
-        name: 'test-page1',
-        component: () => import('@pages/test-page1/test-page1')
-      },
       // 测试页面注释
       {
         path: '/test-page',
         name: 'test-page',
-        component: () => import('@pages/test-page/test-page')
+        component: () => import('@pages/test-page/test-page'),
+        children: [
+          {
+            path: '/test-page/sample',
+            name: 'sample',
+            component: () => import('@pages/sample/sample')
+          },
+          {
+            path: '/test-page/other-pages',
+            name: 'other-pages',
+            component: () => import('@pages/other-pages/other-pages')
+          },
+          // 测试页面配置
+          {
+            path: '/test-page/test-page1',
+            name: 'test-page1',
+            component: () => import('@pages/test-page1/test-page1')
+          },
+        ]
       },
+      // a
       {
-        path: '/sample',
-        name: 'sample',
-        component: () => import('@pages/sample/sample')
+        path: '/two-page',
+        name: 'two-page',
+        component: () => import('@pages/two-page/two-page'),
+        children: [
+
+        ]
       },
+      // asdad
       {
-        path: '/other-pages',
-        name: 'other-pages',
-        component: () => import('@pages/other-pages/other-pages')
+        path: '/hello-world',
+        name: 'hello-world',
+        component: () => import('@pages/hello-world/hello-world')
+      },
+      // asda
+      {
+        path: '/ttt-zzz',
+        name: 'ttt-zzz',
+        component: () => import('@pages/ttt-zzz/ttt-zzz')
       },
     ]
   },
   {
-    path: '/404',
-    name: '404',
+    path: '*',
+    name: 'NOT_FOUND',
+    hideInMenu: true,
     component: require('@pages/_404/_404').default,
     props: true
-  },
-  {
-    path: '*',
-    redirect: '404'
   }
 ]
 

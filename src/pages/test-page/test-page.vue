@@ -1,6 +1,8 @@
 <template>
   <div class="test-page">
     test-page
+    <router-link to="/test-page/sample" tag="h1">to sample</router-link>
+    <router-view class="basic-router" style="z-index: 10"></router-view>
   </div>
 </template>
 
@@ -11,6 +13,19 @@
     name: PAGE_NAME,
     data() {
       return {}
+    },
+    beforeRouteEnter(to, from, next) {
+      setTimeout(() => {
+        next(vm => vm.getList())
+      }, 100)
+    },
+    created() {
+      console.log('test-page created')
+    },
+    methods: {
+      getList() {
+        console.log('entry test page')
+      }
     }
   }
 </script>
@@ -19,5 +34,8 @@
   @import "~@design"
 
   .test-page
-    width: 100%
+    position :relative
+    .basic-router
+      fill-box(absolute)
+      height :100vh
 </style>

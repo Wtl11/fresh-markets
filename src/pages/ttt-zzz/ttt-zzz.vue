@@ -1,17 +1,14 @@
----
-to: "src/pages/<%= h.inflection.dasherize(name) %>/<%= h.inflection.dasherize(name) %>.vue"
----
 <template>
-  <div class="<%= h.inflection.dasherize(name) %>">
-    <%= h.inflection.dasherize(name) %>
+  <div class="ttt-zzz">
+    ttt-zzz
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './helpers'
   // import API from '@api'
-  const PAGE_NAME = '<%=  h.inflection.dasherize(name).toUpperCase().replace(/-/g, '_')%>'
-  const TITLE = '<%= title %>'
+  const PAGE_NAME = 'TTT_ZZZ'
+  const TITLE = 'asda'
 
   export default {
     name: PAGE_NAME,
@@ -29,6 +26,6 @@ to: "src/pages/<%= h.inflection.dasherize(name) %>/<%= h.inflection.dasherize(na
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
 
-  .<%= h.inflection.dasherize(name) %>
+  .ttt-zzz
     width: 100%
 </style>
