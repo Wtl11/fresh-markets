@@ -1,6 +1,9 @@
 <template>
   <div class="sample">
     sample 页面
+    <ul>
+      <li v-for="(item) in 20" :key="item" style="height: 100px;text-align: right; width: 200vw">{{item}}</li>
+    </ul>
   </div>
 </template>
 

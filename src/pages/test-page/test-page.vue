@@ -1,7 +1,8 @@
 <template>
   <div class="test-page">
     test-page
-    <router-link to="/test-page/sample" tag="h1">to sample</router-link>
+    <router-link to="/test-page/sample" tag="h1" style="">to sample</router-link>
+    <div style="width: 300vw;text-align: right">asdadasdads</div>
     <router-view class="basic-router" style="z-index: 10"></router-view>
   </div>
 </template>
@@ -38,4 +39,5 @@
     .basic-router
       fill-box(absolute)
       height :100vh
+      overflow-y :scroll
 </style>

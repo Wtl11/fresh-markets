@@ -45,4 +45,5 @@
         font-size :16px
     .content
       flex: 1
+      overflow :hidden
 </style>
