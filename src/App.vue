@@ -6,7 +6,7 @@
 
 <script>
   import appConfig from '@src/app.config'
-
+  // import '@utils/http-handler'
   export default {
     page: {
       titleTemplate(title) {
