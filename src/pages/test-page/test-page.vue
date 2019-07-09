@@ -1,8 +1,8 @@
 <template>
   <div class="test-page">
     test-page
-    <router-link to="/test-page/sample" tag="h1" style="">to sample</router-link>
-    <div style="width: 300vw;text-align: right">asdadasdads</div>
+    <router-link to="/manager/test-page/sample" tag="h1" style="">to sample</router-link>
+<!--    <div style="width: 300vw;height:200vh;text-align: right; background: yellowgreen">asdadasdads</div>-->
     <router-view class="basic-router" style="z-index: 10"></router-view>
   </div>
 </template>
@@ -13,14 +13,23 @@
   export default {
     name: PAGE_NAME,
     data() {
-      return {}
+      return {
+        isShow: true
+      }
     },
     beforeRouteEnter(to, from, next) {
+      console.log(to, from)
       setTimeout(() => {
         next(vm => vm.getList())
       }, 100)
     },
+    beforeRouteLeave() {
+      this.isShow = false
+      console.log(123)
+    },
     created() {
+      this.isShow = true
+      console.log(this.$route.path, 111)
       console.log('test-page created')
     },
     methods: {
@@ -38,6 +47,6 @@
     position :relative
     .basic-router
       fill-box(absolute)
-      height :100vh
-      overflow-y :scroll
+      height :200vh
+      z-index :50
 </style>

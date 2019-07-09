@@ -1,13 +1,17 @@
 <template>
   <div class="basic-layout">
-    <ul class="menu">
-      <template v-for="(item, index) in menuList">
-        <router-link :key="index" tag="li" class="m-item" :to="item.path">{{item.name}}</router-link>
-      </template>
-    </ul>
-    <div class="content">
+    <aside class="aside">
+      <ul class="menu">
+        <template v-for="(item, index) in menuList">
+          <router-link :key="index" tag="li" class="m-item" :to="item.path">{{item.name}}</router-link>
+        </template>
+      </ul>
+    </aside>
+    <header class="header-wrapper">
+    </header>
+    <section class="content-wrapper">
       <router-view></router-view>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -31,19 +35,35 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  $asideWidth = 210px
+  $topHeight = 64px
   @import "~@design"
 
   .basic-layout
-    display :flex
-    .menu
-      height :100vh
-      width :150px
-      background aliceblue
-      .m-item
-        height :30px
-        text-align :center
-        font-size :16px
-    .content
-      flex: 1
-      overflow :hidden
+    position :relative
+    .aside
+      position :fixed
+      width :$asideWidth
+      z-index :50
+      .menu
+        height :100vh
+        width :100%
+        background aliceblue
+        .m-item
+          height :30px
+          text-align :center
+          font-size :16px
+    .header-wrapper
+      position :fixed
+      left :$asideWidth
+      right :0
+      height :$topHeight
+      background :red
+      z-index :50
+    .content-wrapper
+      padding-left : $asideWidth
+      padding-top : $topHeight
+      box-sizing :border-box
+      min-height :100vh
+      background :darkgray
 </style>

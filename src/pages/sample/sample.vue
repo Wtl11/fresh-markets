@@ -130,5 +130,6 @@
   @import "~@design"
 
   .sample
-    background :#fff
+    background rebeccapurple
+
 </style>
