@@ -6,7 +6,7 @@ export default {
    * @returns {*}
    */
   jssdkConfig(args) {
-    let url = 'https://fresh-manager.jkweixin.com/scm/api/backend/statistics/base-data'
+    let url = 'https://fresh-manager.jkweixin.net/social-shopping/api/backend/token-validate'
     return request.get({url, ...args})
   }
 }

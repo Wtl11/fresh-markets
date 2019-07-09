@@ -1,32 +1,53 @@
 export default [
   {
-    path: '/',
-    component: () => import('@pages/client-view/client-view'),
+    path: '/user',
+    component: {render: h => h('router-view')},
+    redirect: '/user/login',
+    children: [
+      // 登陆
+      {
+        path: '/user/login',
+        name: 'login',
+        component: () => import('@pages/login/login')
+      },
+    ]
   },
   {
-    path: '/home',
+    path: '/',
+    redirect: '/home',
+    component: {render: h => h('router-view')},
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@pages/client-view/client-view'),
+      }
+    ]
+  },
+  {
+    path: '/manager',
     component: () => import('@pages/basic-layout/basic-layout'),
-    redirect: '/test-page',
+    redirect: '/manager/test-page',
     children: [
       // 测试页面注释
       {
-        path: '/test-page',
+        path: '/manager/test-page',
         name: 'test-page',
         component: () => import('@pages/test-page/test-page'),
         children: [
           {
-            path: '/test-page/sample',
+            path: '/manager/test-page/sample',
             name: 'sample',
             component: () => import('@pages/sample/sample')
           },
           {
-            path: '/test-page/other-pages',
+            path: '/manager/test-page/other-pages',
             name: 'other-pages',
             component: () => import('@pages/other-pages/other-pages')
           },
           // 测试页面配置
           {
-            path: '/test-page/test-page1',
+            path: '/manager/test-page/test-page1',
             name: 'test-page1',
             component: () => import('@pages/test-page1/test-page1')
           },
@@ -34,7 +55,7 @@ export default [
       },
       // a
       {
-        path: '/two-page',
+        path: '/manager/two-page',
         name: 'two-page',
         component: () => import('@pages/two-page/two-page'),
         children: [
@@ -43,13 +64,13 @@ export default [
       },
       // asdad
       {
-        path: '/hello-world',
+        path: '/manager/hello-world',
         name: 'hello-world',
         component: () => import('@pages/hello-world/hello-world')
       },
       // asda
       {
-        path: '/ttt-zzz',
+        path: '/manager/ttt-zzz',
         name: 'ttt-zzz',
         component: () => import('@pages/ttt-zzz/ttt-zzz')
       },

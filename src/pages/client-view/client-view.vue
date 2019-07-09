@@ -28,6 +28,9 @@
     created() {
       API.Global.jssdkConfig({formatter: formatterData, toast: true}).then(res => {
         console.log(res)
+      }).catch((err) => {
+        console.log(err)
+        this.$loading.hide()
       })
       // Http.GodMode((http, context) => {
       //   http.defaults.headers.common['TTT'] = 'TTTT'

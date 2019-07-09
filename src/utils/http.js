@@ -19,6 +19,39 @@ class Request {
     this.errorCodeFn = undefined // 后台业务错误码处理函数
     this.resCommonFn = undefined // 响应参数后的处理函数
     this.beforeReqCommonFn = undefined // 请求前的处理函数
+    this.interceptorsReqFn = undefined
+    this.interceptorsResFn = undefined
+    // 请求数据前的拦截
+    const self = this
+    this.http.interceptors.request.use(
+      (config) => {
+        if (typeof self.interceptorsReqFn === 'function') {
+          self.interceptorsReqFn(config)
+        }
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
+    // 响应前数据前的拦截
+    this.http.interceptors.response.use(
+      (response) => {
+        typeof self.interceptorsResFn === 'function' && self.interceptorsResFn(response)
+        return response
+      },
+      (error) => {
+        return Promise.resolve(error.response)
+      }
+    )
+  }
+  // 请求前拦截
+  interceptorsRequest(fn) {
+    this.interceptorsReqFn = fn
+  }
+  // 响应前拦截
+  interceptorsResponse(fn) {
+    this.interceptorsResFn = fn
   }
   get(args) {
     return this._formatReq({...args, method: 'GET', paramsKey: 'params'})
@@ -32,7 +65,6 @@ class Request {
   delete(args) {
     return this._formatReq({...args, method: 'DELETE'})
   }
-
   /**
    *
    * @param method 方法名
