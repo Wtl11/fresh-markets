@@ -1,6 +1,10 @@
 export default [
   {
     path: '/',
+    component: () => import('@pages/client-view/client-view'),
+  },
+  {
+    path: '/home',
     component: () => import('@pages/basic-layout/basic-layout'),
     redirect: '/test-page',
     children: [

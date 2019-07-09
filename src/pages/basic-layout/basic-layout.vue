@@ -21,7 +21,7 @@
       title: TITLE
     },
     data() {
-      const menuList = this.$router.options.routes.find(val => val.path === '/').children // todo
+      const menuList = this.$router.options.routes.find(val => val.path === '/home').children // todo
       console.log(menuList)
       return {
         menuList
