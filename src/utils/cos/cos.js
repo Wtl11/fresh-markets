@@ -1,4 +1,4 @@
-import request from '@utils/request'
+import request from '@utils/http'
 import storage from 'storage-controller'
 
 /**
