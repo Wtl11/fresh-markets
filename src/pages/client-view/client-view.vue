@@ -7,7 +7,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './helpers'
   import API from '@api'
-  // import Http from '@utils/http'
+  import Http from '@utils/http'
   const PAGE_NAME = 'CLIENT_VIEW'
   const TITLE = 'casdad'
 
@@ -37,18 +37,18 @@
       //   console.log(context)
       // })
       // Http.setHeaders({HELLO: 'WOLDD', ASD: 'ASDASD'})
-      // Http.get({
-      //   url: 'https://fresh-manager.jkweixin.com/scm/api/backend/statistics/base-data',
-      //   data: {hello: 123, q: 55},
-      //   toast: (res) => {
-      //     console.log(123)
-      //   },
-      //   loading: () => {
-      //     console.log(666)
-      //   }
-      // }).then(res => {
-      //   console.log(res)
-      // })
+      Http.get({
+        url: 'https://fresh-manager.jkweixin.com/scm/api/backend/statistics/base-data',
+        data: {hello: 123, q: 55},
+        toast: (res) => {
+          console.log(123)
+        },
+        loading: () => {
+          console.log(666)
+        }
+      }).then(res => {
+        console.log(res)
+      })
       // Http.post({url: 'https://fresh-manager.jkweixin.com/social-shopping/api/backend/activity-manage/activity-fixed', data: {hello: 123, q: 55}})
       // Http.handleError(code => {
       //   console.log(code, 1111)
