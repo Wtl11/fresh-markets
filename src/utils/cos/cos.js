@@ -9,7 +9,7 @@ import {API_PUB} from '../constant'
  */
 function _saveFile(data) {
   const url = `${API_PUB}/api/cos/save-file`
-  return request.post(url, data)
+  return request.post({method: 'post', url, data})
 }
 
 /**

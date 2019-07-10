@@ -15,6 +15,10 @@ HTTP.handleError((code) => {
 })
 
 HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
+  if (!res) {
+    APP.$loading && APP.$loading.hide()
+    return {}
+  }
   if (loading) {
     APP.$loading && APP.$loading.hide()
   }
