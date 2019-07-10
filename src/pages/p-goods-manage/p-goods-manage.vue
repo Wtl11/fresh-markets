@@ -25,7 +25,7 @@
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
-      <city-select ref="city" @setValue="_getCity"></city-select>
+      <!--<city-select ref="city" @setValue="_getCity"></city-select>-->
     </div>
     <default-confirm ref="confirm"></default-confirm>
   </div>
