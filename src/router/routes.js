@@ -22,6 +22,13 @@ export default [
         path: '/home',
         name: 'home',
         component: () => import('@pages/client-view/client-view'),
+        children: [
+          {
+            path: '/goods-manage',
+            name: 'goods-manage',
+            component: () => import('@pages/goods-manage/goods-manage')
+          },
+        ]
       }
     ]
   },

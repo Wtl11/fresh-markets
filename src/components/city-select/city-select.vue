@@ -214,7 +214,7 @@
       margin-left: 0px
 
   .select-title
-    font-size: $font-size-medium
+    font-size: $font-size-14
     line-height: 17px
     no-wrap()
 
@@ -222,8 +222,8 @@
     cursor: pointer
     box-sizing: border-box
     border-radius: 2px
-    font-size: $font-size-medium
-    color: $color-text-main
+    font-size: $font-size-14
+    color: #666
     position: relative
     .admin-select-box
       border-radius: 2px
