@@ -131,7 +131,7 @@
       margin-left: 0px
 
   .select-title
-    font-size: $font-size-medium
+    font-size: $font-size-14
     line-height: 17px
     no-wrap()
 
@@ -139,7 +139,7 @@
     cursor: pointer
     box-sizing: border-box
     border-radius: 2px
-    font-size: $font-size-medium
+    font-size: $font-size-14
     color: $color-text-main
     position: relative
     .admin-select-box
@@ -151,7 +151,7 @@
       white-space: nowrap
       font-size: $font-size-12
       position: relative
-      color: $color-text-sub
+      color: #666
       box-sizing: border-box
       transition: all 0.2s
       .city-tap-top
@@ -168,7 +168,7 @@
         transition: transform 0.3s
       .select-child
         left: 0
-        background: $color-white
+        background: #FFF
         z-index: 300
         position: absolute
         border-radius: 3px
@@ -230,7 +230,7 @@
     transition: all 0.3s
     &:disabled
       color: $color-text-assist
-      background: $color-white
+      background: #FFF
     &::-webkit-inner-spin-button
       appearance: none
     &:hover
