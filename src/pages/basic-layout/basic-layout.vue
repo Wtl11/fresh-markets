@@ -28,10 +28,7 @@
       title: TITLE
     },
     data() {
-      const menuList = this.$router.options.routes.find(val => val.path === '/manager').children // todo
-      console.log(menuList)
       return {
-        menuList
       }
     }
   }
