@@ -11,7 +11,7 @@
         <base-search ref="search" :infoText="requestData.keyword" placeHolder="请输入商品名称" @search="search"></base-search>
       </div>
     </div>
-    <div class="list-content">
+    <div class="table-content">
       <div class="identification">
         <div class="identification-page">
           <img src="" class="identification-icon">
@@ -204,9 +204,8 @@
   @import "~@design"
 
   .goods-manage
-    width: 100%
-    background: #fff
-    flex: 1
+    display: flex
+    flex-direction: column
     .down-content
       padding: 0 20px
       box-sizing: border-box
