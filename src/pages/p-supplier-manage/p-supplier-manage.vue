@@ -1,26 +1,20 @@
 <template>
   <div class="goods-manage">
     <div class="down-content">
-      <span class="down-tip">分类筛选</span>
-      <div class="down-item-small">
-        <div class="drop-down">
-          <base-drop-down :select="firstCategory" @setValue="firstCategorySelect"></base-drop-down>
-        </div>
-        <div class="drop-down">
-          <base-drop-down :select="secondCategory" @setValue="secondCategorySelect"></base-drop-down>
-        </div>
-      </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
-        <base-search ref="search" :infoText="requestData.keyword" placeHolder="请输入商品名称" @search="search"></base-search>
+        <base-search ref="search" :infoText="requestData.keyword" placeHolder="输入供应商名称" @search="search"></base-search>
       </div>
     </div>
     <div class="table-content">
       <div class="identification">
         <div class="identification-page">
           <img src="" class="identification-icon">
-          <p class="identification-name">商品列表</p>
+          <p class="identification-name">供应商列表</p>
           <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
+        </div>
+        <div class="function-btn">
+          <router-link tag="div" to="new-coupon" append class="btn-main"><span class="add-icon"></span>新建商品</router-link>
         </div>
       </div>
       <div class="big-list">
@@ -30,30 +24,27 @@
         <div v-if="goodsList.length" class="list">
           <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
             <div v-for="(val, ind) in listTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
-
               <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
-
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item">
                 <img :src="require('./img.jpg')" alt="" class="img">
               </div>
-
-              <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item list-double-row">
-                <span class="text top">{{item[val.value]}}</span>
-                <span class="text bottom">{{item.code}}</span>
+              <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item explain">
+                {{item[val.value] || '---'}}
               </div>
-
+              <!--状态-->
+              <div v-if="false" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '未开始' : item.status === 1 ? '进行中' : item.status === 2 ? '已结束' : ''}}</div>
               <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
                 <span v-if="false" class="list-operation" @click="auditing(item)">审核</span>
-                <router-link tag="span" to="/manager/goods-detail" class="list-operation">查看</router-link>
-                <span class="list-operation" @click="downGoods(item)">下架</span>
+                <router-link tag="span" to="/manager/supplier-detail" class="list-operation">查看</router-link>
+                <span class="list-operation" @click="deleteSupplier(item)">删除</span>
               </div>
 
-              <div v-if="+val.type === 5 && requestData.status === ''" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '审核中' : item.status === 1 ? '审核成功' : item.status === 2 ? '审核失败' : ''}}
+              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '审核中' : item.status === 1 ? '审核成功' : item.status === 2 ? '审核失败' : ''}}
               </div>
 
-              <div v-if="+val.type === 6 && +requestData.status > 0" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item[val.value]}}{{requestData.status}}
+              <div v-if="+val.type === 6 && +requestData.status > 0" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item[val.value]}}
               </div>
             </div>
           </div>
@@ -65,7 +56,7 @@
       </div>
     </div>
     <auditing-model ref="auditingModel" @confirm="auditingConfirm"></auditing-model>
-    <default-confirm ref="confirm" confirm="downConfirm"></default-confirm>
+    <default-confirm ref="confirm" confirm="deleteConfirm"></default-confirm>
   </div>
 </template>
 
@@ -74,79 +65,77 @@
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import AuditingModel from './auditing-model/auditing-model'
   const PAGE_NAME = 'GOODS-MANAGE'
-  const TITLE = '商品管理'
-
-  const FIRST_CATEGORY = {
-    check: false,
-    show: false,
-    content: '一级分类',
-    type: 'default',
-    data: [{name: '水果'}]
-  }
-  const SECOND_CATEGORY = {
-    check: false,
-    show: false,
-    content: '二级分类',
-    type: 'default',
-    data: [{name: '水果'}]
-  }
+  const TITLE = '供应商管理'
 
   const LIST_TITLE = [
-    {name: '图片', flex: 0.7, value: 'img_url', type: 2},
-    {name: '商品名称', flex: 1.8, value: 'goods_name', type: 3},
-    {name: '供应商', flex: 1, value: 'supplier', type: 1},
+    {name: '供应商编号', flex: 1, value: 'code', type: 1},
+    {name: '供应商名称', flex: 1, value: 'name', type: 1},
+    {name: '区域', flex: 1, value: 'area', type: 1},
     {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '采购规格', flex: 1, value: 'format', type: 1},
-    {name: '采购单价', flex: 1, value: 'price', type: 1},
-    {name: '提交时间', flex: 1.2, value: 'time', type: 1},
-    {name: '状态', flex: 1, value: 'status', type: 5},
-    {name: '审核说明', flex: 1, value: 'explain', type: 6},
+    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
+    {name: '联系人', flex: 1, value: 'contact', type: 1},
+    {name: '联系方式', flex: 1, value: 'mobile', type: 1},
+    {name: '提交时间', flex: 1, value: 'time', type: 1},
+    {name: '状态', flex: 1, value: 'status', type: 1},
+    {name: '审核说明', flex: 1, value: 'explain', type: 3},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
 
   const LIST_TITLE1 = [
-    {name: '图片', flex: 0.7, value: 'img_url', type: 2},
-    {name: '商品名称', flex: 1.8, value: 'goods_name', type: 3},
-    {name: '供应商', flex: 1, value: 'supplier', type: 1},
+    {name: '供应商编号', flex: 1, value: 'code', type: 1},
+    {name: '供应商名称', flex: 1, value: 'name', type: 1},
+    {name: '区域', flex: 1, value: 'area', type: 1},
     {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '采购规格', flex: 1, value: 'format', type: 1},
-    {name: '采购单价', flex: 1, value: 'price', type: 1},
-    {name: '提交时间', flex: 1.2, value: 'time', type: 1},
+    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
+    {name: '联系人', flex: 1, value: 'contact', type: 1},
+    {name: '联系方式', flex: 1, value: 'mobile', type: 1},
+    {name: '提交时间', flex: 1, value: 'time', type: 1},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
 
   const LIST_TITLE2 = [
-    {name: '图片', flex: 0.7, value: 'img_url', type: 2},
-    {name: '商品名称', flex: 1.8, value: 'goods_name', type: 3},
-    {name: '供应商', flex: 1, value: 'supplier', type: 1},
+    {name: '供应商编号', flex: 1, value: 'code', type: 1},
+    {name: '供应商名称', flex: 1, value: 'name', type: 1},
+    {name: '区域', flex: 1, value: 'area', type: 1},
     {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '采购规格', flex: 1, value: 'format', type: 1},
-    {name: '采购单价', flex: 1, value: 'price', type: 1},
-    {name: '提交时间', flex: 1.2, value: 'time', type: 1},
-    {name: '审核说明', flex: 1, value: 'explain', type: 6},
+    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
+    {name: '联系人', flex: 1, value: 'contact', type: 1},
+    {name: '联系方式', flex: 1, value: 'mobile', type: 1},
+    {name: '提交时间', flex: 1, value: 'time', type: 1},
+    {name: '审核说明', flex: 1, value: 'explain', type: 3},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
 
   const GOODS_LIST = [
     {
       img_url: './img.jpg',
-      goods_name: '阿克苏苹果阿克苏苹果',
-      supplier: '隔壁老王',
+      name: '阿克苏苹果阿克苏苹果',
+      area: '白云区国际单位',
       category: '水果',
-      format: '4kg/箱',
-      price: '¥64/箱',
-      code: '69020524564546',
+      contact: '王某人',
+      mobile: '13584260103',
+      code: '5645641',
       time: '2019-07-19 15:18:00'
     },
     {
       img_url: './img.jpg',
-      goods_name: '阿克苏苹果阿克苏苹果',
-      supplier: '隔壁老王',
+      name: '阿克苏苹果阿克苏苹果',
+      area: '白云区国际单位',
       category: '水果',
-      format: '4kg/箱',
-      price: '¥64/箱',
+      contact: '王某人',
+      mobile: '13584260103',
       explain: '审核',
-      code: '69020524564546',
+      code: '5645641',
+      time: '2019-07-19 15:18:00'
+    },
+    {
+      img_url: './img.jpg',
+      name: '阿克苏苹果阿克苏苹果',
+      area: '白云区国际单位',
+      category: '水果',
+      contact: '王某人',
+      mobile: '13584260103',
+      code: '5645641',
       time: '2019-07-19 15:18:00'
     },
     {
@@ -154,20 +143,10 @@
       goods_name: '阿克苏苹果阿克苏苹果',
       supplier: '隔壁老王',
       category: '水果',
-      format: '4kg/箱',
-      price: '¥64/箱',
-      code: '69020524564546',
-      time: '2019-07-19 15:18:00'
-    },
-    {
-      img_url: './img.jpg',
-      goods_name: '阿克苏苹果阿克苏苹果',
-      supplier: '隔壁老王',
-      category: '水果',
-      format: '4kg/箱',
-      price: '¥64/箱',
+      contact: '王某人',
+      mobile: '13584260103',
       explain: '审核',
-      code: '69020524564546',
+      code: '690205',
       time: '2019-07-19 15:18:00'
     }
   ]
@@ -183,8 +162,7 @@
     },
     data() {
       return {
-        firstCategory: FIRST_CATEGORY,
-        secondCategory: SECOND_CATEGORY,
+        // listTitle: LIST_TITLE,
         requestData: {
           keyword: '',
           category_id: '',
@@ -227,7 +205,6 @@
       // this.getGoodsStatus()
     },
     mounted() {
-      // this.$refs.auditingModel.show()
       // this.$refs.confirm.show('sdfsjdklfjs')
     },
     methods: {
@@ -257,7 +234,6 @@
       // 切换tab栏
       changeStatus(selectStatus) {
         this.setData({page: 1, status: selectStatus.value})
-        console.log(this.requestData)
         this.getGoodsList()
         this.$refs.pagination.beginPage()
       },
@@ -323,12 +299,12 @@
         console.log(data)
         this.$refs.auditingModel.hide()
       },
-      downGoods(item) {
+      deleteSupplier(item) {
         this.currentItem = item
         this.$refs.confirm.show('确定下架'+ item.goods_name+ '?')
       },
       // 商品下架
-      downConfirm() {
+      deleteConfirm() {
         let data = {
           goods_id: this.currentItem.id,
           is_online: 0
@@ -381,7 +357,7 @@
       height: 60px
       align-items: center
       display: flex
-  .list-box
+  .list-box,.list-header
     .list-item:last-child
       max-width: 80px
       padding-right: 0
@@ -395,7 +371,7 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
-      .list-double-row
+      .goods-name
         display: flex
         flex-direction: column
         .bottom
@@ -404,18 +380,6 @@
         .text
           text-overflow: ellipsis
           overflow: hidden
-      .status-item:before
-        content: ""
-        display: inline-block
-        width: 9px
-        height: 9px
-        border-radius: 50%
-        margin-right: 6px
-        background: $color-negative
-      .status-fail:before
-        background: #E1E1E1
-      .status-success:before
-        background: $color-positive
       .img
         width: 42px
         height: 42px
@@ -433,4 +397,7 @@
         background: #E1E1E1
       .status-success:before
         background: $color-positive
+      .list-double-row
+        .item-sub
+          color: #333
 </style>

@@ -46,7 +46,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  $menu-width = 210px
+  $menu-width = 130px
   @import "~@design"
   .default-modal
     position: fixed
