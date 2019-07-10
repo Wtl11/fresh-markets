@@ -10,14 +10,20 @@ export default [
         path: '/user/login',
         name: 'login',
         component: () => import('@pages/login/login')
-      },
+      }
     ]
   },
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
+      // 信息平台
+      {
+        path: '/information',
+        name: 'information',
+        component: () => import('@pages/information/information')
+      },
       {
         path: '/home',
         name: 'home',
@@ -52,7 +58,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: [USER_TYPE.SUPER]
+          authority: []
         },
         component: () => import('@pages/two-page/two-page'),
         children: [
@@ -68,7 +74,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: [USER_TYPE.SUPER]
+          authority: []
         },
         component: () => import('@pages/hello-world/hello-world')
       },
@@ -95,21 +101,3 @@ export default [
     props: true
   }
 ]
-
-// function lazyLoadView(AsyncView) {
-//   const AsyncHandler = () => ({
-//     component: AsyncView,
-//     loading: require('@pages/_loading/_loading').default,
-//     delay: 400,
-//     error: require('@pages/_timeout/_timeout').default,
-//     timeout: 10000
-//   })
-//
-//   return Promise.resolve({
-//     functional: true,
-//     render(h, {data, children}) {
-//       // 将属性和方法传递给所有展示组件
-//       return h(AsyncHandler, data, children)
-//     }
-//   })
-// }
