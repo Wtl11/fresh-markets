@@ -50,11 +50,11 @@
       },
       width: {
         type: Number,
-        default: 102
+        default: 160
       },
       height: {
         type: Number,
-        default: 28
+        default: 32
       },
       isInput: {
         type: Boolean,
@@ -138,13 +138,13 @@
   .admin-big-box
     cursor: pointer
     box-sizing: border-box
-    border-radius: 2px
+    border-radius: 4px
     font-size: $font-size-14
     color: $color-text-main
     position: relative
     .admin-select-box
       min-width: 102px
-      border-radius: 2px
+      border-radius: 4px
       border 1px solid $color-line
       padding: 0 31px 0 15px
       line-height: 27px
@@ -223,7 +223,7 @@
   .value-input
     font-size: $font-size-14
     padding: 0 14px
-    border-radius: 2px
+    border-radius: 4px
     width: 400px
     height: 40px
     border: 0.5px solid $color-line

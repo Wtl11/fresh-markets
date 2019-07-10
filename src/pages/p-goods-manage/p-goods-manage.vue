@@ -3,8 +3,12 @@
     <div class="down-content">
       <span class="down-tip">分类筛选</span>
       <div class="down-item-small">
-        <base-drop-down :select="firstCategory" @setValue="firstCategorySelect"></base-drop-down>
-        <base-drop-down :select="secondCategory" @setValue="secondCategorySelect"></base-drop-down>
+        <div class="drop-down">
+          <base-drop-down :select="firstCategory" @setValue="firstCategorySelect"></base-drop-down>
+        </div>
+        <div class="drop-down">
+          <base-drop-down :select="secondCategory" @setValue="secondCategorySelect"></base-drop-down>
+        </div>
       </div>
       <span class="down-tip">搜索</span>
       <div class="down-item">
@@ -19,8 +23,36 @@
           <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>
       </div>
-      <div class="list-box">
+      <div class="big-list">
+        <div class="list-header list-box">
+          <div v-for="(item,index) in goodsTitle" :key="index" class="list-item" :style="{flex: item.flex}">{{item.name}}</div>
+        </div>
+        <div v-if="goodsList.length" class="list">
+          <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
+            <div v-for="(val, ind) in goodsTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
+              <div v-if="+val.type === 1 || +val.type === 3" :style="{flex: val.flex}" class="item">
+                {{+val.type === 3 ? '¥' : ''}}{{item[val.value] || '0'}}
+              </div>
+              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="list-double-row item">
+                <p class="item-dark">{{item.start_at}}</p>
+                <p class="item-sub">{{item.end_at}}</p>
+              </div>
 
+              <!--状态-->
+              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '未开始' : item.status === 1 ? '进行中' : item.status === 2 ? '已结束' : ''}}</div>
+
+              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="list-operation-box item">
+                <span class="list-operation" @click="handleNav(item, 'id')">查看</span>
+                <span class="list-operation" @click="_deleteActivity(item.id)">删除</span>
+                <span class="list-operation" @click="handleNav(item, 'editId')">复制活动</span>
+              </div>
+              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item">
+                {{item[val.value] || '0'}}/{{item[val.value2] || '0'}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <base-blank v-else blackStyle="margin-top: 6%"></base-blank>
       </div>
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
@@ -51,6 +83,28 @@
     data: []
   }
 
+  const GOODS_TITLE = [
+    {name: '活动名称', flex: 1.3, value: 'activity_name', type: 1},
+    {name: '活动时间', flex: 1.3, value: 'start_at', type: 2},
+    {name: '商品', flex: 1.4, value: 'goods_count', type: 1},
+    {name: '销量', flex: 1, value: 'sale_count', type: 1},
+    {name: '交易额(元)', flex: 1, value: 'pay_amount', type: 3},
+    {name: '状态', flex: 1, value: 'status', type: 4},
+    {name: '操作', flex: 1.4, value: '', type: 5}
+  ]
+  const LIST_TITLE = [
+    {name: '活动名称', flex: 1.5, value: 'activity_name', type: 1},
+    {name: '活动时间', flex: 1.5, value: 'start_at', type: 2},
+    {name: '活动商品数', flex: 1, value: 'goods_count', type: 1},
+    {name: '销量', flex: 1, value: 'sale_count', type: 1},
+    {name: '交易额(元)', flex: 1, value: 'pay_amount', type: 3},
+    {name: '成团数/模拟成团数', flex: 1.5, value: 'groupon_success_num', type: 6, value2: 'groupon_imitate_success_num'},
+    {name: '参团人员', flex: 1, value: 'groupon_all_people_num', type: 1},
+    {name: '状态', flex: 1, value: 'status', type: 4},
+    {name: '创建时间', flex: 1.5, value: 'start_at', type: 1},
+    {name: '操作', flex: 1.6, value: '', type: 5}
+  ]
+
   export default {
     name: PAGE_NAME,
     page: {
@@ -63,6 +117,8 @@
       return {
         firstCategory: FIRST_CATEGORY,
         secondCategory: SECOND_CATEGORY,
+        goodsTitle: GOODS_TITLE,
+        listTitle: LIST_TITLE,
         requestData: {
           keyword: '',
           category_id: '',
@@ -209,7 +265,7 @@
     .down-content
       padding: 0 20px
       box-sizing: border-box
-      min-height: 72px
+      min-height: 80px
       background: #fff
       align-items: center
       margin-bottom: 20px
@@ -220,6 +276,8 @@
         margin-right: 10px
       .down-item-small
         display: flex
+        margin-right: 20px
+      .drop-down
         margin-right: 10px
       .down-item
         display: flex
@@ -250,13 +308,6 @@
           line-height: 1
           white-space: nowrap
           font-family: $font-family-regular
-    .list-box
-      max-height: 645px
-      background: #ffffff
-      overflow: visible
-      display: flex
-      flex-direction: column
-      flex: 1
     .pagination-box
       height: 60px
       align-items: center

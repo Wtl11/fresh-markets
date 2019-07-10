@@ -26,7 +26,7 @@
       },
       width: {
         type: Number,
-        default: 187
+        default: 224
       }
     },
     data() {
@@ -58,7 +58,7 @@
 
   .base-search
     display: flex
-    height: 28px
+    height: 32px
     overflow: hidden
 
   .search-input
@@ -70,7 +70,7 @@
     width: 100%
     box-sizing: border-box
     border: 0.5px solid $color-line
-    border-radius: 2px
+    border-radius: 4px
     padding-left: 10px
     transition: all 0.2s
     &:hover
@@ -85,11 +85,11 @@
     width: 50px
     margin-left: 10px
     overflow: hidden
-    height: 28px
-    border-radius: 2px
+    height: 32px
+    border-radius: 4px
     background: $color-main
     text-align: center
-    line-height: 28px
+    line-height: 32px
     font-size: $font-size-12
     color: $color-white
     transition: 0.3s all
