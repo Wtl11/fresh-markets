@@ -35,6 +35,7 @@ export default [
         path: '/manager/test-page',
         name: 'test-page',
         meta: {
+          crumbs: ['商城2', '营销2', '营销计划2'],
           authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/test-page/test-page'),
