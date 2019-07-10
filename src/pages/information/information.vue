@@ -1,6 +1,8 @@
 <template>
   <div class="information">
-    information
+    <section class="banner-wrapper">
+      <img src="https://img.alicdn.com/tfs/TB1etRMaUuF3KVjSZK9XXbVtXXa-2000-660.jpg" alt="" class="banner-img">
+    </section>
   </div>
 </template>
 
@@ -27,5 +29,12 @@
   @import "~@design"
 
   .information
-    width: 100%
+    .banner-wrapper
+      margin : 0 auto
+      max-width :1980px
+      height :614px
+      .banner-img
+        width :100%
+        height :100%
+        object-fit :cover
 </style>

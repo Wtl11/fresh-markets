@@ -41,7 +41,6 @@
             return item.meta.authority.some(val => val === this.$store.state.auth.currentUserType) && item
           }
         })
-        console.log(children)
         return children
       },
       navHandle(item) {
