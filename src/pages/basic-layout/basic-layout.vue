@@ -8,6 +8,7 @@
       </ul>
     </aside>
     <header class="header-wrapper">
+      <layout-crumb></layout-crumb>
     </header>
     <section class="content-wrapper">
       <router-view></router-view>
@@ -16,11 +17,15 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import LayoutCrumb from './layout-crumb/layout-crumb'
   const PAGE_NAME = 'BASIC_LAYOUT'
   const TITLE = '基布局'
 
   export default {
     name: PAGE_NAME,
+    components: {
+      LayoutCrumb
+    },
     page: {
       title: TITLE
     },
@@ -36,7 +41,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   $asideWidth = 210px
-  $topHeight = 64px
+  $topHeight = 40px
   @import "~@design"
 
   .basic-layout
@@ -45,7 +50,7 @@
     .aside
       position :fixed
       width :$asideWidth
-      z-index :50
+      z-index :999
       .menu
         height :100vh
         width :100%
@@ -60,7 +65,7 @@
       right :0
       height :$topHeight
       background :red
-      z-index :50
+      z-index :999
     .content-wrapper
       flex: 1
       border-left : $asideWidth solid transparent
