@@ -21,34 +21,27 @@ export default [
       {
         path: '/home',
         name: 'home',
-        component: () => import('@pages/client-view/client-view'),
-        children: [
-          {
-            path: '/goods-manage',
-            name: 'goods-manage',
-            component: () => import('@pages/goods-manage/goods-manage')
-          },
-        ]
+        component: () => import('@pages/client-view/client-view')
       }
     ]
   },
   {
     path: '/manager',
     component: () => import('@pages/basic-layout/basic-layout'),
-    redirect: '/manager/test-page',
+    redirect: '/manager/p-goods-manage',
     children: [
       // 测试页面注释
       {
-        path: '/manager/test-page',
-        name: 'test-page',
+        path: '/manager/p-goods-manage',
+        name: 'p-goods-manage',
         meta: {
           title: '商品管理',
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['商城2', '营销2', '营销计划2'],
-          authority: [USER_TYPE.MERCHANT]
+          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
         },
-        component: () => import('@pages/test-page/test-page'),
+        component: () => import('@pages/p-goods-manage/p-goods-manage'),
         children: [
           {
             path: '/manager/test-page/sample',
