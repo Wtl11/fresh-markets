@@ -1,6 +1,16 @@
 <template>
   <div class="client-view">
-    client-view
+    <div class="left-menu">
+
+    </div>
+    <div class="view-container">
+      <div class="view-container-top">
+
+      </div>
+      <div class="container">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,4 +80,27 @@
 
   .client-view
     width: 100%
+  .left-menu
+    width: 130px
+    min-height: 100vh
+    position: fixed
+    left: 0
+    top: 0
+    background: #ccc
+  .view-container
+    min-width: 1000px
+    margin-left: 220px
+    min-height: 100vh
+    display: flex
+    flex-direction: column
+  .view-container-top
+    height: 80px
+    background: #ddd
+  .container
+    display: flex
+    flex-direction: column
+    margin-top: 20px
+    background: #aaa
+    flex: 1
+
 </style>

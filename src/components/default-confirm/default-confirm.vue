@@ -98,7 +98,7 @@
         font-size: $font-size-16
         font-family: $font-family-medium
         line-height: 1
-        color: $color-text-main
+        color: #333
       .close
         width: 12px
         height: @width

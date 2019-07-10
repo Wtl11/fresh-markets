@@ -25,12 +25,16 @@
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
+      <city-select ref="city" @setValue="_getCity"></city-select>
     </div>
+    <default-confirm ref="confirm"></default-confirm>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Http from '@utils/http'
+  import DefaultConfirm from '@components/default-confirm/default-confirm'
+  import CitySelect from '@components/city-select/city-select'
   const PAGE_NAME = 'GOODS-MANAGE'
   const TITLE = '商品管理'
 
@@ -53,6 +57,10 @@
     name: PAGE_NAME,
     page: {
       title: TITLE
+    },
+    components: {
+      DefaultConfirm,
+      CitySelect
     },
     data() {
       return {
@@ -85,7 +93,7 @@
       // this.getGoodsStatus()
     },
     mounted() {
-
+      this.$refs.confirm.show('sdfsjdklfjs')
     },
     methods: {
       // 选择一级分类
@@ -212,7 +220,7 @@
       flex-wrap: wrap
       .down-tip
         font-size: $font-size-12
-        color: #333
+        color: $color-text-main
         margin-right: 10px
       .down-item-small
         display: flex
@@ -241,7 +249,7 @@
           height: 14px
           margin-right: 5px
         .identification-name
-          color: #333
+          color: $color-text-main
           font-size: $font-size-16
           line-height: 1
           white-space: nowrap

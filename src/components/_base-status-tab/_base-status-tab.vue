@@ -71,7 +71,7 @@
   .base-status-tab
     margin-left: 30px
     display: flex
-    background: #F6F6F6
+    background: #F5F7FA
     border-radius: 100px
     height: 30px
     box-sizing: border-box
@@ -98,5 +98,5 @@
     height: 30px
     border-radius: 100px
     transition: left 0.2s
-    background: $color-main
+    background: #64A0F7
 </style>
