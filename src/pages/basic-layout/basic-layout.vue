@@ -41,6 +41,7 @@
 
   .basic-layout
     position :relative
+    display flex
     .aside
       position :fixed
       width :$asideWidth
@@ -61,9 +62,11 @@
       background :red
       z-index :50
     .content-wrapper
-      padding-left : $asideWidth
-      padding-top : $topHeight
+      flex: 1
+      border-left : $asideWidth solid transparent
+      border-top : $topHeight solid transparent
       box-sizing :border-box
       min-height :100vh
-      background :darkgray
+      background darkgray
+      padding :20px
 </style>

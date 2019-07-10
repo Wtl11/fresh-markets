@@ -13,6 +13,9 @@
         title = typeof title === 'function' ? title(this.$store) : title
         return title || appConfig.title
       }
+    },
+    beforeCreate() {
+      console.log('app created')
     }
   }
 </script>

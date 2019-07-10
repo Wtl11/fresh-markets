@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
+import {findLast} from 'lodash'
+import sotre from '@state/store'
 
 NProgress.configure({showSpinner: false})
 
@@ -26,6 +28,12 @@ const router = new VueRouter({
 router.beforeEach((routeTo, routeFrom, next) => {
   if (routeFrom.name !== null) {
     NProgress.start()
+  }
+  let record = findLast(routeTo.matched, record => record.meta.authority)
+  if (record && !record.meta.authority.some(val => val === sotre.getters['auth/currentUserType'])) {
+    if (routeTo.path !== '/user/login') {
+      return next({path: '/user/login'})
+    }
   }
   return next()
 })

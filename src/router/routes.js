@@ -1,3 +1,4 @@
+import {USER_TYPE} from '@utils/constant'
 export default [
   {
     path: '/user',
@@ -33,11 +34,17 @@ export default [
       {
         path: '/manager/test-page',
         name: 'test-page',
+        meta: {
+          authority: [USER_TYPE.MERCHANT]
+        },
         component: () => import('@pages/test-page/test-page'),
         children: [
           {
             path: '/manager/test-page/sample',
             name: 'sample',
+            meta: {
+              authority: [USER_TYPE.SUPER]
+            },
             component: () => import('@pages/sample/sample')
           },
           {
