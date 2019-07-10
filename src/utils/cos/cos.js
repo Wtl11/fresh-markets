@@ -1,5 +1,6 @@
 import request from '@utils/http'
 import storage from 'storage-controller'
+import {API_PUB} from '../constant'
 
 /**
  * 数据入库
@@ -7,7 +8,7 @@ import storage from 'storage-controller'
  * @returns {Promise.<*>}
  */
 function _saveFile(data) {
-  const url = `/api/cos/file`
+  const url = `${API_PUB}/api/cos/save-file`
   return request.post(url, data)
 }
 
@@ -19,14 +20,17 @@ function _saveFile(data) {
  */
 function _getAuthorization(options, callback) {
   const method = (options.Method || 'get').toLowerCase()
+  // const method = ('get').toLowerCase()
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key
-  const Authorization = storage.get('token')
-  const url = '/api/cos/temp/signature?method=' + method + '&image=' + encodeURIComponent(pathname)
+  const Authorization = storage.get('auth.currentUser').access_token
+  const url =
+    API_PUB + '/api/cos/h5-upload-image-sign?method=' + method + '&image=' + encodeURIComponent(pathname)
   const xhr = new XMLHttpRequest()
   xhr.open('GET', url, true)
   xhr.setRequestHeader('Authorization', Authorization)
+  xhr.setRequestHeader('current-corp', process.env.VUE_APP_CURRENT_CORP)
   xhr.onload = function(e) {
     let AuthData
     try {
@@ -54,7 +58,7 @@ function _getAuthorization(options, callback) {
  * @param processCallBack 进度条回调方法let
  * @returns {Promise<any>}
  */
-export function uploadFiles(fileType, files, showProcess, processCallBack) {
+export function uploadFiles({fileType, files, showProcess, processCallBack}) {
   if (!files.map) {
     throw new Error('please use Array')
   }
@@ -85,7 +89,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
           }
           xhr.onload = function() {
             if (xhr.status === 200 || xhr.status === 206) {
-              _saveFile({path: '/' + info.pathname}).then((resp) => {
+              _saveFile({path: '/' + encodeURIComponent(info.pathname), type: 'image'}).then((resp) => {
                 resolve(resp)
               })
             } else {
@@ -100,7 +104,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
       })
     })
     Promise.all(requests)
-      .then(resolve)
-      .catch(reject)
+    .then(resolve)
+    .catch(reject)
   })
 }

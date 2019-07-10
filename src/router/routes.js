@@ -21,13 +21,18 @@ export default [
   },
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
       {
         path: '/home',
         name: 'home',
         component: () => import('@pages/client-view/client-view')
+      },
+      {
+        path: '/information',
+        name: 'information',
+        component: () => import('@pages/information/information')
       }
     ]
   },
