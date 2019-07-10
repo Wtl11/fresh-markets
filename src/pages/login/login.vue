@@ -16,7 +16,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {loginMethods} from './modules/helpers'
+  // import {loginMethods} from './modules/helpers'
+  import storage from 'storage-controller'
   // import Http from '@utils/http'
   import API from '@api'
 
@@ -34,11 +35,35 @@
         loginMsg: {
           keyword: 'super',
           password: 'jike2018!'
-        }
+        },
+        loggedIn: false
       }
     },
+    beforeRouteEnter(to, from, next) {
+      console.log(to, from)
+      // 判断用户是否已经登录
+      next((vw) => {
+        API.Auth.validate()
+          .then((res) => {
+            if (res.error !== vw.$ERR_OK) {
+              vw.loggedIn = false
+              vw.$toast.show(res.message)
+              return
+            }
+            const user = res.data
+            storage.set('auth.currentUser', user)
+            vw.loggedIn = user
+          })
+          .catch(() => {
+            vw.loggedIn = false
+          })
+      })
+      // if (storage.get('auth.currentUser', 0)) {
+      //   next(vm => vm._goToMain())
+      // }
+    },
     methods: {
-      ...loginMethods,
+      // ...loginMethods,
       _checkLogin() {
         if (_tryingLogin) {
           return false
@@ -73,6 +98,9 @@
           .finally(() => {
             this.$loading.hide()
           })
+      },
+      _goToMain() {
+        this.$router.push(`/manager/edit-goods`)
       },
       _becomeSuppliers() {
         this.$router.push(`/manager/edit-goods`)
