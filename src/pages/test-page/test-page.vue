@@ -2,7 +2,7 @@
   <div class="test-page">
     test-page
     <router-link to="/manager/test-page/sample" tag="h1" style="">to sample</router-link>
-    <div style="width: 300vw;height:200vh;text-align: right; background: yellowgreen">asdadasdads</div>
+<!--    <div style="width: 300vw;height:200vh;text-align: right; background: yellowgreen">asdadasdads</div>-->
     <router-view class="basic-router" style="z-index: 10"></router-view>
   </div>
 </template>
@@ -19,9 +19,15 @@
     },
     beforeRouteEnter(to, from, next) {
       console.log(to, from)
-      setTimeout(() => {
-        next(vm => vm.getList())
-      }, 100)
+      // API.Gl...then(res => {
+      //   next(vm => {
+      //     vm.list = res.data
+      //   })
+      // })
+      // setTimeout(() => {
+      //   next(vm => vm.getList())
+      // }, 100)
+      next()
     },
     beforeRouteLeave(to, from, next) {
       this.isShow = false
@@ -47,7 +53,6 @@
   .test-page
     position :relative
     background rebeccapurple
-    height :300vh
     .basic-router
       fill-box(absolute)
       z-index :50
