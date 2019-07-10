@@ -7,7 +7,7 @@
       <layout-crumb></layout-crumb>
     </header>
     <section class="content-wrapper">
-      <router-view></router-view>
+      <router-view class="default-router-view"></router-view>
     </section>
   </div>
 </template>
@@ -65,4 +65,8 @@
       min-height :100vh
       background $color-background
       padding :20px
+      display flex
+      .default-router-view
+        flex: 1
+
 </style>
