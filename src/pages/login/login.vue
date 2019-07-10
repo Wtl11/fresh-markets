@@ -18,11 +18,10 @@
 <script type="text/ecmascript-6">
   // import {loginMethods} from './modules/helpers'
   import storage from 'storage-controller'
-  // import Http from '@utils/http'
   import API from '@api'
 
   const PAGE_NAME = 'LOGIN'
-  const TITLE = '登陆'
+  const TITLE = '登录'
   let _tryingLogin = false
 
   export default {
@@ -35,32 +34,28 @@
         loginMsg: {
           keyword: 'super',
           password: 'jike2018!'
-        },
-        loggedIn: false
+        }
       }
     },
     beforeRouteEnter(to, from, next) {
       console.log(to, from)
       // 判断用户是否已经登录
       next((vw) => {
-        API.Auth.validate()
-          .then((res) => {
-            if (res.error !== vw.$ERR_OK) {
-              vw.loggedIn = false
-              vw.$toast.show(res.message)
-              return
-            }
-            const user = res.data
-            storage.set('auth.currentUser', user)
-            vw.loggedIn = user
-          })
-          .catch(() => {
-            vw.loggedIn = false
-          })
+        if (storage.get('auth.currentUser', 0)) {
+          API.Auth.validate()
+            .then((res) => {
+              if (res.error !== vw.$ERR_OK) {
+                vw.$toast.show(res.message)
+                return
+              }
+              const user = res.data
+              storage.set('auth.currentUser', user)
+            })
+            .finally(() => {
+              vw.$loading.hide()
+            })
+        }
       })
-      // if (storage.get('auth.currentUser', 0)) {
-      //   next(vm => vm._goToMain())
-      // }
     },
     methods: {
       // ...loginMethods,
@@ -85,25 +80,27 @@
         _tryingLogin = true
         API.Auth.logIn(this.loginMsg)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
+            if (res.error !== 0) {
               this.$toast.show(res.message)
               return
             }
             const user = res.data
-            console.log(user)
+            storage.set('auth.currentUser', user)
+            this._goToMain()
           })
           .catch(() => {
-            return null
+            this.$toast.show('登录失败!')
           })
           .finally(() => {
+            _tryingLogin = false
             this.$loading.hide()
           })
       },
       _goToMain() {
-        this.$router.push(`/manager/edit-goods`)
+        this.$router.push(`/manager/shop-info`)
       },
       _becomeSuppliers() {
-        this.$router.push(`/manager/edit-goods`)
+        this.$router.push(`/user/apply-suppliers`)
       }
     }
   }

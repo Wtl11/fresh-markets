@@ -11,6 +11,12 @@ export default [
         name: 'login',
         component: () => import('@pages/login/login')
       },
+      // 成为供应商
+      {
+        path: '/user/apply-suppliers',
+        name: 'apply-suppliers',
+        component: () => import('@pages/apply-suppliers/apply-suppliers')
+      },
     ]
   },
   {
