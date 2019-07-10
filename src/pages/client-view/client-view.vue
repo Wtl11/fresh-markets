@@ -89,7 +89,7 @@
     background: #ccc
   .view-container
     min-width: 1000px
-    margin-left: 220px
+    margin-left: 150px
     min-height: 100vh
     display: flex
     flex-direction: column
