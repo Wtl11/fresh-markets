@@ -1,14 +1,28 @@
 <template>
   <div class="login">
-    login
+    <div class="logo"></div>
+    <div class="login-con">
+      <div class="header">登录/Login</div>
+      <div class="item">
+        <input v-model="loginMsg.keyword" type="text" placeholder="请输入账号" class="input" @keyup.enter="_tryLogin">
+      </div>
+      <div class="item">
+        <input v-model="loginMsg.password" type="password" placeholder="请输入密码" class="input" @keyup.enter="_tryLogin">
+      </div>
+      <div class="item button hand" @click="_tryLogin">登录</div>
+      <span class="tips hand" @click="_becomeSuppliers">成为供应商</span>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
-  // import API from '@api'
+  import {loginMethods} from './modules/helpers'
+  // import Http from '@utils/http'
+  import API from '@api'
+
   const PAGE_NAME = 'LOGIN'
   const TITLE = '登陆'
+  let _tryingLogin = false
 
   export default {
     name: PAGE_NAME,
@@ -17,7 +31,51 @@
     },
     data() {
       return {
-
+        loginMsg: {
+          keyword: 'super',
+          password: 'jike2018!'
+        }
+      }
+    },
+    methods: {
+      ...loginMethods,
+      _checkLogin() {
+        if (_tryingLogin) {
+          return false
+        }
+        if (!this.loginMsg.keyword) {
+          this.$toast.show('请输入账号')
+          return false
+        }
+        if (!this.loginMsg.password) {
+          this.$toast.show('请输入密码')
+          return false
+        }
+        return true
+      },
+      _tryLogin() {
+        if (!this._checkLogin()){
+          return
+        }
+        _tryingLogin = true
+        API.Auth.logIn(this.loginMsg)
+          .then((res) => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            const user = res.data
+            console.log(user)
+          })
+          .catch(() => {
+            return null
+          })
+          .finally(() => {
+            this.$loading.hide()
+          })
+      },
+      _becomeSuppliers() {
+        this.$router.push(`/manager/edit-goods`)
       }
     }
   }
@@ -27,5 +85,71 @@
   @import "~@design"
 
   .login
+    position: absolute
     width: 100%
+    height: 100%
+    bg-image('./pic-login_background')
+    background-repeat: no-repeat
+    background-size: cover
+    background-position: center center
+    layout()
+    align-items: center
+    justify-content: center
+    .logo
+      position: absolute
+      top: 35px
+      left: 94px
+      width: 150px
+      height: 48px
+      bg-image('./pic-login_logo')
+      background-size: 100%
+    .login-con
+      width: 360px
+      layout()
+      justify-content: center
+      .header
+        margin-bottom: 30px
+        font-family: $font-family-regular
+        font-size: 20px
+        color: #FFFFFF
+        letter-spacing: 0
+        line-height: 1
+      .item
+        width: 100%
+        height: 44px
+        padding: 0 14px
+        background: #fff
+        border-radius: 4px
+        margin-bottom: 24px
+        .input
+          width: 100%
+          height: 44px
+          background: #fff
+          font-family: $font-family-regular
+          font-size: 14px
+          color: $color-text-main
+          letter-spacing: 0
+          outline: none
+          &::placeholder
+            font-family: $font-family-regular
+            color: #82899C
+        &.button
+          width: 100%
+          height: 44px
+          line-height: 44px
+          margin: 16px 0 30px 0
+          background: #1FBB91
+          text-align: center
+          font-family: $font-family-regular
+          font-size: 14px
+          color: #fff
+          letter-spacing: 0
+      .tips
+        text-align: center
+        font-family: $font-family-regular
+        font-size: 14px
+        color: #FFFFFF
+        letter-spacing: 0
+        line-height: 14px
+        text-decoration: underline
 </style>

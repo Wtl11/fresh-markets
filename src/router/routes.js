@@ -82,6 +82,18 @@ export default [
         name: 'ttt-zzz',
         component: () => import('@pages/ttt-zzz/ttt-zzz')
       },
+      // 店铺信息
+      {
+        path: '/manager/shop-info',
+        name: 'shop-info',
+        component: () => import('@pages/shop-info/shop-info')
+      },
+      // 新建/编辑商品
+      {
+        path: '/manager/edit-goods',
+        name: 'edit-goods',
+        component: () => import('@pages/edit-goods/edit-goods')
+      },
     ]
   },
   {
