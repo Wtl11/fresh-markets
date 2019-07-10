@@ -2,7 +2,7 @@
   <div class="test-page">
     test-page
     <router-link to="/manager/test-page/sample" tag="h1" style="">to sample</router-link>
-<!--    <div style="width: 300vw;height:200vh;text-align: right; background: yellowgreen">asdadasdads</div>-->
+    <div style="width: 300vw;height:200vh;text-align: right; background: yellowgreen">asdadasdads</div>
     <router-view class="basic-router" style="z-index: 10"></router-view>
   </div>
 </template>
@@ -25,17 +25,17 @@
     },
     beforeRouteLeave(to, from, next) {
       this.isShow = false
-      console.log(123)
+      // console.log(123)
       next()
     },
     created() {
       this.isShow = true
-      console.log(this.$route.path, 111)
-      console.log('test-page created')
+      // console.log(this.$route.path, 111)
+      // console.log('test-page created')
     },
     methods: {
       getList() {
-        console.log('entry test page')
+        // console.log('entry test page')
       }
     }
   }

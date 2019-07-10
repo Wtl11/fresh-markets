@@ -39,8 +39,6 @@
         children = children.filter((item) => {
           if (item.meta && item.meta.authority && item.meta.authority.length) {
             return item.meta.authority.some(val => val === this.$store.state.auth.currentUserType) && item
-          } else {
-            return item
           }
         })
         console.log(children)
