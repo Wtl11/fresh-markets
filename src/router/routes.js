@@ -10,72 +10,38 @@ export default [
         path: '/user/login',
         name: 'login',
         component: () => import('@pages/login/login')
-      }
+      },
     ]
   },
   {
     path: '/',
-    redirect: '/information',
+    redirect: '/home',
     component: {render: h => h('router-view')},
     children: [
-      // 信息平台
-      {
-        path: '/information',
-        name: 'information',
-        component: () => import('@pages/information/information')
-      },
       {
         path: '/home',
         name: 'home',
-        component: () => import('@pages/client-view/client-view'),
-        children: [
-          {
-            path: '/goods-manage',
-            name: 'goods-manage',
-            component: () => import('@pages/goods-manage/goods-manage')
-          },
-        ]
+        component: () => import('@pages/client-view/client-view')
       }
     ]
   },
   {
     path: '/manager',
     component: () => import('@pages/basic-layout/basic-layout'),
-    redirect: '/manager/test-page',
+    redirect: '/manager/p-goods-manage',
     children: [
       // 测试页面注释
       {
-        path: '/manager/test-page',
-        name: 'test-page',
+        path: '/manager/p-goods-manage',
+        name: 'p-goods-manage',
         meta: {
           title: '商品管理',
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['商城2', '营销2', '营销计划2'],
-          authority: [USER_TYPE.SUPER]
+          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
         },
-        component: () => import('@pages/test-page/test-page'),
-        children: [
-          {
-            path: '/manager/test-page/sample',
-            name: 'sample',
-            meta: {
-              authority: [USER_TYPE.SUPER]
-            },
-            component: () => import('@pages/sample/sample')
-          },
-          {
-            path: '/manager/test-page/other-pages',
-            name: 'other-pages',
-            component: () => import('@pages/other-pages/other-pages')
-          },
-          // 测试页面配置
-          {
-            path: '/manager/test-page/test-page1',
-            name: 'test-page1',
-            component: () => import('@pages/test-page1/test-page1')
-          },
-        ]
+        component: () => import('@pages/p-goods-manage/p-goods-manage')
       },
       // a
       {
@@ -86,7 +52,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: []
+          authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/two-page/two-page'),
         children: [
@@ -102,7 +68,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: []
+          authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/hello-world/hello-world')
       },
@@ -141,3 +107,21 @@ export default [
     props: true
   }
 ]
+
+// function lazyLoadView(AsyncView) {
+//   const AsyncHandler = () => ({
+//     component: AsyncView,
+//     loading: require('@pages/_loading/_loading').default,
+//     delay: 400,
+//     error: require('@pages/_timeout/_timeout').default,
+//     timeout: 10000
+//   })
+//
+//   return Promise.resolve({
+//     functional: true,
+//     render(h, {data, children}) {
+//       // 将属性和方法传递给所有展示组件
+//       return h(AsyncHandler, data, children)
+//     }
+//   })
+// }
