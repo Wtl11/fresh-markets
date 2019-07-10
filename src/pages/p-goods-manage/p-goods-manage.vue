@@ -24,27 +24,26 @@
         </div>
       </div>
       <div class="big-list">
-        <div class="list-header list-box">
-          <div v-for="(item,index) in goodsTitle" :key="index" class="list-item" :style="{flex: item.flex}">{{item.name}}</div>
+        <div class="list-header">
+          <div v-for="(item,index) in listTitle" :key="index" class="list-item" :style="{flex: item.flex}">{{item.name}}</div>
         </div>
         <div v-if="goodsList.length" class="list">
           <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
-            <div v-for="(val, ind) in goodsTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
-              <div v-if="+val.type === 1 || +val.type === 3" :style="{flex: val.flex}" class="item">
-                {{+val.type === 3 ? '¥' : ''}}{{item[val.value] || '0'}}
+            <div v-for="(val, ind) in listTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
+              <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
+                {{item[val.value] || '---'}}
               </div>
-              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="list-double-row item">
-                <p class="item-dark">{{item.start_at}}</p>
-                <p class="item-sub">{{item.end_at}}</p>
+              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item">
+                <img :src="require('./img.jpg')" alt="" class="img">
               </div>
-
-              <!--状态-->
-              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '未开始' : item.status === 1 ? '进行中' : item.status === 2 ? '已结束' : ''}}</div>
-
-              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="list-operation-box item">
-                <span class="list-operation" @click="handleNav(item, 'id')">查看</span>
-                <span class="list-operation" @click="_deleteActivity(item.id)">删除</span>
-                <span class="list-operation" @click="handleNav(item, 'editId')">复制活动</span>
+              <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item goods-name">
+                <span class="text top">{{item[val.value]}}</span>
+                <span class="text bottom">{{item.code}}</span>
+              </div>
+              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
+                <span v-if="false" class="list-operation" @click="_deleteActivity(item.id)">审核</span>
+                <router-link tag="span" to="/manager/goods-detail" class="list-operation">查看</router-link>
+                <span class="list-operation" @click="downGoods(item)">下架</span>
               </div>
               <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '0'}}/{{item[val.value2] || '0'}}
@@ -58,7 +57,7 @@
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
     </div>
-    <default-confirm ref="confirm"></default-confirm>
+    <default-confirm ref="confirm" confirm="downConfirm"></default-confirm>
   </div>
 </template>
 
@@ -73,36 +72,71 @@
     show: false,
     content: '一级分类',
     type: 'default',
-    data: []
+    data: [{name: '水果'}]
   }
   const SECOND_CATEGORY = {
     check: false,
     show: false,
     content: '二级分类',
     type: 'default',
-    data: []
+    data: [{name: '水果'}]
   }
 
-  const GOODS_TITLE = [
-    {name: '活动名称', flex: 1.3, value: 'activity_name', type: 1},
-    {name: '活动时间', flex: 1.3, value: 'start_at', type: 2},
-    {name: '商品', flex: 1.4, value: 'goods_count', type: 1},
-    {name: '销量', flex: 1, value: 'sale_count', type: 1},
-    {name: '交易额(元)', flex: 1, value: 'pay_amount', type: 3},
-    {name: '状态', flex: 1, value: 'status', type: 4},
-    {name: '操作', flex: 1.4, value: '', type: 5}
-  ]
   const LIST_TITLE = [
-    {name: '活动名称', flex: 1.5, value: 'activity_name', type: 1},
-    {name: '活动时间', flex: 1.5, value: 'start_at', type: 2},
-    {name: '活动商品数', flex: 1, value: 'goods_count', type: 1},
-    {name: '销量', flex: 1, value: 'sale_count', type: 1},
-    {name: '交易额(元)', flex: 1, value: 'pay_amount', type: 3},
-    {name: '成团数/模拟成团数', flex: 1.5, value: 'groupon_success_num', type: 6, value2: 'groupon_imitate_success_num'},
-    {name: '参团人员', flex: 1, value: 'groupon_all_people_num', type: 1},
-    {name: '状态', flex: 1, value: 'status', type: 4},
-    {name: '创建时间', flex: 1.5, value: 'start_at', type: 1},
-    {name: '操作', flex: 1.6, value: '', type: 5}
+    {name: '图片', flex: 0.7, value: 'img_url', type: 2},
+    {name: '商品名称', flex: 1.8, value: 'goods_name', type: 3},
+    {name: '供应商', flex: 1, value: 'supplier', type: 1},
+    {name: '分类', flex: 1, value: 'category', type: 1},
+    {name: '采购规格', flex: 1, value: 'format', type: 1},
+    {name: '采购单价', flex: 1, value: 'price', type: 1},
+    {name: '提交时间', flex: 1.2, value: 'time', type: 1},
+    {name: '审核说明', flex: 1, value: 'explain', type: 1},
+    {name: '操作', flex: 1.6, value: '', type: 4}
+  ]
+
+  const GOODS_LIST = [
+    {
+      img_url: './img.jpg',
+      goods_name: '阿克苏苹果阿克苏苹果',
+      supplier: '隔壁老王',
+      category: '水果',
+      format: '4kg/箱',
+      price: '¥64/箱',
+      code: '69020524564546',
+      time: '2019-07-19 15:18:00'
+    },
+    {
+      img_url: './img.jpg',
+      goods_name: '阿克苏苹果阿克苏苹果',
+      supplier: '隔壁老王',
+      category: '水果',
+      format: '4kg/箱',
+      price: '¥64/箱',
+      explain: '审核',
+      code: '69020524564546',
+      time: '2019-07-19 15:18:00'
+    },
+    {
+      img_url: './img.jpg',
+      goods_name: '阿克苏苹果阿克苏苹果',
+      supplier: '隔壁老王',
+      category: '水果',
+      format: '4kg/箱',
+      price: '¥64/箱',
+      code: '69020524564546',
+      time: '2019-07-19 15:18:00'
+    },
+    {
+      img_url: './img.jpg',
+      goods_name: '阿克苏苹果阿克苏苹果',
+      supplier: '隔壁老王',
+      category: '水果',
+      format: '4kg/箱',
+      price: '¥64/箱',
+      explain: '审核',
+      code: '69020524564546',
+      time: '2019-07-19 15:18:00'
+    }
   ]
 
   export default {
@@ -117,7 +151,6 @@
       return {
         firstCategory: FIRST_CATEGORY,
         secondCategory: SECOND_CATEGORY,
-        goodsTitle: GOODS_TITLE,
         listTitle: LIST_TITLE,
         requestData: {
           keyword: '',
@@ -132,13 +165,14 @@
           {name: '审核成功', num: 0},
           {name: '审核失败', num: 0}
         ],
-        goodsList: [],
+        goodsList: GOODS_LIST,
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
-        defaultIndex: 0
+        defaultIndex: 0,
+        currentItem: {}
       }
     },
     created() {
@@ -178,14 +212,15 @@
         this.getGoodsList()
         this.$refs.pagination.beginPage()
       },
-      // 分页
+      // 翻页
       addPage(page) {
         this.goodsPage = page
-        this._updateList({page}, true)
-        // this.getGoodsListData()
+        this.getGoodsList()
       },
       // 获取列表
       getGoodsList() {
+        console.log('getGoods')
+        return
         let data = {
           goods_category_id: this.categoryId,
           status: this.status,
@@ -232,10 +267,14 @@
           })
         })
       },
+      downGoods(item) {
+        this.currentItem = item
+        this.$refs.confirm.show('确定下架'+ item.goods_name+ '?')
+      },
       // 商品下架
-      downGoods(item, index) {
+      downConfirm() {
         let data = {
-          goods_id: item.id,
+          goods_id: this.currentItem.id,
           is_online: 0
         }
         Http.Goods.downGoods(data).then((res) => {
@@ -282,34 +321,51 @@
       .down-item
         display: flex
         margin-right: 30px
-    .list-content
-      display: flex
-      padding: 0 20px
-      background: #fff
-      flex-direction: column
-      flex: 1
-      .identification
-        display: flex
-        align-items: center
-        justify-content: space-between
-        height: 60px
-        background: #ffffff
-        box-sizing: border-box
-        .identification-page
-          display: flex
-          align-items: center
-        .identification-icon
-          width: 14px
-          height: 14px
-          margin-right: 5px
-        .identification-name
-          color: $color-text-main
-          font-size: $font-size-16
-          line-height: 1
-          white-space: nowrap
-          font-family: $font-family-regular
     .pagination-box
       height: 60px
       align-items: center
       display: flex
+  .list-box
+    .list-item:last-child
+      max-width: 80px
+      padding-right: 0
+  .list
+    flex: 1
+    .list-item
+      font-size: $font-size-14
+      line-height:1.2
+      .item
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
+        font-size: 14px
+      .goods-name
+        display: flex
+        flex-direction: column
+        .bottom
+          color: #666
+          margin-top: 6px
+        .text
+          text-overflow: ellipsis
+          overflow: hidden
+      .img
+        width: 42px
+        height: 42px
+        border-radius: 4px
+        border: 1px solid $color-line
+      .status-item:before
+        content: ""
+        display: inline-block
+        width: 9px
+        height: 9px
+        border-radius: 50%
+        margin-right: 6px
+        background: $color-negative
+      .status-fail:before
+        background: #E1E1E1
+      .status-success:before
+        background: $color-positive
+      .list-double-row
+        .item-sub
+          color: #333
 </style>
