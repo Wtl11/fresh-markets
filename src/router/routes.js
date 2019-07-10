@@ -35,6 +35,9 @@ export default [
         path: '/manager/test-page',
         name: 'test-page',
         meta: {
+          title: '商品管理',
+          icon: require('./icon-goods_manage1@2x.png'),
+          iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['商城2', '营销2', '营销计划2'],
           authority: [USER_TYPE.MERCHANT]
         },
@@ -65,6 +68,13 @@ export default [
       {
         path: '/manager/two-page',
         name: 'two-page',
+        meta: {
+          title: '店铺管理',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['商城33', '营销3', '营销计划3'],
+          authority: [USER_TYPE.SUPER]
+        },
         component: () => import('@pages/two-page/two-page'),
         children: [
 
@@ -74,12 +84,26 @@ export default [
       {
         path: '/manager/hello-world',
         name: 'hello-world',
+        meta: {
+          title: '店铺管理4444',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['商城33', '营销3', '营销计划3'],
+          authority: [USER_TYPE.SUPER]
+        },
         component: () => import('@pages/hello-world/hello-world')
       },
       // asda
       {
         path: '/manager/ttt-zzz',
         name: 'ttt-zzz',
+        meta: {
+          title: '店铺管理5555',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['商城33', '营销3', '营销计划3'],
+          authority: [USER_TYPE.SUPER]
+        },
         component: () => import('@pages/ttt-zzz/ttt-zzz')
       },
       // 店铺信息
