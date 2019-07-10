@@ -25,7 +25,6 @@
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
-      <!--<city-select ref="city" @setValue="_getCity"></city-select>-->
     </div>
     <default-confirm ref="confirm"></default-confirm>
   </div>
@@ -34,7 +33,6 @@
 <script type="text/ecmascript-6">
   import Http from '@utils/http'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
-  import CitySelect from '@components/city-select/city-select'
   const PAGE_NAME = 'GOODS-MANAGE'
   const TITLE = '商品管理'
 
@@ -59,8 +57,7 @@
       title: TITLE
     },
     components: {
-      DefaultConfirm,
-      CitySelect
+      DefaultConfirm
     },
     data() {
       return {
