@@ -28,4 +28,5 @@
 
   .test-page1
     width: 100%
+    background aliceblue
 </style>

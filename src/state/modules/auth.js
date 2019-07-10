@@ -2,7 +2,7 @@ import {USER_TYPE} from '@utils/constant'
 import storage from 'storage-controller'
 
 export const state = {
-  currentUserType: storage.get('userType', USER_TYPE.MERCHANT) // 当前用户类型
+  currentUserType: storage.get('userType', USER_TYPE.SUPER) // 当前用户类型
 }
 
 export const getters = {

@@ -29,4 +29,5 @@
 
   .two-page
     width: 100%
+    background aliceblue
 </style>
