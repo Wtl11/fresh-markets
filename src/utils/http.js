@@ -54,6 +54,7 @@ class Request {
     this.interceptorsResFn = fn
   }
   get(args) {
+    console.warn('get')
     return this._formatReq({...args, method: 'GET', paramsKey: 'params'})
   }
   put(args) {
@@ -140,6 +141,7 @@ class Request {
     for (let [key, value] of Object.entries(args)) {
       this.http.defaults.headers.common[key] = value
     }
+    console.log(this.http.defaults.headers.common)
   }
   // 可以修改http任意模式
   GodMode(fn) {

@@ -1,6 +1,7 @@
 import HTTP from './http'
 import {app as APP} from '../main'
 import {ERR_OK} from './config'
+import storage from 'storage-controller'
 
 const AUTHORITY_LOST = 10000 // 权限失效
 
@@ -57,3 +58,7 @@ function resetUrl(url) {
   }
   return url
 }
+HTTP.setHeaders({
+  'Authorization': storage.get('auth.currentUser', {}).access_token,
+  'Current-Corp': process.env.VUE_APP_CURRENT_CORP
+})
