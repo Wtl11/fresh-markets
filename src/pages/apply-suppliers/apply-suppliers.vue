@@ -29,7 +29,7 @@
           <div class="form-input-box mini-form-input-box">
             <base-drop-down :height="44" :width="195" :select="provinceSelect" @setValue="_setSelectValue($event, 'province')"></base-drop-down>
             <base-drop-down :height="44" :width="195" :select="citySelect" @setValue="_setSelectValue($event, 'city')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="areaSelect" @setValue="_setSelectValue($event, 'area')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="districtSelect" @setValue="_setSelectValue($event, 'district')"></base-drop-down>
           </div>
         </div>
         <div class="form-item  form-image-box">
@@ -66,8 +66,42 @@
             商品起批量
           </div>
           <div class="form-input-box">
-            <input v-model="applyData.name" type="text" class="form-input" maxlength="29"
-                   @mousewheel.native.prevent
+            <input v-model="applyData.goods_start_num" type="text" class="form-input" placeholder="请输入起批量件数"
+                   maxlength="29" @mousewheel.native.prevent
+            >
+          </div>
+          <div class="form-input-unit">件</div>
+        </div>
+        <div class="form-item">
+          <div class="form-title">
+            <span class="start">*</span>
+            主营品类
+          </div>
+          <div class="form-input-box mini-form-input-box">
+            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
+          </div>
+        </div>
+        <div class="form-item">
+          <div class="form-title">
+            <span class="start">*</span>
+            联系人
+          </div>
+          <div class="form-input-box">
+            <input v-model="applyData.contact" type="text" class="form-input" placeholder="请输入联系人信息"
+                   maxlength="29" @mousewheel.native.prevent
+            >
+          </div>
+          <div class="form-input-unit">件</div>
+        </div>
+        <div class="form-item">
+          <div class="form-title">
+            <span class="start">*</span>
+            联系电话
+          </div>
+          <div class="form-input-box">
+            <input v-model="applyData.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
+                   maxlength="29" @mousewheel.native.prevent
             >
           </div>
           <div class="form-input-unit">件</div>
@@ -100,7 +134,12 @@
             <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
           </div>
         </div>
+        <div class=""></div>
       </div>
+    </div>
+    <div class="button-con">
+      <div class="hand button cancel">取消</div>
+      <div class="hand button confirm">{{confirmText}}</div>
     </div>
   </div>
 </template>
@@ -131,10 +170,13 @@
         },
         provinceSelect: {check: false, show: false, content: '请选择省份', type: 'default', data: SELECT_TEST},
         citySelect: {check: false, show: false, content: '请选择城市', type: 'default', data: SELECT_TEST},
-        areaSelect: {check: false, show: false, content: '请选择区/县', type: 'default', data: SELECT_TEST},
+        districtSelect: {check: false, show: false, content: '请选择区/县', type: 'default', data: SELECT_TEST},
+        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: SELECT_TEST},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: SELECT_TEST},
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
-        uploading: ''
+        uploading: '',
+        confirmText: '提交审核'
       }
     },
     methods: {
@@ -164,6 +206,8 @@
           this.applyData[applyKey] = imagesArr[0].image_id
           this.uploadImg[uploadKey] = imagesArr[0].image_url
           this.uploadLoading = false
+        }).catch(() => {
+          this.uploadLoading = false
         })
       },
       _delImg(applyKey, uploadKey) {
@@ -180,8 +224,9 @@
   .apply-suppliers
     position: absolute
     width: 100%
-    height: 100%
+    min-height: 100%
     background: #fff
+    padding-bottom: 120px
     .logo
       width: 150px
       height: 48px
@@ -206,12 +251,11 @@
         letter-spacing: 0
         line-height: 1
 
-
   .content
     position: relative
     flex: 1
     background: $color-white
-    padding: 0 30px 80px
+    padding: 0 30px
     box-sizing: border-box
     .content-header
       line-height: 1
@@ -221,7 +265,7 @@
       justify-content: space-between
       position: relative
       box-sizing: border-box
-      border-bottom: 1px solid $color-line
+      border-bottom: 0.5px solid $color-line
       &:before
         content: ''
         position: absolute
@@ -236,7 +280,6 @@
         font-family: $font-family-regular
         font-size: $font-size-16
     .form-con
-      padding: 0 20px
       box-sizing: border-box
       .form-item
         display: flex
@@ -268,7 +311,7 @@
           border-radius: 2px
           width: 400px
           height: 40px
-          border: 1px solid $color-line
+          border: 0.5px solid $color-line
           transition: all 0.3s
           &:disabled
             color: $color-text-assist
@@ -276,7 +319,7 @@
           &::-webkit-inner-spin-button
             appearance: none
           &:hover
-            border: 1px solid #ACACAC
+            border: 0.5px solid #ACACAC
           &::placeholder
             font-family: $font-family-regular
             color: $color-text-assist
@@ -356,4 +399,40 @@
                 all-center()
                 width: 25px
                 height: 25px
+  .button-con
+    box-sizing: border-box
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    height: 80px
+    padding-left: 163px
+    background: #F9F9F9
+    border-top: 0.5px solid #E9ECF0
+    layout(row)
+    align-items: center
+    .button
+      width: 96px
+      height: 40px
+      margin-right: 20px
+      font-family: $font-family-regular
+      font-size: 16px
+      letter-spacing: 0
+      line-height: 40px
+      text-align: center
+      color: #fff
+      background: $color-main
+      border: 0.5px solid $color-main
+      border-radius: 4px
+      &.cancel
+        background: #fff
+        color: #333333
+        border: 0.5px solid #E9ECF0
+        &:hover
+          border: 0.5px solid #ACACAC
+      &:hover
+        opacity: 0.8
+      &.disable
+        opacity: 0.5
+
 </style>
