@@ -41,28 +41,7 @@ export default [
           crumbs: ['商城2', '营销2', '营销计划2'],
           authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
         },
-        component: () => import('@pages/p-goods-manage/p-goods-manage'),
-        children: [
-          {
-            path: '/manager/test-page/sample',
-            name: 'sample',
-            meta: {
-              authority: [USER_TYPE.SUPER]
-            },
-            component: () => import('@pages/sample/sample')
-          },
-          {
-            path: '/manager/test-page/other-pages',
-            name: 'other-pages',
-            component: () => import('@pages/other-pages/other-pages')
-          },
-          // 测试页面配置
-          {
-            path: '/manager/test-page/test-page1',
-            name: 'test-page1',
-            component: () => import('@pages/test-page1/test-page1')
-          },
-        ]
+        component: () => import('@pages/p-goods-manage/p-goods-manage')
       },
       // a
       {
