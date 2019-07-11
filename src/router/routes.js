@@ -93,6 +93,12 @@ export default [
       },
     ]
   },
+  // 权限受限
+  {
+    path: '/forbid',
+    name: 'forbid',
+    component: () => import('@pages/forbid/forbid')
+  },
   {
     path: '*',
     name: 'NOT_FOUND',

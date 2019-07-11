@@ -9,34 +9,40 @@
         <dl class="content-wrapper">
           <dd class="info-item-wrapper">
             <span class="key">主营品类：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.goods_material_category}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">商品数量：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.goods_num}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">所在地区：</span>
-            <span class="value">广东省广州市</span>
+            <span class="pos area-wrapper">{{areas}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">联  系 人：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.contact}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">联系方式：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.mobile}}</span>
           </dd>
           <dt class="qr-code-wrapper">
             <span class="key">微信二维码:</span>
-            <img src="http://www.oppein.cn/updata/uploads/201702/58aa85f323e2e.jpg" alt="" class="qr-code">
+            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code">
           </dt>
         </dl>
         <button class="button">进入店铺 >></button>
       </section>
     </section>
     <section class="right-wrapper">
-      <goods-item v-for="(item, index) in 3" :key="index" :showCompany="false" class="goods-item-wrapper"></goods-item>
+      <goods-item
+        v-for="(item, index) in goodsList"
+        :key="index"
+        :showCompany="false"
+        :goodsInfo="item"
+        class="goods-item-wrapper"
+      ></goods-item>
     </section>
   </div>
 </template>
@@ -49,13 +55,26 @@
   export default {
     name: COMPONENT_NAME,
     components: {
-      GoodsItem
+      GoodsItem,
+    },
+    props: {
+      marketInfo: {
+        type: Object,
+        default: () => {}
+      }
     },
     data() {
       return {
-
       }
-    }
+    },
+    computed: {
+      areas() {
+        return this.marketInfo.province + this.marketInfo.city + this.marketInfo.district
+      },
+      goodsList() {
+        return this.marketInfo.goods_list || []
+      }
+    },
   }
 </script>
 
@@ -76,6 +95,7 @@
         height :100%
         width :225px
         margin-right :10px
+        cursor :pointer
         &:last-child
           margin-right :0
     .left-wrapper
@@ -114,9 +134,21 @@
           .info-item-wrapper
             width : 256px
             padding-bottom :30px
+            position :relative
+            user-select :text
             .key
               width :70px
               color: #999
+            .value
+              no-wrap()
+            .pos
+              position absolute
+            .area-wrapper
+              height :100%
+              top:-3px
+              left :70px
+              width :400px
+              line-height :1.4
         .button
           cursor :pointer
           height :44px
@@ -124,11 +156,17 @@
           background-image: linear-gradient(270deg, #FF7822 0%, #FF520F -99%);
           border-radius: 4px;
           color: #fff
+          transition : all 0.3s
+          opacity :1
+          &:hover
+            opacity :0.7
+
       .l-header
         display :flex
         overflow :hidden
         align-items :center
         line-height :1
+        padding-top :16px
         .icon
           width :19px
           height: 20px
