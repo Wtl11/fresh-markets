@@ -4,7 +4,7 @@
       <div class="confirm-content">
         <div class="title-box">
           <div class="title">
-            {{infoTitle}}
+            {{title}}
           </div>
           <span class="close hand" @click="cancel"></span>
         </div>
@@ -50,7 +50,7 @@
     data() {
       return {
         text: '',
-        title: ''
+        title: this.infoTitle
       }
     },
     methods: {
@@ -58,7 +58,7 @@
         if (!text && !title) return
         this.$refs.modal && this.$refs.modal.showModal()
         this.text = text
-        this.title = title
+        title && (this.title = title)
       },
       hide() {
         this.$refs.modal && this.$refs.modal.hideModal()

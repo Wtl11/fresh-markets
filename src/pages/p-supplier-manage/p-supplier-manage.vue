@@ -56,6 +56,7 @@
       </div>
     </div>
     <auditing-model ref="auditingModel" @confirm="auditingConfirm"></auditing-model>
+    <change-model ref="changeModel" @confirm="changePassword"></change-model>
     <default-confirm ref="confirm" confirm="deleteConfirm"></default-confirm>
   </div>
 </template>
@@ -64,6 +65,7 @@
   import Http from '@utils/http'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import AuditingModel from './auditing-model/auditing-model'
+  import ChangeModel from './change-model/change-model'
   const PAGE_NAME = 'GOODS-MANAGE'
   const TITLE = '供应商管理'
 
@@ -158,7 +160,8 @@
     },
     components: {
       DefaultConfirm,
-      AuditingModel
+      AuditingModel,
+      ChangeModel
     },
     data() {
       return {
@@ -205,6 +208,7 @@
       // this.getGoodsStatus()
     },
     mounted() {
+      // this.$refs.changeModel.show()
       // this.$refs.confirm.show('sdfsjdklfjs')
     },
     methods: {
@@ -299,9 +303,12 @@
         console.log(data)
         this.$refs.auditingModel.hide()
       },
+      changePassword(data) {
+        console.log(data)
+      },
       deleteSupplier(item) {
         this.currentItem = item
-        this.$refs.confirm.show('确定下架'+ item.goods_name+ '?')
+        this.$refs.confirm.show('确定下架'+ item.goods_name+ '?', '删除')
       },
       // 商品下架
       deleteConfirm() {
