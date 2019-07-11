@@ -55,7 +55,7 @@
       </section>
       <section v-else class="goods-list">
         <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-          <goods-item :goodsInfo="item" @clickHandle="clickHandle"></goods-item>
+          <goods-item :goodsInfo="item"></goods-item>
         </div>
       </section>
       <section>
@@ -205,6 +205,7 @@
       },
       changeTabHandle(item, index) {
         if (this.tabIndex === index) return
+        this.selectChange(0, 'first')
         this.tabIndex = index
         this.page = 1
         this.category_id = ''
@@ -244,13 +245,6 @@
         } else {
           this._getGoodsList(false)
         }
-      },
-      clickHandle(item) {
-        let routeUrl = this.$router.resolve({
-          path: "/goods-detail",
-          query: {goodsId:item.id, supplierId: item.supplier_id}
-        });
-        window.open(routeUrl.href, '_blank')
       }
     }
   }

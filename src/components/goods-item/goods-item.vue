@@ -39,7 +39,11 @@
     },
     methods: {
       clickHandle() {
-        this.$emit('clickHandle', this.goodsInfo)
+        let routeUrl = this.$router.resolve({
+          path: "/goods-detail",
+          query: {goodsId:this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
+        });
+        window.open(routeUrl.href, '_blank')
       }
     }
   }
@@ -86,6 +90,8 @@
           margin-right: 2px
       .goods-title
         margin: 10px 0
+        height :36px
+        box-sizing :border-box
         font-family: PingFangSC-Regular
         font-size: 14px
         line-height: 18px

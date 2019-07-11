@@ -41,7 +41,6 @@
         :key="index"
         :showCompany="false"
         :goodsInfo="item"
-        @clickHandle="clickHandle"
         class="goods-item-wrapper"
       ></goods-item>
     </section>
@@ -77,13 +76,6 @@
       }
     },
     methods: {
-      clickHandle(item) {
-        let routeUrl = this.$router.resolve({
-          path: "/goods-detail",
-          query: {goodsId:item.id, supplierId: item.supplier_id}
-        });
-        window.open(routeUrl.href, '_blank')
-      },
       navHandle() {
         let routeUrl = this.$router.resolve({
           path: "/business-detail",
