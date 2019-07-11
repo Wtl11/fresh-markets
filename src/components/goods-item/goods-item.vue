@@ -24,14 +24,7 @@
       },
       goodsInfo: {
         type: Object,
-        default: () => {
-          return {
-            goods_cover_image: '',
-            purchase_price: '',
-            name: '',
-            supplier: {}
-          }
-        }
+        default: () => {}
       }
     },
     data() {

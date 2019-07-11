@@ -36,7 +36,13 @@
       </section>
     </section>
     <section class="right-wrapper">
-      <goods-item v-for="(item, index) in 3" :key="index" :showCompany="false" class="goods-item-wrapper"></goods-item>
+      <goods-item
+        v-for="(item, index) in goodsList"
+        :key="index"
+        :showCompany="false"
+        :goodsInfo="item"
+        class="goods-item-wrapper"
+      ></goods-item>
     </section>
   </div>
 </template>
@@ -64,6 +70,9 @@
     computed: {
       areas() {
         return this.marketInfo.province + this.marketInfo.city + this.marketInfo.district
+      },
+      goodsList() {
+        return this.marketInfo.goods_list || []
       }
     },
   }

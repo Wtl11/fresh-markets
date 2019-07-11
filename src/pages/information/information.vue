@@ -58,6 +58,9 @@
           <goods-item :goodsInfo="item"></goods-item>
         </div>
       </section>
+      <section>
+        <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
+      </section>
     </article>
   </div>
 </template>
@@ -68,6 +71,8 @@
   import SelectClassify from './select-classify/select-classify'
   import GoodsItem from '@components/goods-item/goods-item'
   import MarketInfo from './market-info/market-info'
+  import GoodsPagination from '@components/goods-pagination/goods-pagination'
+
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '信息平台'
   // const CLASSIFYLIST = [
@@ -88,14 +93,15 @@
     components: {
       SelectClassify,
       GoodsItem,
-      MarketInfo
+      MarketInfo,
+      GoodsPagination
     },
     page: {
       title: TITLE
     },
     data() {
       this.category_id = 0
-      this.page = 0
+      this.page = 1
       this.province = ''
       return {
         // navList: CLASSIFYLIST,
@@ -118,7 +124,12 @@
         isShowThirdSelect: false,
         selectArray: [],
         selectSecondArray: [],
-        selectThirdArray: []
+        selectThirdArray: [],
+        pageDetail: {
+          total: 1,
+          per_page: 10,
+          total_page: 1
+        },
       }
     },
     computed: {
@@ -135,13 +146,12 @@
     created() {
       this._getGoodsClassifyList()
       this._getAreasList()
-      if (this.tabIndex) {
-        this._getMarketList()
-      } else {
-        this._getGoodsList()
-      }
+      this.getList()
     },
     methods: {
+      addPage(page) {
+        this.page = page
+      },
       _getGoodsClassifyList() {
         API.Information.getGoodsClassifyList({
           data: {parent_id: -1},
@@ -178,6 +188,7 @@
           loading
         }).then(res => {
           this.goodsList = res.data
+          this.setPageDetail(res.meta)
         })
       },
       // 供应商
@@ -192,16 +203,23 @@
           loading
         }).then(res => {
           this.marketList = res.data
-          console.log(this.marketList)
+          this.setPageDetail(res.meta)
         })
       },
-      changeTabHandle(item, index) {
-        this.tabIndex = index
-        if (this.tabIndex) {
-          this._getMarketList(false)
-        } else {
-          this._getGoodsList(false)
+      setPageDetail(meta) {
+        this.pageDetail = {
+          total: meta.total,
+          per_page: meta.per_page,
+          total_page: meta.last_page
         }
+      },
+      changeTabHandle(item, index) {
+        if (this.tabIndex === index) return
+        this.tabIndex = index
+        this.page = 1
+        this.category_id = ''
+        this.province = ''
+        this.getList()
       },
       navHandle(index) {
         this.$refs.selectFirst && this.$refs.selectFirst.setSelectId(index)
@@ -228,6 +246,9 @@
         default:
           break
         }
+        this.getList()
+      },
+      getList() {
         if (this.tabIndex) {
           this._getMarketList(false)
         } else {
