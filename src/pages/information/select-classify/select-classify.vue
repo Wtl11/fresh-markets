@@ -39,7 +39,11 @@
       },
       selectHandle(item, index) {
         this.selectId = index
-        this.$emit('selectChange', this.selectId, 'as')
+        this.$emit('selectChange', this.selectId)
+      },
+      reset() {
+        this.selectId = 0
+        this.$emit('selectChange', this.selectId)
       }
     }
   }

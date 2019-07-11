@@ -17,20 +17,24 @@
       </ul>
       <div class="select-wrapper">
         <select-classify
+          ref="selectFirst"
           class="border-1"
           title="一级分类："
           @selectChange="selectChange($event, 'first')"
         ></select-classify>
         <select-classify
           v-if="isShowSendSelect"
+          ref="selectSecond"
           class="border-left-1 border-right-1 border-bottom-1"
           title="二级分类："
           @selectChange="selectChange($event, 'second')"
         ></select-classify>
         <select-classify
           v-if="isShowThirdSelect"
+          ref="selectThird"
           class="border-left-1 border-right-1 border-bottom-1"
           title="区域："
+          @selectChange="selectChange($event, 'third')"
         ></select-classify>
       </div>
       <keep-alive>
@@ -98,17 +102,20 @@
           }
         ],
         tabIndex: 0,
-        goodsList: new Array(3).fill(1),
+        goodsList: new Array(4).fill(1),
         isShowSendSelect: false,
         isShowThirdSelect: false
       }
     },
     computed: {
-      showSendSelect() {
-        return true
-      },
-      showThirdSelect() {
-        return true
+    },
+    watch: {
+      tabIndex(cur,pre) {
+        if (pre !== cur) {
+          this.$refs.selectThird && this.$refs.selectThird.reset()
+          this.$refs.selectSecond && this.$refs.selectSecond.reset()
+          this.$refs.selectFirst && this.$refs.selectFirst.reset()
+        }
       }
     },
     methods: {
@@ -122,7 +129,6 @@
         this.tabIndex = index
       },
       selectChange(id, type) {
-
         switch (type) {
         case 'first':
           this.isShowSendSelect = id > 0
@@ -159,6 +165,7 @@
 
   .information
     font-family: $font-family-regular
+    min-height :2238px
     .body-wrapper
       width :$minWidth
       margin :0 auto

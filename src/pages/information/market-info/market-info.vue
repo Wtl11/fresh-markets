@@ -36,7 +36,7 @@
       </section>
     </section>
     <section class="right-wrapper">
-      <goods-item class="goods-item-wrapper"></goods-item>
+      <goods-item v-for="(item, index) in 3" :key="index" :showCompany="false" class="goods-item-wrapper"></goods-item>
     </section>
   </div>
 </template>
@@ -75,6 +75,9 @@
       .goods-item-wrapper
         height :100%
         width :225px
+        margin-right :10px
+        &:last-child
+          margin-right :0
     .left-wrapper
       font-family: $font-family-regular
       font-size: 14px;
