@@ -21,7 +21,6 @@
     name: COMPONENT_NAME,
     data() {
       const menuData = this.createMenuData(this.$router.options.routes)
-      console.log(this.$store.state.auth, 1)
       return {
         menuData
       }

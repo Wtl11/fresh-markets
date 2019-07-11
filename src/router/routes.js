@@ -76,7 +76,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['店铺信息'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/shop-info/shop-info')
       },

@@ -1,8 +1,7 @@
-import {USER_TYPE} from '@utils/constant'
 import storage from 'storage-controller'
 
 export const state = {
-  currentUserType: storage.get('userType', USER_TYPE.SUPER) // 当前用户类型
+  currentUserType: storage.get('auth.currentUser', {}).identity // 当前用户类型
 }
 
 export const getters = {
@@ -13,6 +12,7 @@ export const mutations = {
   // 设置用户类型
   SET_USER_TYPE(state, userType) {
     state.currentUserType = userType
+    console.info(state.currentUserType, 6666)
   }
 }
 
