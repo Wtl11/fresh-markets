@@ -56,12 +56,12 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_main_images && uploadImg.goods_main_images" class="draggable">
-                <div v-for="(item, index) in uploadImg.goods_main_images" :key="index" class="show-image hand">
-                  <img class="img" :src="item" alt="">
+              <draggable v-if="goodsInfo.goods_main_images" class="draggable">
+                <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
+                  <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
-              </div>
+              </draggable>
               <div v-if="goodsInfo.goods_main_images.length < 5" class="add-image hand">
                 <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_main_images', $event)"
@@ -81,12 +81,12 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_detail_images && uploadImg.goods_detail_images" class="draggable">
-                <div v-for="(item, index) in uploadImg.goods_detail_images" :key="index" class="show-image hand">
-                  <img class="img" :src="item" alt="">
+              <draggable v-if="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
+                <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
+                  <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
-              </div>
+              </draggable>
               <div v-if="goodsInfo.goods_detail_images.length < 15" class="add-image hand">
                 <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_detail_images', $event)"
@@ -111,6 +111,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './helpers'
   import API from '@api'
+  import Draggable from 'vuedraggable'
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '新建商品'
@@ -121,57 +122,70 @@
     page: {
       title: TITLE
     },
+    components: {
+      Draggable
+    },
     data() {
       return {
         goodsId: '',
         goodsInfo: {
           goods_supplier_category_id: '',
           name: '',
-          goods_supplier_skus: [{purchase_specs: '', purchase_price: ''}],
+          goods_supplier_skus: [{purchase_specs: '', purchase_price: '', goods_sku_code: '', goods_supplier_sku_id: ''}],
           goods_main_images: [],
           goods_detail_images: []
         },
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
-        uploadImg: {goods_main_images:[],goods_detail_images:[]},
         uploadLoading: false,
         uploading: '',
       }
     },
     beforeRouteEnter(to, from, next) {
-      next((vw) => {
-        const goodsId = vw.$route.query.goodsId
-        vw.goodsId = goodsId
-        if(!goodsId) return
-        API.GoodsManage.getGoodsInfo()
+      const goodsId = to.query.goodsId
+      if (goodsId) {
+        API.GoodsManage.getGoodsInfo(goodsId)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              vw.$toast.show(res.message)
-              return
-            }
-            console.log(res.data)
-            vw._setGoodsInfo(res.data)
+            next((vw) => {
+              vw._setGoodsInfo(res.data)
+            })
           })
-      })
-    },
-    mounted() {
-      this._getCategoryData()
+      } else {
+        next((vw) => {
+          vw._getCategoryData()
+        })
+      }
     },
     methods: {
-      _getCategoryData() {
-        API.GoodsManage.getCategoryData()
-          .then((res) => {
-            // if (res.error !== this.$ERR_OK) {
-            //   this.$toast.show(res.message)
-            //   return
-            // }
-            this.firstSelect.data = res.data
-          })
-      },
       _setGoodsInfo(resData) {
-        // this.provinceSelect.content = resData.province
-        // this.citySelect.content = resData.city
-        // this.districtSelect.content = resData.district
+        this.goodsId = resData.goods_supplier_id
+        this._getCategoryData()
+        this.goodsInfo = {
+          goods_supplier_category_id: resData.goods_supplier_category_id,
+          name: resData.name,
+          goods_supplier_skus: resData.goods_supplier_skus,
+          goods_main_images: resData.goods_main_images,
+          goods_detail_images: resData.goods_detail_images
+        }
+      },
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData({parent_id: -1,goods_id: this.goodsId||''})
+          .then((res) => {
+            this.firstSelect.data = res.data
+            res.data.forEach((item) => {
+              if (item.is_selected) {
+                this.firstSelect.content = item.name
+                this.secondSelect.data = item.list
+                item.list.forEach((secondItem) => {
+                  if (secondItem.is_selected) {
+                    this.secondSelect.content = secondItem.name
+                    return false
+                  }
+                })
+                return false
+              }
+            })
+          })
       },
       _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
@@ -179,23 +193,18 @@
           this[childKey].data = data.list
         }
       },
+      _setSort() {},
       _addImg(key, e) {
         this.uploading = key
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
-          if (resData.error !== this.$ERR_OK) {
-            this.$toast.show(resData.message)
-            return
-          }
-          this.goodsInfo[key].push({id: resData.id})
-          this.uploadImg[key].push(resData.url)
+          this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
         })
       },
       _delImg(key, index) {
         this.goodsInfo[key].splice(index, 1)
-        this.uploadImg[key].splice(index, 1)
       },
       _checkForm() {
         if(submitting) {
@@ -231,14 +240,16 @@
       _subEdit() {
         if(!this._checkForm()) return
         submitting = true
-        // const apiArr = ['editGoodsInfo','creatGoodsInfo']
-        API.GoodsManage.creatGoodsInfo(this.goodsInfo, true, this.goodsId)
+        let apiName = 'creatGoodsInfo'
+        if(this.goodsId) {
+          apiName = 'editGoodsInfo'
+        }
+        API.GoodsManage[apiName](this.goodsInfo, true, this.goodsId)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              this.$toast.show(res.message)
-              return
-            }
-            console.log(res.data)
+            this.$toast.show('保存成功！')
+            setTimeout(()=>{
+              this.$router.push(`/manager/goods-manage`)
+            },1000)
           })
           .finally(() => {
             submitting = false

@@ -17,7 +17,7 @@ export default {
     return http.post({url, data, loading})
   },
   // 更新店铺信息
-  editSupplierInfo(id, data, loading = false) {
+  editSupplierInfo(data, loading = false, id) {
     let url = `/market-info/api/supplier/update/${id}`
     return http.put({url, data, loading})
   }

@@ -23,7 +23,7 @@ function _getAuthorization(options, callback) {
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key
-  const Authorization = storage.get('auth.currentUser').access_token
+  const Authorization = storage.get('auth.currentUser')?storage.get('auth.currentUser').access_token:''
   const url =
     API_PUB + '/api/cos/h5-upload-image-sign?method=' + method + '&image=' + encodeURIComponent(pathname)
   const xhr = new XMLHttpRequest()

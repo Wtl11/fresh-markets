@@ -26,9 +26,7 @@
             区域
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="provinceSelect" @setValue="_setSelectValue($event, 'province')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="citySelect" @setValue="_setSelectValue($event, 'city')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="districtSelect" @setValue="_setSelectValue($event, 'district')"></base-drop-down>
+            <city-select ref="city" :height="44" :width="195" @setValue="_setCityValue"></city-select>
           </div>
         </div>
         <div class="form-item  form-image-box">
@@ -77,7 +75,7 @@
             主营品类
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id', 'secondSelect')"></base-drop-down>
             <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
           </div>
         </div>
@@ -99,7 +97,7 @@
           </div>
           <div class="form-input-box">
             <input v-model="shopInfo.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
-                   maxlength="29" @mousewheel.native.prevent
+                   disabled maxlength="29" @mousewheel.native.prevent
             >
           </div>
         </div>
@@ -151,29 +149,26 @@
   // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
+  import CitySelect from './city-select/city-select'
   const PAGE_NAME = 'SHOP_INFO'
   const TITLE = '店铺信息'
-  const SELECT_TEST = [
-    { id: 1, name: '广东' },
-    { id: 2, name: '北京' },
-    { id: 3, name: '上海' }
-  ]
   const APPROVE_TEXT = ['审核中...', '提交审核', '提交审核']
   let submitting = false
+  let shopId = ''
 
   export default {
     name: PAGE_NAME,
     page: {
       title: TITLE
     },
+    components: {
+      CitySelect
+    },
     data() {
       return {
         shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
-        provinceSelect: {check: false, show: false, content: '请选择省份', type: 'default', data: SELECT_TEST},
-        citySelect: {check: false, show: false, content: '请选择城市', type: 'default', data: SELECT_TEST},
-        districtSelect: {check: false, show: false, content: '请选择区/县', type: 'default', data: SELECT_TEST},
-        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: SELECT_TEST},
-        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: SELECT_TEST},
+        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
@@ -186,24 +181,59 @@
       next((vw) => {
         API.SupplierInfo.getSupplierInfo()
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              // vw.$toast.show(res.message)
-              return
-            }
-            console.log(res.data)
-            vw._getSupplierInfo(res.data)
+            vw._setSupplierInfo(res.data)
           })
       })
     },
     methods: {
-      _getSupplierInfo(resData) {
-        this.provinceSelect.content = resData.province
-        this.citySelect.content = resData.city
-        this.districtSelect.content = resData.district
+      _setSupplierInfo(resData) {
+        shopId = resData.id
+        this._getCategoryData()
         this.approveStatus = resData.approve_status
+        this.shopInfo = {
+          name: resData.name,
+          province: resData.province,
+          city: resData.city,
+          district: resData.district,
+          image_id: resData.image_id,
+          goods_start_num: resData.goods_start_num,
+          category_id: resData.category_id,
+          contact: resData.contact,
+          mobile: resData.mobile,
+          wechat_image_id: resData.wechat_image_id
+        }
+        this.uploadImg = {license:resData.image_url,QRCode:resData.wechat_image_url}
+        this.$refs.city.infoCity([this.shopInfo.province, this.shopInfo.city, this.shopInfo.district])
       },
-      _setSelectValue(data, key) {
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData({parent_id: -1, supplier_id: shopId})
+          .then((res) => {
+            this.firstSelect.data = res.data
+            res.data.forEach((item) => {
+              if (item.is_selected) {
+                this.firstSelect.content = item.name
+                this.secondSelect.data = item.list
+                item.list.forEach((secondItem) => {
+                  if (secondItem.is_selected) {
+                    this.secondSelect.content = secondItem.name
+                    return false
+                  }
+                })
+                return false
+              }
+            })
+          })
+      },
+      _setSelectValue(data, key, childKey = false) {
         this.shopInfo[key] = data.id
+        if(childKey) {
+          this[childKey].data = data.list
+        }
+      },
+      _setCityValue(data) {
+        this.shopInfo.province = data[0].includes('请选择') ? '' : data[0]
+        this.shopInfo.city = data[1].includes('请选择') ? '' : data[1]
+        this.shopInfo.district = data[2].includes('请选择') ? '' : data[2]
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
@@ -211,10 +241,6 @@
         uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
-          if (resData.error !== this.$ERR_OK) {
-            this.$toast.show(resData.message)
-            return
-          }
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
         })
@@ -238,7 +264,7 @@
           wechat_image_id: '请上传微信二维码'
         }
         for (let k in this.shopInfo) {
-          if(!this.shopInfo[k].trim()) {
+          if(!(this.shopInfo[k]+'').trim()) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -248,13 +274,8 @@
       _subModify() {
         if(!this._checkForm()) return
         submitting = true
-        API.SupplierInfo.editSupplierInfo(this.shopInfo, true)
+        API.SupplierInfo.editSupplierInfo(this.shopInfo, true, shopId)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              this.$toast.show(res.message)
-              return
-            }
-            console.log(res.data)
             this.subModify = true
           })
           .finally(() => {
@@ -442,6 +463,7 @@
       width: 100%
       height: 100%
       background: #fff
+      z-index: 101
       layout()
       align-items: center
       justify-content: center

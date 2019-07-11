@@ -34,11 +34,6 @@ export default [
         path: '/goods-detail',
         name: 'goods-detail',
         component: () => import('@pages/goods-detail/goods-detail')
-      },
-      {
-        path: '/business-detail',
-        name: 'business-detail',
-        component: () => import('@pages/business-detail/business-detail')
       }
     ]
   },
@@ -85,10 +80,30 @@ export default [
         },
         component: () => import('@pages/shop-info/shop-info')
       },
+      // 商品管理
+      {
+        path: '/manager/goods-manage',
+        name: 'goods-manage',
+        meta: {
+          title: '编辑商品',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['商品','商品管理'],
+          authority: [USER_TYPE.MERCHANT]
+        },
+        component: () => import('@pages/goods-manage/goods-manage')
+      },
       // 新建/编辑商品
       {
         path: '/manager/edit-goods',
         name: 'edit-goods',
+        meta: {
+          title: '编辑商品',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['商品','商品管理','编辑商品'],
+          authority: [USER_TYPE.MERCHANT]
+        },
         component: () => import('@pages/edit-goods/edit-goods')
       },
     ]

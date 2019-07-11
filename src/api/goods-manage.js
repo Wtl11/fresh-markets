@@ -2,9 +2,14 @@ import http from '@utils/http'
 
 export default {
   // 获取分类数据
-  getCategoryData(data) {
+  getCategoryData(data, loading = false) {
     let url = '/market-info/api/supplier/goods-material-category'
-    return http.get({url, data})
+    return http.get({url, data, loading})
+  },
+  // 获取商品统计
+  getGoodsStatus(data, loading = false) {
+    let url = '/market-info/api/supplier/goods-supplier-status'
+    return http.get({url, data, loading})
   },
   // 获取商品列表
   getGoodsList(data, loading = true) {
@@ -12,7 +17,7 @@ export default {
     return http.get({url, data, loading})
   },
   // 获取商品信息
-  getGoodsInfo(id, data, loading = true) {
+  getGoodsInfo(id, data = {}, loading = true) {
     let url = `/market-info/api/supplier/goods-supplier/${id}`
     return http.get({url, data, loading})
   },
