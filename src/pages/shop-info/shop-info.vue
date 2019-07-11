@@ -208,7 +208,7 @@
         this.$refs.city.infoCity([this.shopInfo.province, this.shopInfo.city, this.shopInfo.district])
       },
       _getCategoryData() {
-        API.GoodsManage.getCategoryData()
+        API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
             this.firstSelect.data = res.data
             res.data.forEach((item) => {

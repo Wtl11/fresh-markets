@@ -173,7 +173,7 @@
     },
     methods: {
       _getCategoryData() {
-        API.GoodsManage.getCategoryData()
+        API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
             this.firstSelect.data = res.data
           })
