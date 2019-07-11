@@ -139,28 +139,24 @@
       }
     },
     beforeRouteEnter(to, from, next) {
-      next((vw) => {
-        const goodsId = vw.$route.query.goodsId
-        vw.goodsId = goodsId
-        if(!goodsId) return
+      const goodsId = to.query.goodsId
+      if (goodsId) {
         API.GoodsManage.getGoodsInfo(goodsId)
           .then((res) => {
-            console.log(res.data)
-            vw._setGoodsInfo(res.data)
+            next((vw) => {
+              vw._setGoodsInfo(res.data)
+            })
           })
-      })
-    },
-    mounted() {
-      this._getCategoryData()
+      } else {
+        next((vw) => {
+          vw._getCategoryData()
+        })
+      }
     },
     methods: {
-      _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1})
-          .then((res) => {
-            this.firstSelect.data = res.data
-          })
-      },
       _setGoodsInfo(resData) {
+        this.goodsId = resData.goods_supplier_id
+        this._getCategoryData()
         this.goodsInfo = {
           goods_supplier_category_id: resData.goods_supplier_category_id,
           name: resData.name,
@@ -169,6 +165,25 @@
           goods_detail_images: resData.goods_detail_images
         }
         this.uploadImg = {goods_main_images:resData.goods_main_images,goods_detail_images:resData.goods_detail_images}
+      },
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData({parent_id: -1,goods_id: this.goodsId||''})
+          .then((res) => {
+            this.firstSelect.data = res.data
+            res.data.forEach((item) => {
+              if (item.is_selected) {
+                this.firstSelect.content = item.name
+                this.secondSelect.data = item.list
+                item.list.forEach((secondItem) => {
+                  if (secondItem.is_selected) {
+                    this.secondSelect.content = secondItem.name
+                    return false
+                  }
+                })
+                return false
+              }
+            })
+          })
       },
       _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
@@ -232,7 +247,7 @@
           .then((res) => {
             this.$toast.show('保存成功！')
             setTimeout(()=>{
-              this._goBack()
+              this.$router.push(`/manager/goods-manage`)
             },1000)
           })
           .finally(() => {
