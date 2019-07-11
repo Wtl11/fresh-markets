@@ -185,13 +185,11 @@
           })
       })
     },
-    mounted() {
-      this._getCategoryData()
-    },
     methods: {
       _setSupplierInfo(resData) {
-        this.approveStatus = resData.approve_status
         shopId = resData.id
+        this._getCategoryData()
+        this.approveStatus = resData.approve_status
         this.shopInfo = {
           name: resData.name,
           province: resData.province,
@@ -208,7 +206,7 @@
         this.$refs.city.infoCity([this.shopInfo.province, this.shopInfo.city, this.shopInfo.district])
       },
       _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1})
+        API.GoodsManage.getCategoryData({parent_id: -1, supplier_id: shopId})
           .then((res) => {
             this.firstSelect.data = res.data
             res.data.forEach((item) => {
@@ -218,8 +216,10 @@
                 item.list.forEach((secondItem) => {
                   if (secondItem.is_selected) {
                     this.secondSelect.content = secondItem.name
+                    return false
                   }
                 })
+                return false
               }
             })
           })
