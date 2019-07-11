@@ -189,22 +189,14 @@
         this.uploading = applyKey
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then(res => {
-          console.log(res)
-          // let imagesArr = []
-          // resArr.forEach((item) => {
-          //   if (item.error !== this.$ERR_OK) {
-          //     return this.$toast.show(item.message)
-          //   }
-          //   let obj = {
-          //     id: 0,
-          //     image_id: item.data.id,
-          //     image_url: item.data.url
-          //   }
-          //   imagesArr.push(obj)
-          // })
-          // this.shopInfo[applyKey] = imagesArr[0].image_id
-          // this.uploadImg[uploadKey] = imagesArr[0].image_url
-          // this.uploadLoading = false
+          this.uploadLoading = false
+          const resData = res[0].data
+          if (resData.error !== this.$ERR_OK) {
+            this.$toast.show(resData.message)
+            return
+          }
+          this.shopInfo[applyKey] = resData.id
+          this.uploadImg[uploadKey] = resData.url
         })
       },
       _delImg(applyKey, uploadKey) {
