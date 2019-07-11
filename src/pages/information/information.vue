@@ -39,12 +39,12 @@
       </div>
       <keep-alive>
         <div v-if="tabIndex" class="goods-list">
-          <div class="market-item-info" v-for="(item, idx) in goodsList" :key="idx">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="market-item-info">
             <market-info></market-info>
           </div>
         </div>
         <div v-else class="goods-list">
-          <div class="goods-item-box" v-for="(item, idx) in goodsList" :key="idx">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
             <goods-item></goods-item>
           </div>
         </div>
