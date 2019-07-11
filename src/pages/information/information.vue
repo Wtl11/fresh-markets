@@ -176,7 +176,7 @@
           loading
         }).then(res => {
           this.goodsList = res.data
-          this.tabList[0].number = res.meta.total
+          this.tabList[0].number === 0 && (this.tabList[0].number = res.meta.total)
           this.setPageDetail(res.meta)
         })
       },
@@ -192,7 +192,7 @@
           loading
         }).then(res => {
           this.marketList = res.data
-          this.tabList[1].number = res.meta.total
+          this.tabList[1].number === 0 && (this.tabList[1].number = res.meta.total)
           this.setPageDetail(res.meta)
         })
       },

@@ -29,7 +29,7 @@
           </dd>
           <dt class="qr-code-wrapper">
             <span class="key">微信二维码:</span>
-            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code">
+            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code" @click="qrCodeHandle">
           </dt>
         </dl>
         <button class="button" @click.stop="navHandle">进入店铺 >></button>
@@ -82,6 +82,9 @@
           query: {supplierId:this.marketInfo.id}
         });
         window.open(routeUrl.href, '_blank')
+      },
+      qrCodeHandle() {
+        window.open(this.marketInfo.wechat_image_url, '_blank')
       }
     }
   }
@@ -140,6 +143,7 @@
               border-radius: 2px;
               overflow :hidden
               display :inline-block
+              cursor :pointer
           .info-item-wrapper
             width : 256px
             padding-bottom :30px
