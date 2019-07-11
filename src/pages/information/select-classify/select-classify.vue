@@ -1,8 +1,8 @@
 <template>
   <div class="select-classify" :class="{active: isOpen}">
-    <article class="left-wrapper">一级分类：</article>
+    <article class="left-wrapper">{{title}}</article>
     <article ref="middle" class="middle-wrapper">
-      <span v-for="(item, index) in classifyData" :key="index" class="classify-item">时令鲜果</span>
+      <span v-for="(item, index) in classifyData" :key="index" class="classify-item" :class="{active: selectId === index}" @click="selectHandle(item, index)">{{index === 0 ? '全部': '时令鲜果'}}</span>
     </article>
     <article class="right-wrapper" @click="openHandle"><span class="text">{{isOpen ? '收起' : '展开'}}</span><i class="triangle" :class="{active: isOpen}"></i></article>
   </div>
@@ -17,30 +17,29 @@
       classifyData: {
         type: Array,
         default: () => new Array(30).fill(1)
+      },
+      title: {
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
         isOpen: false,
-        heightAuto: false
+        selectId: 0
       }
     },
     computed: {
     },
     watch: {
-      isOpen(val) {
-        setTimeout(() => {
-          this.heightAuto = val
-        }, 300)
-      }
     },
     methods: {
       openHandle() {
         this.isOpen = !this.isOpen
-        setTimeout(() => {
-          console.log(this.$refs.middle.getBoundingClientRect())
-        }, 300)
-        // console.log(this.$refs.middle.getBoundingClientRect())
+      },
+      selectHandle(item, index) {
+        this.selectId = index
+        this.$emit('selectChange', this.selectId, 'as')
       }
     }
   }
@@ -60,13 +59,17 @@
     box-sizing border-box
     transition :all 0.3s ease-in-out
     height:44px
+    overflow :hidden
+    border-radius :1px
+    &.active
+      overflow :visible
+      height :auto
     .left-wrapper
       padding-left :15px
       width :100px
       color: #999
     .middle-wrapper
       flex :1
-      overflow :hidden
       .classify-item
         float: left
         line-height :14px
@@ -74,6 +77,8 @@
         cursor :pointer
         margin-right :40px
         margin-bottom :15px
+        &.active
+          color: #ff520f
     .right-wrapper
       cursor :pointer
       position :relative
