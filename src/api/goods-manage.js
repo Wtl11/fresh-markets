@@ -6,6 +6,11 @@ export default {
     let url = '/market-info/api/supplier/goods-material-category'
     return http.get({url, data, loading})
   },
+  // 获取商品统计
+  getGoodsStatus(data, loading = false) {
+    let url = '/market-info/api/supplier/goods-supplier-status'
+    return http.get({url, data, loading})
+  },
   // 获取商品列表
   getGoodsList(data, loading = true) {
     let url = '/market-info/api/supplier/goods-supplier'
