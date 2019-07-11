@@ -100,6 +100,13 @@ export default [
       {
         path: '/manager/shop-info',
         name: 'shop-info',
+        meta: {
+          title: '店铺信息',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['店铺信息'],
+          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+        },
         component: () => import('@pages/shop-info/shop-info')
       },
       // 新建/编辑商品

@@ -16,7 +16,7 @@
             供应商名称
           </div>
           <div class="form-input-box">
-            <input v-model="applyData.name" type="text" class="form-input" maxlength="29"
+            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="29"
                    @mousewheel.native.prevent
             >
           </div>
@@ -39,7 +39,7 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="applyData.image_id && uploadImg.license" class="draggable">
+              <div v-if="shopInfo.image_id && uploadImg.license" class="draggable">
                 <div class="show-image hand">
                   <img class="img" :src="uploadImg.license" alt="">
                   <span class="close" @click="_delImg('image_id', 'license')"></span>
@@ -66,7 +66,7 @@
             商品起批量
           </div>
           <div class="form-input-box">
-            <input v-model="applyData.goods_start_num" type="text" class="form-input" placeholder="请输入起批量件数"
+            <input v-model="shopInfo.goods_start_num" type="text" class="form-input" placeholder="请输入起批量件数"
                    maxlength="29" @mousewheel.native.prevent
             >
           </div>
@@ -88,11 +88,10 @@
             联系人
           </div>
           <div class="form-input-box">
-            <input v-model="applyData.contact" type="text" class="form-input" placeholder="请输入联系人信息"
+            <input v-model="shopInfo.contact" type="text" class="form-input" placeholder="请输入联系人信息"
                    maxlength="29" @mousewheel.native.prevent
             >
           </div>
-          <div class="form-input-unit">件</div>
         </div>
         <div class="form-item">
           <div class="form-title">
@@ -100,11 +99,10 @@
             联系电话
           </div>
           <div class="form-input-box">
-            <input v-model="applyData.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
+            <input v-model="shopInfo.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
                    maxlength="29" @mousewheel.native.prevent
             >
           </div>
-          <div class="form-input-unit">件</div>
         </div>
         <div class="form-item  form-image-box">
           <div class="form-title">
@@ -113,7 +111,7 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="applyData.wechat_image_id && uploadImg.QRCode" class="draggable">
+              <div v-if="shopInfo.wechat_image_id && uploadImg.QRCode" class="draggable">
                 <div class="show-image hand">
                   <img class="img" :src="uploadImg.QRCode" alt="">
                   <span class="close" @click="_delImg('wechat_image_id', 'QRCode')"></span>
@@ -138,17 +136,16 @@
       </div>
     </div>
     <div class="button-con">
-      <div class="hand button cancel">取消</div>
-      <div class="hand button confirm">{{confirmText}}</div>
+      <div class="hand button cancel" @click="_goBack">取消</div>
+      <div class="hand button confirm" @click="_subApply">{{confirmText}}</div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   // import * as Helpers from './helpers'
-  // import API from '@api'
-  import * as cos from '../../utils/cos/cos'
-  import {fileType} from '../../utils/cos/file-config'
+  import API from '@api'
+  import {uploadFiles} from '../../utils/cos/cos'
 
   const PAGE_NAME = 'APPLY_SUPPLIERS'
   const TITLE = '申请成为供应商'
@@ -157,6 +154,7 @@
     { id: 2, name: '北京' },
     { id: 3, name: '上海' }
   ]
+  let submitting = false
 
   export default {
     name: PAGE_NAME,
@@ -165,9 +163,7 @@
     },
     data() {
       return {
-        applyData: {
-          name
-        },
+        shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
         provinceSelect: {check: false, show: false, content: '请选择省份', type: 'default', data: SELECT_TEST},
         citySelect: {check: false, show: false, content: '请选择城市', type: 'default', data: SELECT_TEST},
         districtSelect: {check: false, show: false, content: '请选择区/县', type: 'default', data: SELECT_TEST},
@@ -181,38 +177,80 @@
     },
     methods: {
       _setSelectValue(data, key) {
-        this.applyData[key] = data.id
+        this.shopInfo[key] = data.id
+      },
+      changeHandle(applyKey, uploadKey, e) {
+        console.log([e.target.files[0]])
+        uploadFiles({files: [e.target.files[0]]}).then(res => {
+          console.log(res)
+        })
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
-        let arr = Array.from(e.target.files)
-        e.target.value = ''
-        if (arr.length < 1) return
-        arr = arr.slice(0, 1)
         this.uploadLoading = true
-        cos.uploadFiles(fileType.IMAGE_TYPE, arr).then((resArr) => {
-          let imagesArr = []
-          resArr.forEach((item) => {
-            if (item.error !== this.$ERR_OK) {
-              return this.$toast.show(item.message)
-            }
-            let obj = {
-              id: 0,
-              image_id: item.data.id,
-              image_url: item.data.url
-            }
-            imagesArr.push(obj)
-          })
-          this.applyData[applyKey] = imagesArr[0].image_id
-          this.uploadImg[uploadKey] = imagesArr[0].image_url
-          this.uploadLoading = false
-        }).catch(() => {
-          this.uploadLoading = false
+        uploadFiles({files: [e.target.files[0]]}).then(res => {
+          console.log(res)
+          // let imagesArr = []
+          // resArr.forEach((item) => {
+          //   if (item.error !== this.$ERR_OK) {
+          //     return this.$toast.show(item.message)
+          //   }
+          //   let obj = {
+          //     id: 0,
+          //     image_id: item.data.id,
+          //     image_url: item.data.url
+          //   }
+          //   imagesArr.push(obj)
+          // })
+          // this.shopInfo[applyKey] = imagesArr[0].image_id
+          // this.uploadImg[uploadKey] = imagesArr[0].image_url
+          // this.uploadLoading = false
         })
       },
       _delImg(applyKey, uploadKey) {
-        this.applyData[applyKey] = ''
+        this.shopInfo[applyKey] = ''
         this.uploadImg[uploadKey] = ''
+      },
+      _checkForm() {
+        if(submitting) {
+          return false
+        }
+        let errorMsg = {
+          name: '请输入供应商名称',
+          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
+          image_id: '请上传营业执照',
+          goods_start_num: '请输入商品起批量',
+          category_id: '请选择主营品类',
+          contact: '请输入联系人',
+          mobile: '请输入联系电话',
+          wechat_image_id: '请上传微信二维码'
+        }
+        for (let k in this.shopInfo) {
+          if(!this.shopInfo[k].trim()) {
+            this.$toast.show(errorMsg[k])
+            return false
+          }
+        }
+        return true
+      },
+      _subApply() {
+        if(!this._checkForm()) return
+        submitting = true
+        API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
+          .then((res) => {
+            if (res.error !== 0) {
+              this.$toast.show(res.message)
+              return
+            }
+            console.log(res.data)
+          })
+          .finally(() => {
+            submitting = false
+            this.$loading.hide()
+          })
+      },
+      _goBack() {
+        this.$router.back()
       }
     }
   }
@@ -276,7 +314,7 @@
         bottom: 0px
         left: 0
       .content-title
-        color: $color-text-main
+        color: #333333
         font-family: $font-family-regular
         font-size: $font-size-16
     .form-con
