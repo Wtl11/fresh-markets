@@ -1,6 +1,7 @@
 import HTTP from './http'
 import {app as APP} from '../main'
 import {ERR_OK} from './config'
+import storage from 'storage-controller'
 
 const AUTHORITY_LOST = 10000 // 权限失效
 
@@ -17,11 +18,11 @@ HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
   if (loading) {
     APP.$loading && APP.$loading.hide()
   }
-  if (ERR_OK !== res.error) {
+  if (!res || ERR_OK !== res.error) {
     if (typeof toast === 'function') {
       toast(res)
     } else if(toast) {
-      APP.$toast.show(res.message)
+      APP.$toast.show(res && res.message)
     }
   }
   if (typeof formatter === 'function') {
@@ -57,3 +58,7 @@ function resetUrl(url) {
   }
   return url
 }
+HTTP.setHeaders({
+  'Authorization': storage.get('auth.currentUser', {}).access_token,
+  'Current-Corp': process.env.VUE_APP_CURRENT_CORP
+})
