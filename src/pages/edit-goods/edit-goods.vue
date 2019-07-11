@@ -15,8 +15,8 @@
             类目
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'goods_supplier_category_id', 'secondSelect')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'goods_supplier_category_id')"></base-drop-down>
           </div>
         </div>
         <div class="form-item">
@@ -25,18 +25,14 @@
             商品主标题
           </div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.name" type="text" class="form-input" maxlength="29"
-                   @mousewheel.native.prevent
-            >
+            <input v-model="goodsInfo.name" type="text" class="form-input" maxlength="30" @mousewheel.native.prevent>
           </div>
           <div class="form-tip">商品在店铺商品显示的名称</div>
         </div>
         <div class="form-item">
           <div class="form-title">采购规格</div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.goods_start_num" type="text" class="form-input"
-                   maxlength="29" @mousewheel.native.prevent
-            >
+            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_specs" type="text" class="form-input" maxlength="10" @mousewheel.native.prevent>
           </div>
         </div>
         <div class="form-item">
@@ -45,9 +41,7 @@
             采购价格
           </div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.contact" type="text" class="form-input"
-                   maxlength="29" @mousewheel.native.prevent
-            >
+            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_price" type="text" class="form-input" @mousewheel.native.prevent>
           </div>
         </div>
       </div>
@@ -62,20 +56,17 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.image_id && uploadImg.license" class="draggable">
-                <div class="show-image hand">
-                  <img class="img" :src="uploadImg.license" alt="">
-                  <span class="close" @click="_delImg('image_id', 'license')"></span>
+              <div v-if="goodsInfo.goods_main_images && uploadImg.goods_main_images" class="draggable">
+                <div v-for="(item, index) in uploadImg.goods_main_images" :key="index" class="show-image hand">
+                  <img class="img" :src="item" alt="">
+                  <span class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
               </div>
-              <div v-else class="add-image hand">
-                <input type="file"
-                       class="sendImage hand"
-                       multiple="multiple"
-                       accept="image/*"
-                       @change="_addImg('image_id', 'license', $event)"
+              <div v-if="goodsInfo.goods_main_images.length < 5" class="add-image hand">
+                <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
+                       @change="_addImg('goods_main_images', $event)"
                 >
-                <div v-if="uploadLoading && uploading === 'image_id'" class="loading-mask">
+                <div v-if="uploadLoading && uploading === 'goods_main_images'" class="loading-mask">
                   <img src="./loading.gif" class="loading">
                 </div>
               </div>
@@ -90,20 +81,17 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.wechat_image_id && uploadImg.QRCode" class="draggable">
-                <div class="show-image hand">
-                  <img class="img" :src="uploadImg.QRCode" alt="">
-                  <span class="close" @click="_delImg('wechat_image_id', 'QRCode')"></span>
+              <div v-if="goodsInfo.goods_detail_images && uploadImg.goods_detail_images" class="draggable">
+                <div v-for="(item, index) in uploadImg.goods_detail_images" :key="index" class="show-image hand">
+                  <img class="img" :src="item" alt="">
+                  <span class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
               </div>
-              <div v-else class="add-image hand">
-                <input type="file"
-                       class="sendImage hand"
-                       multiple="multiple"
-                       accept="image/*"
-                       @change="_addImg('wechat_image_id', 'QRCode', $event)"
+              <div v-if="goodsInfo.goods_detail_images.length < 15" class="add-image hand">
+                <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
+                       @change="_addImg('goods_detail_images', $event)"
                 >
-                <div v-if="uploadLoading && uploading === 'wechat_image_id'" class="loading-mask">
+                <div v-if="uploadLoading && uploading === 'goods_detail_images'" class="loading-mask">
                   <img src="./loading.gif" class="loading">
                 </div>
               </div>
@@ -114,8 +102,8 @@
       </div>
     </div>
     <div class="button-con">
-      <div class="hand button cancel">取消</div>
-      <div class="hand button" @click="_subApply">保存</div>
+      <div class="hand button cancel" @click="_goBack">取消</div>
+      <div class="hand button" @click="_subEdit">保存</div>
     </div>
   </div>
 </template>
@@ -126,12 +114,6 @@
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '新建商品'
-  const SELECT_TEST = [
-    { id: 1, name: '广东' },
-    { id: 2, name: '北京' },
-    { id: 3, name: '上海' }
-  ]
-  const APPROVE_TEXT = ['审核中...', '提交审核', '提交审核']
   let submitting = false
 
   export default {
@@ -141,91 +123,118 @@
     },
     data() {
       return {
-        goodsInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
-        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: SELECT_TEST},
-        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: SELECT_TEST},
-        uploadImg: {license:'',QRCode:''},
+        goodsId: '',
+        goodsInfo: {
+          goods_supplier_category_id: '',
+          name: '',
+          goods_supplier_skus: [{purchase_specs: '', purchase_price: ''}],
+          goods_main_images: [],
+          goods_detail_images: []
+        },
+        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
+        uploadImg: {goods_main_images:[],goods_detail_images:[]},
         uploadLoading: false,
         uploading: '',
-        approveArr: APPROVE_TEXT,
       }
     },
     beforeRouteEnter(to, from, next) {
       next((vw) => {
-        API.SupplierInfo.getSupplierInfo()
+        const goodsId = vw.$route.query.goodsId
+        vw.goodsId = goodsId
+        if(!goodsId) return
+        API.GoodsManage.getGoodsInfo()
           .then((res) => {
-            if (res.error !== 0) {
+            if (res.error !== this.$ERR_OK) {
               vw.$toast.show(res.message)
               return
             }
             console.log(res.data)
-            vw._getSupplierInfo(res.data)
+            vw._setGoodsInfo(res.data)
           })
       })
     },
+    mounted() {
+      this._getCategoryData()
+    },
     methods: {
-      _getSupplierInfo(resData) {
-        this.provinceSelect.content = resData.province
-        this.citySelect.content = resData.city
-        this.districtSelect.content = resData.district
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData()
+          .then((res) => {
+            // if (res.error !== this.$ERR_OK) {
+            //   this.$toast.show(res.message)
+            //   return
+            // }
+            this.firstSelect.data = res.data
+          })
       },
-      _setSelectValue(data, key) {
+      _setGoodsInfo(resData) {
+        // this.provinceSelect.content = resData.province
+        // this.citySelect.content = resData.city
+        // this.districtSelect.content = resData.district
+      },
+      _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
+        if(childKey) {
+          this[childKey].data = data.list
+        }
       },
-      _addImg(applyKey, uploadKey, e) {
-        this.uploading = applyKey
+      _addImg(key, e) {
+        this.uploading = key
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then(res => {
-          console.log(res)
-          // let imagesArr = []
-          // resArr.forEach((item) => {
-          //   if (item.error !== this.$ERR_OK) {
-          //     return this.$toast.show(item.message)
-          //   }
-          //   let obj = {
-          //     id: 0,
-          //     image_id: item.data.id,
-          //     image_url: item.data.url
-          //   }
-          //   imagesArr.push(obj)
-          // })
-          // this.goodsInfo[applyKey] = imagesArr[0].image_id
-          // this.uploadImg[uploadKey] = imagesArr[0].image_url
-          // this.uploadLoading = false
+          this.uploadLoading = false
+          const resData = res[0].data
+          if (resData.error !== this.$ERR_OK) {
+            this.$toast.show(resData.message)
+            return
+          }
+          this.goodsInfo[key].push({id: resData.id})
+          this.uploadImg[key].push(resData.url)
         })
       },
-      _delImg(applyKey, uploadKey) {
-        this.goodsInfo[applyKey] = ''
-        this.uploadImg[uploadKey] = ''
+      _delImg(key, index) {
+        this.goodsInfo[key].splice(index, 1)
+        this.uploadImg[key].splice(index, 1)
       },
       _checkForm() {
         if(submitting) {
           return false
         }
         let errorMsg = {
-          name: '请输入供应商名称',
-          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
-          image_id: '请上传营业执照',
-          goods_start_num: '请输入商品起批量',
-          category_id: '请选择主营品类',
-          contact: '请输入联系人',
-          mobile: '请输入联系电话',
-          wechat_image_id: '请上传微信二维码'
+          goods_supplier_category_id: '请选择主营品类',
+          name: '请输入商品主标题',
+          goods_supplier_skus: '请输入采购价格',
+          goods_main_images: '请上传商品封面图',
+          goods_detail_images: '请上传商品详情图'
         }
         for (let k in this.goodsInfo) {
-          if(!this.goodsInfo[k].trim()) {
-            this.$toast.show(errorMsg[k])
-            return false
+          if(k === 'goods_supplier_skus') {
+            if(!this.goodsInfo.goods_supplier_skus[0].purchase_price.trim()) {
+              this.$toast.show(errorMsg[k])
+              return false
+            }
+          } else if(k === 'goods_main_images' || k === 'goods_detail_images') {
+            if(this.goodsInfo[k].length<=0) {
+              this.$toast.show(errorMsg[k])
+              return false
+            }
+          } else {
+            if(!(this.goodsInfo[k]+'').trim()) {
+              this.$toast.show(errorMsg[k])
+              return false
+            }
           }
         }
         return true
       },
-      _subApply() {
+      _subEdit() {
         if(!this._checkForm()) return
         submitting = true
-        API.SupplierInfo.editSupplierInfo(this.goodsInfo, true)
+        // const apiArr = ['editGoodsInfo','creatGoodsInfo']
+        API.GoodsManage.creatGoodsInfo(this.goodsInfo, true, this.goodsId)
           .then((res) => {
-            if (res.error !== 0) {
+            if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
               return
             }
@@ -235,6 +244,9 @@
             submitting = false
             this.$loading.hide()
           })
+      },
+      _goBack() {
+        this.$router.back()
       }
     }
   }
@@ -293,6 +305,7 @@
         font-size: $font-size-16
     .form-con
       box-sizing: border-box
+      padding-bottom: 24px
       .form-item
         display: flex
         color: #2A2A2A
@@ -387,12 +400,8 @@
               border-radius: 2px
               position: relative
               overflow: hidden
-              .icon-video
-                width: 26px
-                height: @width
-                all-center()
-              .video
-                height: 90px
+              .img
+                height: 100%
             .close
               icon-image('icon-delete_img')
               width: 15px
@@ -422,6 +431,7 @@
     border-top: 0.5px solid #E9ECF0
     layout(row)
     align-items: center
+    justify-content: center
     .button
       width: 96px
       height: 40px

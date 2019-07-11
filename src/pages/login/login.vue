@@ -80,7 +80,7 @@
         _tryingLogin = true
         API.Auth.logIn(this.loginMsg)
           .then((res) => {
-            if (res.error !== 0) {
+            if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
               return
             }

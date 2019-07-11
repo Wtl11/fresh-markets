@@ -415,12 +415,8 @@
               border-radius: 2px
               position: relative
               overflow: hidden
-              .icon-video
-                width: 26px
-                height: @width
-                all-center()
-              .video
-                height: 90px
+              .img
+                height: 100%
             .close
               icon-image('icon-delete_img')
               width: 15px

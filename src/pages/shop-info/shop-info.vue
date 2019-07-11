@@ -186,7 +186,7 @@
       next((vw) => {
         API.SupplierInfo.getSupplierInfo()
           .then((res) => {
-            if (res.error !== 0) {
+            if (res.error !== this.$ERR_OK) {
               // vw.$toast.show(res.message)
               return
             }
@@ -250,7 +250,7 @@
         submitting = true
         API.SupplierInfo.editSupplierInfo(this.shopInfo, true)
           .then((res) => {
-            if (res.error !== 0) {
+            if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
               return
             }
@@ -411,12 +411,8 @@
               border-radius: 2px
               position: relative
               overflow: hidden
-              .icon-video
-                width: 26px
-                height: @width
-                all-center()
-              .video
-                height: 90px
+              .img
+                height: 100%
             .close
               icon-image('icon-delete_img')
               width: 15px
