@@ -86,9 +86,9 @@
     <!--商品推荐-->
     <section class="goods-recommend">
       <h3 class="page-title">其他商品</h3>
-      <div class="goods-list">
+      <div v-if="goodsList.length" class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
-          <goods-item></goods-item>
+          <goods-item :goodsInfo="item"></goods-item>
         </div>
       </div>
     </section>

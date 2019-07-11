@@ -36,7 +36,7 @@
 
               <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
                 <span v-if="+item.approve_status === 0" class="list-operation" @click="auditing(item)">审核</span>
-                <a v-if="+item.approve_status === 1" target="_blank" :href="'/business-detail?id=' + item.id" class="list-operation">查看</a>
+                <router-link v-if="+item.approve_status === 1" target="_blank" tag="a" :to="'/business-detail?supplierId=' + item.id" class="list-operation">查看</router-link>
                 <span v-if="+item.approve_status === 1" class="list-operation" @click="resetPassword(item)">修改密码</span>
                 <span v-if="+item.approve_status !== 0"  class="list-operation" @click="deleteSupplier(item)">删除</span>
               </div>

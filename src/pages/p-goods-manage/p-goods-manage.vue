@@ -51,7 +51,7 @@
 
               <div v-if="+val.type === 5" :style="{flex: val.flex}" class="list-operation-box item">
                 <span v-if="+item.audit_status === 1" class="list-operation" @click="auditing(item)">审核</span>
-                <a v-if="+item.audit_status === 2" target="_blank" :href="`/goods-detail?goodsId=${item.id}&supplierId=${item.supplier.id}`" class="list-operation">查看</a>
+                <router-link v-if="+item.audit_status === 2" target="_blank" tag="a" :to="`/goods-detail?goodsId=${item.id}&supplierId=${item.supplier.id}`" class="list-operation">查看</router-link>
                 <span v-if="+item.audit_status === 2" class="list-operation" @click="downGoods(item)">下架</span>
                 <span v-if="+item.audit_status === 2" class="list-operation" @click="deleteGoods(item)">删除</span>
               </div>
