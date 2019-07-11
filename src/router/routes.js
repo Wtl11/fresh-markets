@@ -34,6 +34,11 @@ export default [
         path: '/goods-detail',
         name: 'goods-detail',
         component: () => import('@pages/goods-detail/goods-detail')
+      },
+      {
+        path: '/business-detail',
+        name: 'business-detail',
+        component: () => import('@pages/business-detail/business-detail')
       }
     ]
   },
