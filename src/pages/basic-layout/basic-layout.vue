@@ -30,8 +30,7 @@
       title: TITLE
     },
     data() {
-      return {
-      }
+      return {}
     }
   }
 </script>

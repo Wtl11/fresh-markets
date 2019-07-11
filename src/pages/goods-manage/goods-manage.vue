@@ -169,12 +169,11 @@
       }
     },
     beforeRouteEnter(to, from, next) {
-      API.GoodsManage.getGoodsList({page: 1, limit: 10})
-        .then((res) => {
-          next((vw) => {
-            vw._setGoodsListData(res)
-          })
+      API.GoodsManage.getGoodsList({page: 1, limit: 10}).then((res) => {
+        next((vw) => {
+          vw._setGoodsListData(res)
         })
+      })
     },
     created() {
       this._getGoodsStatus()
@@ -182,10 +181,9 @@
     },
     methods: {
       _getGoodsList() {
-        API.GoodsManage.getGoodsList(this.requestData)
-          .then((res) => {
-            this._setGoodsListData(res)
-          })
+        API.GoodsManage.getGoodsList(this.requestData).then((res) => {
+          this._setGoodsListData(res)
+        })
         this._getGoodsStatus()
       },
       _setGoodsListData(res) {
@@ -197,26 +195,26 @@
         }
       },
       _getGoodsStatus() {
-        API.GoodsManage.getGoodsStatus({goods_supplier_category_id: this.requestData.goods_supplier_category_id||''})
-          .then((res) => {
-            res.data.forEach((item) => {
-              if (item.status === '') {
-                this.statusTab[0].num = item.statistic
-              } else {
-                this.statusTab[item.status].num = item.statistic
-              }
-            })
+        API.GoodsManage.getGoodsStatus({
+          goods_supplier_category_id: this.requestData.goods_supplier_category_id || ''
+        }).then((res) => {
+          res.data.forEach((item) => {
+            if (item.status === '') {
+              this.statusTab[0].num = item.statistic
+            } else {
+              this.statusTab[item.status].num = item.statistic
+            }
           })
+        })
       },
       _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1})
-          .then((res) => {
-            this.firstSelect.data = [{id: '', name: '全部一级类目'}, ...res.data]
-          })
+        API.GoodsManage.getCategoryData({parent_id: -1}).then((res) => {
+          this.firstSelect.data = [{id: '', name: '全部一级类目'}, ...res.data]
+        })
       },
       _setSelectValue(data, key, childKey = false) {
         this.requestData[key] = data.id
-        if(childKey) {
+        if (childKey) {
           this[childKey].data = data.list
           this[childKey].content = '二级类目'
         }
@@ -246,7 +244,6 @@
         this.requestData = Object.assign({}, this.requestData, data)
       }
     }
-
   }
 </script>
 

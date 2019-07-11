@@ -16,7 +16,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import {loginMethods} from './modules/helpers'
+// import {loginMethods} from './modules/helpers'
   import storage from 'storage-controller'
   import API from '@api'
   import HTTP from '@utils/http'
@@ -45,11 +45,12 @@
       if (storage.get('auth.token', 0)) {
         API.Auth.validate()
           .then((res) => {
-            next(vm => {
+            next((vm) => {
               vm._goToMain()
             })
-          }).catch(() => {
-            next(vm => {
+          })
+          .catch(() => {
+            next((vm) => {
               vm.$loading.hide()
             })
           })
@@ -77,7 +78,7 @@
         return true
       },
       _tryLogin() {
-        if (!this._checkLogin()){
+        if (!this._checkLogin()) {
           return
         }
         _tryingLogin = true

@@ -37,7 +37,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     NProgress.start()
   }
   let identity = store.getters['auth/currentUserType']
-  let record = findLast(routeTo.matched, record => record.meta.authority)
+  let record = findLast(routeTo.matched, (record) => record.meta.authority)
   if (record && !identity) {
     try {
       let res = await API.Auth.validate()
@@ -50,7 +50,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
       }
     }
   }
-  if (record && !record.meta.authority.some(val => val === identity)) {
+  if (record && !record.meta.authority.some((val) => val === identity)) {
     if (routeTo.path !== LOGIN_PATH) {
       NProgress.done()
       routeTo.path === routeFrom.path && APP && APP.$toast.show('权限不足,请联系管理员.')

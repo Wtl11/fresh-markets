@@ -141,7 +141,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
+// import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
   import CitySelect from './city-select/city-select'
@@ -160,12 +160,23 @@
     },
     data() {
       return {
-        shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
+        shopInfo: {
+          name: '',
+          province: '',
+          city: '',
+          district: '',
+          image_id: '',
+          goods_start_num: '',
+          category_id: '',
+          contact: '',
+          mobile: '',
+          wechat_image_id: ''
+        },
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
-        uploadImg: {license:'',QRCode:''},
+        uploadImg: {license: '', QRCode: ''},
         uploadLoading: false,
-        uploading: '',
+        uploading: ''
       }
     },
     mounted() {
@@ -173,14 +184,13 @@
     },
     methods: {
       _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1})
-          .then((res) => {
-            this.firstSelect.data = res.data
-          })
+        API.GoodsManage.getCategoryData({parent_id: -1}).then((res) => {
+          this.firstSelect.data = res.data
+        })
       },
       _setSelectValue(data, key, childKey = false) {
         this.shopInfo[key] = data.id
-        if(childKey) {
+        if (childKey) {
           this[childKey].data = data.list
         }
       },
@@ -192,7 +202,7 @@
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
         this.uploadLoading = true
-        uploadFiles({files: [e.target.files[0]]}).then(res => {
+        uploadFiles({files: [e.target.files[0]]}).then((res) => {
           this.uploadLoading = false
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
@@ -204,12 +214,14 @@
         this.uploadImg[uploadKey] = ''
       },
       _checkForm() {
-        if(submitting) {
+        if (submitting) {
           return false
         }
         let errorMsg = {
           name: '请输入供应商名称',
-          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
+          province: '请选择省份',
+          city: '请选择城市',
+          district: '请选择区/县',
           image_id: '请上传营业执照',
           goods_start_num: '请输入商品起批量',
           category_id: '请选择主营品类',
@@ -218,7 +230,7 @@
           wechat_image_id: '请上传微信二维码'
         }
         for (let k in this.shopInfo) {
-          if(!(this.shopInfo[k]+'').trim()) {
+          if (!(this.shopInfo[k] + '').trim()) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -226,7 +238,7 @@
         return true
       },
       _subApply() {
-        if(!this._checkForm()) return
+        if (!this._checkForm()) return
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {

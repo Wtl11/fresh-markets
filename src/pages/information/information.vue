@@ -34,15 +34,15 @@
         ></select-classify>
         <select-classify
           v-if="isShowSendSelect"
-          :classifyData="selectSecondArray"
           ref="selectSecond"
+          :classifyData="selectSecondArray"
           class="border-left-1 border-right-1 border-bottom-1"
           title="二级分类："
           @selectChange="selectChange($event, 'second')"
         ></select-classify>
         <select-classify
-          :classifyData="selectThirdArray"
           ref="selectThird"
+          :classifyData="selectThirdArray"
           class="border-left-1 border-right-1 border-bottom-1"
           title="区域："
           @selectChange="selectChange($event, 'third')"
@@ -66,7 +66,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
+// import * as Helpers from './helpers'
   import API from '@api'
   import SelectClassify from './select-classify/select-classify'
   import GoodsItem from '@components/goods-item/goods-item'
@@ -116,13 +116,12 @@
           total: 1,
           per_page: 10,
           total_page: 1
-        },
+        }
       }
     },
-    computed: {
-    },
+    computed: {},
     watch: {
-      tabIndex(cur,pre) {
+      tabIndex(cur, pre) {
         if (pre !== cur) {
           this.$refs.selectFirst && this.$refs.selectFirst.setSelectId(0)
           this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
@@ -147,21 +146,21 @@
             res.data.unshift({name: '全部'})
             return res
           }
-        }).then(res => {
+        }).then((res) => {
           this.selectArray = res.data
         })
       },
       _getAreasList() {
         API.Information.getAreasList({
           formatter: (res) => {
-            res.data = res.data.map(item => {
+            res.data = res.data.map((item) => {
               return {
                 name: item
               }
             })
             return res
           }
-        }).then(res => {
+        }).then((res) => {
           this.selectThirdArray = res.data
         })
       },
@@ -171,10 +170,10 @@
             limit: 48,
             province: this.province,
             goods_supplier_category_id: this.category_id,
-            page: this.page,
+            page: this.page
           },
           loading
-        }).then(res => {
+        }).then((res) => {
           this.goodsList = res.data
           this.tabList[0].number === 0 && (this.tabList[0].number = res.meta.total)
           this.setPageDetail(res.meta)
@@ -187,10 +186,10 @@
             limit: 8,
             province: this.province,
             goods_supplier_category_id: this.category_id,
-            page: this.page,
+            page: this.page
           },
           loading
-        }).then(res => {
+        }).then((res) => {
           this.marketList = res.data
           this.tabList[1].number === 0 && (this.tabList[1].number = res.meta.total)
           this.setPageDetail(res.meta)

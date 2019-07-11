@@ -44,6 +44,5 @@ export default {
   getStatus(loading = false) {
     let url = API_PUB + '/api/platform/platform-supplier-statistic'
     return request.get({url, data: {}, loading})
-  },
-
+  }
 }

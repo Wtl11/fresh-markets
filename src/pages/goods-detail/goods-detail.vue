@@ -103,7 +103,6 @@
   const PAGE_NAME = 'GOODS_DETAIL'
   const TITLE = '商品详情'
 
-
   const GOODS_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   export default {
@@ -126,7 +125,9 @@
         supplierDetail: {}
       }
     },
-    beforeRouteEnter(to, from, next) {next()},
+    beforeRouteEnter(to, from, next) {
+      next()
+    },
     created() {
       this.goodsId = this.$route.query.goodsId || 0
       this.supplierId = this.$route.query.supplierId || 0
@@ -137,26 +138,22 @@
     },
     methods: {
       getGoodsDetail() {
-        API.GoodsDetail.getGoodsDetail(this.goodsId)
-          .then(res => {
-            this.goodsDetail = res.data
-            this.imageList = res.data.goods_main_images
-            this.detailList = res.data.goods_detail_images
-
-          })
+        API.GoodsDetail.getGoodsDetail(this.goodsId).then((res) => {
+          this.goodsDetail = res.data
+          this.imageList = res.data.goods_main_images
+          this.detailList = res.data.goods_detail_images
+        })
       },
       getSupplierDetail() {
-        API.GoodsDetail.getSupplierDetail(this.supplierId)
-          .then(res => {
-            this.supplierDetail = res.data
-          })
+        API.GoodsDetail.getSupplierDetail(this.supplierId).then((res) => {
+          this.supplierDetail = res.data
+        })
       },
       // 获取列表
       getGoodsList() {
-        API.PGoodsManage.getGoodsList({page: 1, limit: 12, goods_supplier_id: this.supplierId}, false)
-          .then((res) => {
-            this.goodsList = res.data
-          })
+        API.PGoodsManage.getGoodsList({page: 1, limit: 12, goods_supplier_id: this.supplierId}, false).then((res) => {
+          this.goodsList = res.data
+        })
       },
       changeImage(item) {
         this.bigImageUrl = item

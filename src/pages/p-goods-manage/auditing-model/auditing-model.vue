@@ -34,8 +34,7 @@
   export default {
     name: COMPONENT_NAME,
     components: {DefaultModal},
-    props: {
-    },
+    props: {},
     data() {
       return {
         status: 2,

@@ -83,33 +83,33 @@ class Request {
       url,
       [paramsKey]: data,
       method
-    }).then((response) => {
-      return this._checkStatus(response)
-    }).then((res) => {
-      return this._checkCode(res)
-    }).then((res) => {
-      return this.resCommonFn ? this.resCommonFn({res, loading, toast, formatter}) : res
     })
+      .then((response) => {
+        return this._checkStatus(response)
+      })
+      .then((res) => {
+        return this._checkCode(res)
+      })
+      .then((res) => {
+        return this.resCommonFn ? this.resCommonFn({res, loading, toast, formatter}) : res
+      })
   }
   // 请求前的处理
   reqCommonHandle(fn) {
-    this.beforeReqCommonFn = function (args) {
+    this.beforeReqCommonFn = function(args) {
       fn(args)
     }
   }
   // 请求公共处理
   resCommonHandle(fn) {
-    this.resCommonFn = function (args) {
-     return typeof fn === 'function' ? fn(args) : args.res
+    this.resCommonFn = function(args) {
+      return typeof fn === 'function' ? fn(args) : args.res
     }
   }
   _checkStatus(response) {
     // _loading
     // 如果http状态码正常，则直接返回数据
-    if (
-      response &&
-      (response.status < 400 )
-    ) {
+    if (response && response.status < 400) {
       return response
       // 如果不需要除了data之外的数据，可以直接 return response.data
     }

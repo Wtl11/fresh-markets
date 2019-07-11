@@ -2,7 +2,7 @@ import {USER_TYPE} from '@utils/constant'
 export default [
   {
     path: '/user',
-    component: {render: h => h('router-view')},
+    component: {render: (h) => h('router-view')},
     redirect: '/user/login',
     children: [
       // 登陆
@@ -16,13 +16,13 @@ export default [
         path: '/user/apply-suppliers',
         name: 'apply-suppliers',
         component: () => import('@pages/apply-suppliers/apply-suppliers')
-      },
+      }
     ]
   },
   {
     path: '/',
     redirect: '/information',
-    component: {render: h => h('router-view')},
+    component: {render: (h) => h('router-view')},
     children: [
       // 信息平台
       {
@@ -88,7 +88,7 @@ export default [
           title: '编辑商品',
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
-          crumbs: ['商品','商品管理'],
+          crumbs: ['商品', '商品管理'],
           authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/goods-manage/goods-manage')
@@ -101,11 +101,11 @@ export default [
           title: '编辑商品',
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
-          crumbs: ['商品','商品管理','编辑商品'],
+          crumbs: ['商品', '商品管理', '编辑商品'],
           authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/edit-goods/edit-goods')
-      },
+      }
     ]
   },
   // 权限受限

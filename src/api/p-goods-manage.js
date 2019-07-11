@@ -51,6 +51,5 @@ export default {
   getStatus(data, loading = false) {
     let url = API_PUB + '/api/platform/goods-supplier-status'
     return request.get({url, data, loading})
-  },
-
+  }
 }

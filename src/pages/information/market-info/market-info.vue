@@ -55,7 +55,7 @@
   export default {
     name: COMPONENT_NAME,
     components: {
-      GoodsItem,
+      GoodsItem
     },
     props: {
       marketInfo: {
@@ -64,8 +64,7 @@
       }
     },
     data() {
-      return {
-      }
+      return {}
     },
     computed: {
       areas() {
@@ -78,9 +77,9 @@
     methods: {
       navHandle() {
         let routeUrl = this.$router.resolve({
-          path: "/business-detail",
-          query: {supplierId:this.marketInfo.id}
-        });
+          path: '/business-detail',
+          query: {supplierId: this.marketInfo.id}
+        })
         window.open(routeUrl.href, '_blank')
       },
       qrCodeHandle() {

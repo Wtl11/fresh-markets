@@ -5,8 +5,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
-  // import API from '@api'
+// import * as Helpers from './helpers'
+// import API from '@api'
   const PAGE_NAME = 'FORBID'
   const TITLE = '权限受限'
 
@@ -16,9 +16,7 @@
       title: TITLE
     },
     data() {
-      return {
-
-      }
+      return {}
     }
   }
 </script>

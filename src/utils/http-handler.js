@@ -21,7 +21,7 @@ HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
   if (!res || ERR_OK !== res.error) {
     if (typeof toast === 'function') {
       toast(res)
-    } else if(toast) {
+    } else if (toast) {
       APP && APP.$toast.show(res && res.message)
     }
     throw new Error(res)
@@ -41,7 +41,7 @@ HTTP.reqCommonHandle(({loading}) => {
   }
 })
 
-HTTP.interceptorsRequest(config => {
+HTTP.interceptorsRequest((config) => {
   config.url = resetUrl(config.url)
   return config
 })
@@ -60,6 +60,6 @@ function resetUrl(url) {
   return url
 }
 HTTP.setHeaders({
-  'Authorization': storage.get('auth.token'),
+  Authorization: storage.get('auth.token'),
   'Current-Corp': process.env.VUE_APP_CURRENT_CORP
 })

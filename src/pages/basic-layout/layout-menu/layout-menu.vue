@@ -28,16 +28,18 @@
     computed: {
       ...authComputed,
       logo() {
-        return this.currentUserType === USER_TYPE.SUPER ? require('./pic-white_logo@2x.png') : require('./pic-top_logo@2x.png')
+        return this.currentUserType === USER_TYPE.SUPER
+          ? require('./pic-white_logo@2x.png')
+          : require('./pic-top_logo@2x.png')
       }
     },
     methods: {
       createMenuData(routes) {
-        let r = routes.find(r => r.path === '/manager')
+        let r = routes.find((r) => r.path === '/manager')
         let children = [...r.children]
         children = children.filter((item) => {
           if (item.meta && item.meta.authority && item.meta.authority.length) {
-            return item.meta.authority.some(val => val === this.$store.state.auth.currentUserType) && item
+            return item.meta.authority.some((val) => val === this.$store.state.auth.currentUserType) && item
           }
         })
         return children

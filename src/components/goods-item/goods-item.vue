@@ -28,8 +28,7 @@
       }
     },
     data() {
-      return {
-      }
+      return {}
     },
     computed: {
       supplierName() {
@@ -40,9 +39,9 @@
     methods: {
       clickHandle() {
         let routeUrl = this.$router.resolve({
-          path: "/goods-detail",
-          query: {goodsId:this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
-        });
+          path: '/goods-detail',
+          query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
+        })
         window.open(routeUrl.href, '_blank')
       }
     }
