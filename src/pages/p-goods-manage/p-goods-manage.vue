@@ -70,7 +70,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Http from '@utils/http'
+  import API from '@api'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import AuditingModel from './auditing-model/auditing-model'
   const PAGE_NAME = 'GOODS-MANAGE'
@@ -187,7 +187,7 @@
         secondCategory: SECOND_CATEGORY,
         requestData: {
           keyword: '',
-          category_id: '',
+          category_id: 0,
           status: '',
           page: 1,
           limit: 10
@@ -222,9 +222,36 @@
         }
       }
     },
+    beforeRouteEnter(to, from, next) {
+      let data = {
+        goods_supplier_category_id: 0,
+        audit_status: '',
+        keyword: '',
+        is_online: 1,
+        page: 1,
+        limit: 10
+      }
+      API.PGoodsManage.getGoodsList(data, true)
+        .then((res) => {
+          next(vm => {
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            vm.goodsList = res.data
+            vm.pageDetail = statePageTotal
+          })
+        })
+        .catch(() => {
+          next(vm => {
+            vm.$loading.hide()
+          })
+        })
+    },
     created() {
-      // this.getCategoriesData()
-      // this.getGoodsStatus()
+      console.log(this.goodsList, 1111)
+      // this.getGoodsList()
     },
     mounted() {
       // this.$refs.auditingModel.show()
@@ -257,7 +284,6 @@
       // 切换tab栏
       changeStatus(selectStatus) {
         this.setData({page: 1, status: selectStatus.value})
-        console.log(this.requestData)
         this.getGoodsList()
         this.$refs.pagination.beginPage()
       },
@@ -268,28 +294,27 @@
       },
       // 获取列表
       getGoodsList() {
-        console.log('getGoods')
-        // let data = {
-        //   goods_category_id: this.categoryId,
-        //   status: this.status,
-        //   keyword: this.keyWord,
-        //   is_online: '',
-        //   page: this.goodsPage,
-        //   limit: 10
-        // }
-        // Http.Product.getGoodsList(data, false).then((res) => {
-        //   if (res.error === this.$ERR_OK) {
-        //     this.goodsList = res.data
-        //     let statePageTotal = {
-        //       total: res.meta.total,
-        //       per_page: res.meta.per_page,
-        //       total_page: res.meta.last_page
-        //     }
-        //     this.pageDetail = statePageTotal
-        //   } else {
-        //     this.$toast.show(res.message)
-        //   }
-        // })
+        let data = {
+          goods_supplier_category_id: this.categoryId,
+          audit_status: this.status,
+          keyword: this.keyWord,
+          is_online: 1,
+          page: this.goodsPage,
+          limit: 10
+        }
+        Http.PGoodsManage.getGoodsList(data, false).then((res) => {
+          if (res.error === this.$ERR_OK) {
+            this.goodsList = res.data
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            this.pageDetail = statePageTotal
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
       },
       // 获取Tab栏状态
       getGoodsStatus() {
