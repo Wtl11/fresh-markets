@@ -27,6 +27,11 @@ export default [
         path: '/information',
         name: 'information',
         component: () => import('@pages/information/information')
+      },
+      {
+        path: '/goods-detail',
+        name: 'goods-detail',
+        component: () => import('@pages/goods-detail/goods-detail')
       }
     ]
   },
@@ -44,7 +49,7 @@ export default [
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['管理后台', '商品管理'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-goods-manage/p-goods-manage')
       },
@@ -56,7 +61,7 @@ export default [
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['管理后台', '供应商管理'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-supplier-manage/p-supplier-manage')
       },

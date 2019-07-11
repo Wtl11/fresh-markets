@@ -1,0 +1,310 @@
+<template>
+  <div class="goods-detail">
+    <!--banner-->
+    <section class="banner-wrapper">
+      <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
+      <img src="./pic-logo@2x.png" alt="" class="logo">
+      <div class="company-detail">
+        <div class="left-detail">
+          <h3 class="company-name">江南皮革厂水果贸易有限公司</h3>
+          <div class="context">
+            <div class="text-box left-text">
+              <p class="text">主营品类： 新鲜水果</p>
+              <p class="text">商品数量： 100个商品</p>
+              <p class="text">所在地区： 江南水乡古镇</p>
+            </div>
+            <div class="text-box right-text">
+              <p class="text">联 系 人： 李江南</p>
+              <p class="text">联系方式： 13584260103</p>
+            </div>
+          </div>
+        </div>
+        <img src="./code.png" alt="" class="qr-code">
+      </div>
+    </section>
+    <!--橙色条-->
+    <section class="top-msg">
+      <div class="msg-box">
+        <p class="title">全部商品</p>
+        <span class="text">(已入驻<em class="num">1000</em>个商品)</span>
+        <span class="icon"></span>
+      </div>
+    </section>
+    <!--商品信息-->
+    <section class="goods-msg">
+      <h2 class="goods-title">源氏素牛尾巴辣条直销22g/袋中包50袋休闲零食批发小包装香辣味</h2>
+      <div class="msg-content">
+        <div class="goods-image-box">
+          <img :src="require(`./goods-image/${bigImageUrl}.jpg`)" alt="" class="goods-image">
+          <div class="image-list">
+            <img
+              v-for="(image, index) in imageList"
+              :key="index"
+              :src="require(`./goods-image/${image}.jpg`)"
+              alt=""
+              class="image-item hand"
+              @click="changeImage(image)"
+            >
+          </div>
+        </div>
+        <div class="goods-msg-box">
+          <div class="top-context">
+            <p class="price">
+              <span class="label">价格</span>
+              <span class="num"><em class="sign">¥</em>20.00</span>
+            </p>
+            <p class="condition">
+              <span class="label">起批量</span>
+              <span class="text">≥ 4件</span>
+            </p>
+          </div>
+          <div class="bottom-context">
+            <p class="deal">
+              <span class="label">成交</span>
+              <span class="text">共成交 <em class="number">2000</em> 件商品</span>
+            </p>
+            <p class="safe">
+              <span class="label">实力保障</span>
+              <span class="bottom-text">
+                <img src="./icon-meng@2x.png" alt="" class="icon">
+                赞播联盟
+                <img src="./icon-good@2x.png" alt="" class="icon">
+                优质供应商
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--商品详情-->
+    <section class="goods-detail-image">
+      <h3 class="page-title">商品信息</h3>
+      <img src="./goods-image/c.jpg" alt="" class="image">
+    </section>
+
+    <div class="bottom"></div>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  const PAGE_NAME = 'GOODS_DETAIL'
+
+  const IMAGE_LIST = ['a', 'b', 'c', 'd', 'e']
+
+  export default {
+    name: PAGE_NAME,
+    data() {
+      return {
+        imageList: IMAGE_LIST,
+        bigImageUrl: 'a'
+      }
+    },
+    beforeRouteEnter(to, from, next) {next()},
+    created() {
+    },
+    methods: {
+      changeImage(item) {
+        this.bigImageUrl = item
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~@design"
+  $maxWidth = 1920px
+  $minWidth = 1400px
+
+  .goods-detail
+    width: 100%
+    background: #F8F8F8
+  .banner-wrapper
+    margin: 0 auto
+    max-width: $maxWidth
+    min-width: $minWidth
+    height: 380px
+    position: relative
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 1
+    .banner-img
+      width: 100%
+      height: 100%
+      object-fit: cover
+    .logo
+      width: 160px
+      height: 58px
+      position: absolute
+      left: 130px
+      top: 50px
+    .company-detail
+      width: 1020px
+      height: 206px
+      padding: 24px 30px
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      position: absolute
+      left: 130px
+      bottom: 36px
+      background-image: linear-gradient(270deg, rgba(39,39,39,0.00) 16%, rgba(17,17,17,0.72) 93%)
+      border-radius: 8px
+    .left-detail
+      width: 622px
+      padding-bottom: 20px
+    .company-name
+      font-size: 32px
+      color: $color-white
+      font-family: $font-family-medium
+    .context
+      margin-top: 25px
+      display: flex
+    .text-box
+      padding-right: 90px
+    .text
+      margin-bottom: 14px
+      font-size: 14px
+      color: $color-white
+      font-family: $font-family-regular
+    .qr-code
+      width: 120px
+      height: 120px
+  .top-msg
+    max-width: $maxWidth
+    min-width: $minWidth
+    margin: 0 auto
+    background: #FF520F
+    height: 60px
+    .msg-box
+      width: $minWidth
+      margin: 0 auto
+      height: 60px
+      display: flex
+      align-items: center
+      color: #ffffff
+      font-family: $font-family-regular
+    .title
+      font-size: 20px
+      margin-top: -5px
+    .text
+      font-size: $font-size-14
+      .num
+        font-style: normal
+        font-family: $font-family-medium
+        font-size: $font-size-16
+    .icon
+      width: 22px
+      height: 22px
+      margin-left: 14px
+      icon-image(icon-Jump)
+      &:hover
+        icon-iamge(icon-Jump_hover)
+
+
+  .goods-msg
+    width: $minWidth
+    margin: 0 auto
+    .goods-title
+      font-size: $font-size-18
+      color: #333333
+      font-family: $font-family-regular
+      padding: 20px 0
+    .msg-content
+      display: flex
+    .goods-image-box
+      width: 400px
+      .goods-image
+        width: 400px
+        height: 400px
+        object-fit: cover
+        background: #ffffff
+      .image-list
+        width: 402px
+        padding: 0 12px
+        box-sizing: border-box
+        height: 66px
+        margin-top: 17px
+      .image-item
+        width: 66px
+        height: 66px
+        float: left
+        object-fit: cover
+        margin-right: 12px
+        background: #ffffff
+        &:last-child
+          margin-right: 0
+    .goods-msg-box
+      margin-left: 20px
+      .top-context
+        background: #F8EEEE
+        padding: 20px 20px 30px
+        width:  970px
+        height: 129px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        box-sizing: border-box
+      .price,.condition,.deal,.safe
+        display: flex
+        align-items: center
+      .label
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        width: 142px
+        color: #333
+      .num
+        font-size: 28px
+        font-family: $font-family-medium
+        color: #ff520f
+      .sign
+        font-style: normal
+        margin-right: 2px
+        font-size: $font-size-16
+      .text
+        font-family: $font-family-regular
+        font-size: $font-size-14
+        color: #333
+      .number
+        font-style: normal
+        font-family: $font-family-medium
+        font-size: $font-size-16
+        color: #ff520f
+      .icon
+        width: 18px
+        height: 18px
+        margin-right: 2px
+        margin-left: 40px
+        &:first-child
+          margin-left: 0
+      .bottom-context
+        padding: 20px 20px 30px
+        box-sizing: border-box
+        height: 119px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        border-bottom: 1px solid $color-line
+      .bottom-text
+        font-family: $font-family-regular
+        font-size: $font-size-14
+        color: #333
+        display: flex
+        align-items: center
+
+
+
+  .goods-detail-image
+    width: $minWidth
+    margin: 10px auto 0
+    .page-title
+      padding: 20px 0
+      font-family: $font-family-medium
+      color: #333333
+      font-size: $font-size-20
+      border-bottom: 1px solid $color-line
+    .image
+      width: 790px
+  .bottom
+    margin-bottom: 80px
+</style>
