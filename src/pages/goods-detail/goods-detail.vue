@@ -6,20 +6,20 @@
       <img src="./pic-logo@2x.png" alt="" class="logo">
       <div class="company-detail">
         <div class="left-detail">
-          <h3 class="company-name">江南皮革厂水果贸易有限公司</h3>
+          <h3 class="company-name">{{supplierDetail.name}}</h3>
           <div class="context">
             <div class="text-box left-text">
-              <p class="text">主营品类： 新鲜水果</p>
-              <p class="text">商品数量： 100个商品</p>
-              <p class="text">所在地区： 江南水乡古镇</p>
+              <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
+              <p class="text">商品数量： {{supplierDetail.goods_num}}个商品</p>
+              <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
             </div>
             <div class="text-box right-text">
-              <p class="text">联 系 人： 李江南</p>
-              <p class="text">联系方式： 13584260103</p>
+              <p class="text">联 系 人： {{supplierDetail.contact}}</p>
+              <p class="text">联系方式： {{supplierDetail.mobile}}</p>
             </div>
           </div>
         </div>
-        <img src="./code.png" alt="" class="qr-code">
+        <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
       </div>
     </section>
     <!--橙色条-->
@@ -32,15 +32,15 @@
     </section>
     <!--商品信息-->
     <section class="goods-msg">
-      <h2 class="goods-title">源氏素牛尾巴辣条直销22g/袋中包50袋休闲零食批发小包装香辣味</h2>
+      <h2 class="goods-title">{{goodsDetail.name}}</h2>
       <div class="msg-content">
         <div class="goods-image-box">
-          <img :src="require(`./goods-image/${bigImageUrl}.jpg`)" alt="" class="goods-image">
+          <img :src="bigImageUrl || (imageList[0] && imageList[0].image_url)" alt="" class="goods-image">
           <div class="image-list">
             <img
               v-for="(image, index) in imageList"
               :key="index"
-              :src="require(`./goods-image/${image}.jpg`)"
+              :src="image && image.image_url"
               alt=""
               class="image-item hand"
               @click="changeImage(image)"
@@ -51,17 +51,17 @@
           <div class="top-context">
             <p class="price">
               <span class="label">价格</span>
-              <span class="num"><em class="sign">¥</em>20.00</span>
+              <span class="num"><em class="sign">¥</em>{{goodsDetail.purchase_price}}</span>
             </p>
             <p class="condition">
               <span class="label">起批量</span>
-              <span class="text">≥ 4件</span>
+              <span class="text">{{supplierDetail.goods_start_num}}</span>
             </p>
           </div>
           <div class="bottom-context">
             <p class="deal">
               <span class="label">成交</span>
-              <span class="text">共成交 <em class="number">2000</em> 件商品</span>
+              <span class="text">共成交 <em class="number">{{supplierDetail.goods_num}}</em> 件商品</span>
             </p>
             <p class="safe">
               <span class="label">实力保障</span>
@@ -80,7 +80,7 @@
     <!--商品详情-->
     <section class="goods-detail-image">
       <h3 class="page-title">商品信息</h3>
-      <img src="./goods-image/c.jpg" alt="" class="image">
+      <img v-for="(image, index) in detailList" :key="index" :src="image && image.image_url" alt="" class="image">
     </section>
 
     <!--商品推荐-->
@@ -98,12 +98,12 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import API from '@api'
   import GoodsItem from '@components/goods-item/goods-item'
   const PAGE_NAME = 'GOODS_DETAIL'
   const TITLE = '商品详情'
 
 
-  const IMAGE_LIST = ['a', 'b', 'c', 'd', 'e']
   const GOODS_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   export default {
@@ -116,15 +116,48 @@
     },
     data() {
       return {
-        imageList: IMAGE_LIST,
-        goodsList: GOODS_LIST,
-        bigImageUrl: 'a'
+        imageList: [],
+        goodsList: [],
+        detailList: [],
+        bigImageUrl: '',
+        goodsId: '',
+        supplierId: '',
+        goodsDetail: {},
+        supplierDetail: {}
       }
     },
     beforeRouteEnter(to, from, next) {next()},
     created() {
+      this.goodsId = this.$route.query.goodsId || 0
+      this.supplierId = this.$route.query.supplierId || 0
+
+      this.getGoodsDetail()
+      this.getSupplierDetail()
+      this.getGoodsList()
     },
     methods: {
+      getGoodsDetail() {
+        API.GoodsDetail.getGoodsDetail(this.goodsId)
+          .then(res => {
+            this.goodsDetail = res.data
+            this.imageList = res.data.goods_main_images
+            this.detailList = res.data.goods_detail_images
+
+          })
+      },
+      getSupplierDetail() {
+        API.GoodsDetail.getSupplierDetail(this.supplierId)
+          .then(res => {
+            this.supplierDetail = res.data
+          })
+      },
+      // 获取列表
+      getGoodsList() {
+        API.PGoodsManage.getGoodsList({page: 1, limit: 12, goods_supplier_id: this.supplierId}, false)
+          .then((res) => {
+            this.goodsList = res.data
+          })
+      },
       changeImage(item) {
         this.bigImageUrl = item
       },
