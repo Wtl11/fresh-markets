@@ -132,10 +132,17 @@
           </div>
         </div>
       </div>
+      <div v-if="subModify" class="approve-tips-model">
+        <div class="tips-con">
+          <img src="./icon-success@2x.png" class="tips-img">
+          <div class="tips-title">提交审核成功，请耐心等待</div>
+          <div class="tips-text">审核结果后会在72小时内以短信形式通知您，请留意手机</div>
+        </div>
+      </div>
     </div>
-    <div class="button-con">
+    <div v-if="!subModify" class="button-con">
       <div class="hand button cancel">取消</div>
-      <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subApply">{{approveArr[approveStatus]}}</div>
+      <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subModify">{{approveArr[approveStatus]}}</div>
     </div>
   </div>
 </template>
@@ -171,7 +178,8 @@
         uploadLoading: false,
         uploading: '',
         approveArr: APPROVE_TEXT,
-        approveStatus: 0,
+        approveStatus: 1,
+        subModify: false,
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -237,7 +245,7 @@
         }
         return true
       },
-      _subApply() {
+      _subModify() {
         if(!this._checkForm()) return
         submitting = true
         API.SupplierInfo.editSupplierInfo(this.shopInfo, true)
@@ -247,6 +255,7 @@
               return
             }
             console.log(res.data)
+            this.subModify = true
           })
           .finally(() => {
             submitting = false
@@ -428,6 +437,38 @@
                 all-center()
                 width: 25px
                 height: 25px
+    .approve-tips-model
+      position: absolute
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      width: 100%
+      height: 100%
+      background: #fff
+      layout()
+      align-items: center
+      justify-content: center
+      .tips-con
+        layout()
+        align-items: center
+        justify-content: center
+        .tips-img
+          width: 114px
+          height: @width
+        .tips-title
+          margin: 18px 0
+          font-family: $font-family-medium
+          font-size: 22px
+          color: $color-text-main
+          text-align: center
+          line-height: 1
+        .tips-text
+          font-family: $font-family-regular
+          font-size: 14px
+          color: #666666
+          text-align: center
+          line-height: 1
   .button-con
     box-sizing: border-box
     width: 100%
@@ -437,6 +478,7 @@
     border-top: 0.5px solid #E9ECF0
     layout(row)
     align-items: center
+    justify-content: center
     .button
       width: 96px
       height: 40px

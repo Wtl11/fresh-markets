@@ -1,8 +1,13 @@
 import http from '@utils/http'
 
 export default {
+  // 获取区域数据
+  getAreasData(data) {
+    let url = '/market-info/api/market/supplier-areas'
+    return http.get({url, data})
+  },
   // 获取店铺信息
-  getSupplierInfo(data, loading = true) {
+  getSupplierInfo(data, loading = false) {
     let url = '/market-info/api/supplier/show'
     return http.get({url, data, loading})
   },

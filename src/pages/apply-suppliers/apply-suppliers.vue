@@ -175,6 +175,18 @@
         confirmText: '提交审核'
       }
     },
+    beforeRouteEnter(to, from, next) {
+      next((vw) => {
+        API.SupplierInfo.getAreasData()
+          .then((res) => {
+            if (res.error !== 0) {
+              vw.$toast.show(res.message)
+              return
+            }
+            console.log(res.data)
+          })
+      })
+    },
     methods: {
       _setSelectValue(data, key) {
         this.shopInfo[key] = data.id
