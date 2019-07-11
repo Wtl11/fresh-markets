@@ -24,15 +24,16 @@ export default [
     redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: () => import('@pages/client-view/client-view')
-      },
+      // 信息平台
       {
         path: '/information',
         name: 'information',
         component: () => import('@pages/information/information')
+      },
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@pages/client-view/client-view')
       }
     ]
   },
@@ -49,39 +50,22 @@ export default [
           title: '商品管理',
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
-          crumbs: ['商城2', '营销2', '营销计划2'],
+          crumbs: ['管理后台', '商品管理'],
           authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-goods-manage/p-goods-manage')
       },
-      // a
       {
-        path: '/manager/two-page',
-        name: 'two-page',
+        path: '/manager/p-supplier-manage',
+        name: 'p-supplier-manage',
         meta: {
-          title: '店铺管理',
-          icon: require('./icon-store_Information1@2x.png'),
-          iconSelected: require('./icon-store_Information2@2x.png'),
-          crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: [USER_TYPE.SUPER]
+          title: '供应商管理',
+          icon: require('./icon-goods_manage1@2x.png'),
+          iconSelected: require('./icon-goods_manage2@2x.png'),
+          crumbs: ['管理后台', '供应商管理'],
+          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
         },
-        component: () => import('@pages/two-page/two-page'),
-        children: [
-
-        ]
-      },
-      // asdad
-      {
-        path: '/manager/hello-world',
-        name: 'hello-world',
-        meta: {
-          title: '店铺管理4444',
-          icon: require('./icon-store_Information1@2x.png'),
-          iconSelected: require('./icon-store_Information2@2x.png'),
-          crumbs: ['商城33', '营销3', '营销计划3'],
-          authority: [USER_TYPE.SUPER]
-        },
-        component: () => import('@pages/hello-world/hello-world')
+        component: () => import('@pages/p-supplier-manage/p-supplier-manage')
       },
       // asda
       {
@@ -125,21 +109,3 @@ export default [
     props: true
   }
 ]
-
-// function lazyLoadView(AsyncView) {
-//   const AsyncHandler = () => ({
-//     component: AsyncView,
-//     loading: require('@pages/_loading/_loading').default,
-//     delay: 400,
-//     error: require('@pages/_timeout/_timeout').default,
-//     timeout: 10000
-//   })
-//
-//   return Promise.resolve({
-//     functional: true,
-//     render(h, {data, children}) {
-//       // 将属性和方法传递给所有展示组件
-//       return h(AsyncHandler, data, children)
-//     }
-//   })
-// }
