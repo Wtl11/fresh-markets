@@ -3,7 +3,7 @@
     <div slot="content" class="default-input">
       <div class="title-input">
         <div class="title">审核</div>
-        <div class="close-box" @click="cancel">
+        <div class="close-box" @click="hide">
           <div class="close hand"></div>
         </div>
       </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="btn-group">
-        <span class="btn cancel" @click="cancel">取消</span>
+        <span class="btn cancel" @click="hide">取消</span>
         <span class="btn confirm" @click="confirm">确定</span>
       </div>
     </div>
@@ -54,9 +54,6 @@
       },
       confirm() {
         this.$emit('confirm', {auditing: this.auditing, text: this.text})
-      },
-      cancel() {
-        this.hide()
       }
     }
   }
@@ -145,14 +142,15 @@
       height: 40px
       line-height: 40px
       border-radius: 4px
+      color: $color-text-main
       border: 1px solid $color-main
       cursor: pointer
       transition: all 0.3s
     .cancel
       border: 1px solid $color-line
       &:hover
-        color: $color-text-sub
-        border-color: $color-text-sub
+        color: #82899C
+        border-color: #82899C
     .confirm
       border: 1px solid $color-main
       background: $color-main
