@@ -20,7 +20,8 @@
   import storage from 'storage-controller'
   import API from '@api'
   import HTTP from '@utils/http'
-  import {authMethod} from '@state/helpers'
+  import {authMethod, authComputed} from '@state/helpers'
+  import {USER_TYPE} from '@utils/constant'
 
   const PAGE_NAME = 'LOGIN'
   const TITLE = '登录'
@@ -34,8 +35,8 @@
     data() {
       return {
         loginMsg: {
-          keyword: 'super',
-          password: 'jike2018!'
+          keyword: '13535596064',
+          password: '123456'
         }
       }
     },
@@ -55,6 +56,9 @@
       } else {
         next()
       }
+    },
+    computed: {
+      ...authComputed
     },
     methods: {
       ...authMethod,
@@ -91,7 +95,16 @@
           })
       },
       _goToMain() {
-        this.$router.push(`/manager`)
+        switch (this.currentUserType) {
+        case USER_TYPE.SUPER:
+          this.$router.push(`/manager`)
+          break
+        case USER_TYPE.MERCHANT:
+          this.$router.push(`/manager/shop-info`)
+          break
+        default:
+          break
+        }
       },
       _becomeSuppliers() {
         this.$router.push(`/user/apply-suppliers`)

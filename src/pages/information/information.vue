@@ -1,6 +1,7 @@
 <template>
   <div class="information">
     <section class="banner-wrapper">
+      <img src="./pic-logo@1x.png" alt="" class="banner-logo">
       <img src="./pic-banner_big.png" alt="" class="banner-img">
       <ul class="icon-wrapper">
         <li v-for="(item, index) in navList" :key="index" class="icon-item-wrapper">
@@ -217,6 +218,12 @@
       font-size: 16px;
       color: #FFFFFF;
       line-height: 1
+      .banner-logo
+        position absolute
+        width: 160px
+        height: 58px
+        top:50px
+        left: 130px
       .banner-img
         width :100%
         height :100%
@@ -231,6 +238,7 @@
         display :flex
         align-items :center
         justify-content :space-around
+        min-width :$minWidth
         .icon-item-wrapper
           cursor :pointer
           display :flex
