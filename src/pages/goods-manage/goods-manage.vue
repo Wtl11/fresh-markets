@@ -48,17 +48,16 @@
               </div>
 
               <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
-                <template v-if="item.status === 2">
+                <template v-if="item.audit_status === 2">
                   <span class="list-operation" @click="downGoods(item, 'check')">查看</span>
                   <span class="list-operation" @click="downGoods(item, 'edit')">编辑</span>
                 </template>
-                <span v-else-if="item.status === 3" class="list-operation" @click="downGoods(item, 'subAgain')">重新提交</span>
-                <span v-else class="list-operation"></span>
-                <span class="list-operation" @click="downGoods(item, 'test')">查看</span>
+                <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'subAgain')">重新提交</span>
+                <span v-else class="list-operation no-line" @click="downGoods(item, 'test')">---</span>
               </div>
 
               <div v-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
-                   :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''"
+                   :class="item.audit_status === 1 ? 'status-success' : item.audit_status === 2 ? 'status-fail' : ''"
               >
                 {{item[val.value]}}
               </div>
@@ -173,7 +172,7 @@
       API.GoodsManage.getGoodsList({page: 1, limit: 10})
         .then((res) => {
           next((vw) => {
-            vw.goodsList = res.data
+            vw._setGoodsListData(res)
           })
         })
     },
@@ -185,29 +184,26 @@
       _getGoodsList() {
         API.GoodsManage.getGoodsList(this.requestData)
           .then((res) => {
-            this.goodsList = res.data
+            this._setGoodsListData(res)
           })
+        this._getGoodsStatus()
+      },
+      _setGoodsListData(res) {
+        this.goodsList = res.data
+        this.pageDetail = {
+          total: res.meta.total,
+          per_page: 10,
+          total_page: res.meta.last_page
+        }
       },
       _getGoodsStatus() {
-        API.GoodsManage.getGoodsStatus({goods_supplier_category_id: ''})
+        API.GoodsManage.getGoodsStatus({goods_supplier_category_id: this.requestData.goods_supplier_category_id||''})
           .then((res) => {
             res.data.forEach((item) => {
-              switch (item.status) {
-              case '':
+              if (item.status === '') {
                 this.statusTab[0].num = item.statistic
-                break
-              // case 0:
-              //   this.statusTab[1].num += item.statistic
-              //   break
-              case 1:
-                this.statusTab[1].num = item.statistic
-                break
-              case 2:
-                this.statusTab[2].num = item.statistic
-                break
-              case 3:
-                this.statusTab[3].num = item.statistic
-                break
+              } else {
+                this.statusTab[item.status].num = item.statistic
               }
             })
           })
@@ -215,13 +211,14 @@
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
-            this.firstSelect.data = res.data
+            this.firstSelect.data = [{id: '', name: '全部一级类目'}, ...res.data]
           })
       },
       _setSelectValue(data, key, childKey = false) {
         this.requestData[key] = data.id
         if(childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
         this._getGoodsList()
       },
@@ -255,7 +252,6 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
-
   .goods-manage
     display: flex
     flex-direction: column
@@ -283,9 +279,8 @@
       height: 60px
       align-items: center
       display: flex
-  .list-box
+  .list-header,.list-box
     .list-item:last-child
-      max-width: 80px
       padding-right: 0
   .list
     flex: 1
@@ -335,4 +330,7 @@
         background: #E1E1E1
       .status-success:before
         background: $color-positive
+  .list .list-content .list-operation.no-line
+    color: $color-text-main
+    text-decoration: none
 </style>

@@ -89,7 +89,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商品','商品管理'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/goods-manage/goods-manage')
       },
@@ -102,7 +102,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商品','商品管理','编辑商品'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/edit-goods/edit-goods')
       },
