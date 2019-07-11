@@ -56,8 +56,8 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_main_images && uploadImg.goods_main_images" class="draggable">
-                <div v-for="(item, index) in uploadImg.goods_main_images" :key="index" class="show-image hand">
+              <div v-if="goodsInfo.goods_main_images" class="draggable">
+                <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
@@ -81,8 +81,8 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_detail_images && uploadImg.goods_detail_images" class="draggable">
-                <div v-for="(item, index) in uploadImg.goods_detail_images" :key="index" class="show-image hand">
+              <div v-if="goodsInfo.goods_detail_images" class="draggable">
+                <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
@@ -133,7 +133,6 @@
         },
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
-        uploadImg: {goods_main_images:[],goods_detail_images:[]},
         uploadLoading: false,
         uploading: '',
       }
@@ -164,7 +163,6 @@
           goods_main_images: resData.goods_main_images,
           goods_detail_images: resData.goods_detail_images
         }
-        this.uploadImg = {goods_main_images:resData.goods_main_images,goods_detail_images:resData.goods_detail_images}
       },
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1,goods_id: this.goodsId||''})
@@ -197,13 +195,11 @@
         uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
-          this.goodsInfo[key].push({image_id: resData.id, id: 0})
-          this.uploadImg[key].push({image_url: resData.url})
+          this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
         })
       },
       _delImg(key, index) {
         this.goodsInfo[key].splice(index, 1)
-        this.uploadImg[key].splice(index, 1)
       },
       _checkForm() {
         if(submitting) {
