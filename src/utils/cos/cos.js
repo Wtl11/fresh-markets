@@ -9,7 +9,7 @@ import {API_PUB} from '../constant'
  */
 function _saveFile(data) {
   const url = `${API_PUB}/api/cos/save-file`
-  return request.post(url, data)
+  return request.post({method: 'post', url, data})
 }
 
 /**
@@ -20,7 +20,6 @@ function _saveFile(data) {
  */
 function _getAuthorization(options, callback) {
   const method = (options.Method || 'get').toLowerCase()
-  // const method = ('get').toLowerCase()
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key

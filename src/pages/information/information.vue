@@ -18,6 +18,11 @@
       <div class="select-wrapper">
         <select-classify></select-classify>
       </div>
+      <div class="goods-list">
+        <div class="goods-item-box" v-for="(item, idx) in goodsList" :key="idx">
+          <goods-item></goods-item>
+        </div>
+      </div>
     </article>
     <input type="file" @change="changeHandle">
   </div>
@@ -28,13 +33,15 @@
   // import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
   import SelectClassify from './select-classify/select-classify'
+  import GoodsItem from '@components/goods-item/goods-item'
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '信息平台'
 
   export default {
     name: PAGE_NAME,
     components: {
-      SelectClassify
+      SelectClassify,
+      GoodsItem
     },
     page: {
       title: TITLE
@@ -54,7 +61,8 @@
             units: '家供应商'
           }
         ],
-        tabIndex: 0
+        tabIndex: 0,
+        goodsList: new Array(30).fill(1)
       }
     },
     methods: {
@@ -106,6 +114,18 @@
             font-size :14px
             color: #999
             transition : all 0.3s
+      .goods-list
+        display: flex
+        overflow: hidden
+        flex-wrap: wrap
+        padding-top: 20px
+        .goods-item-box
+          width: 225px
+          height: 350px
+          margin-bottom: 20px
+          margin-right: 10px
+          &:nth-child(6n)
+            margin-right: 0
     .banner-wrapper
       margin : 0 auto
       max-width :$maxWidth
