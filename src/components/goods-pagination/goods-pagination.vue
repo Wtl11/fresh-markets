@@ -291,7 +291,7 @@
 
       .page-icon
         cursor: pointer
-        icon-image('icon-before')
+        icon-image('icon-left')
         margin-right: 13px
         height: 41px
         width: 41px
@@ -301,19 +301,21 @@
           transition: all 0.3s
           icon-image('pic-paging_left2')
       .page-icon-disable
+        icon-image('icon-left_no')
         &:hover
           transition: all 0.3s
-          icon-image('icon-before_hover')
+          icon-image('icon-left_no')
       .page-icon-two
         transition: all 0.3s
-        icon-image('icon-later')
+        icon-image('icon-right')
         &:hover
           transition: all 0.3s
           icon-image('pic-paging_right2')
       .page-icon-two-disable
+        icon-image('icon-right_no')
         &:hover
           transition: all 0.3s
-          icon-image('icon-later_hover')
+          icon-image('icon-right_no')
       .border-page
         display: flex
         line-height: 41px
