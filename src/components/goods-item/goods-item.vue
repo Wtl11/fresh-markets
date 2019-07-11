@@ -6,7 +6,7 @@
     <div class="msg-box">
       <p class="price-txt"><span class="price-icon">¥</span>35.69</p>
       <p class="goods-title">表情包趣盒卡通巧克力创意零食巧克力休闲食表情包趣盒卡通巧克力创意零食巧克力休闲食</p>
-      <div class="company-msg">
+      <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">
         <span class="company-txt">水果供应商公示时间水果供应商公示时间</span>
       </div>
@@ -18,12 +18,13 @@
   export default {
     name: 'GoodsItem',
     props: {
+      showCompany: {
+        type: Boolean,
+        default: true
+      }
     },
     data() {
       return {
-        tabIndex: this.infoTabIndex,
-        left: 0,
-        tabArr: null
       }
     },
     methods: {
