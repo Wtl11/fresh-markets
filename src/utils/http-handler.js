@@ -15,18 +15,14 @@ HTTP.handleError((code) => {
 })
 
 HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
-  if (!res) {
-    APP.$loading && APP.$loading.hide()
-    return {}
-  }
   if (loading) {
     APP.$loading && APP.$loading.hide()
   }
-  if (ERR_OK !== res.error) {
+  if (!res || ERR_OK !== res.error) {
     if (typeof toast === 'function') {
       toast(res)
     } else if(toast) {
-      APP.$toast.show(res.message)
+      APP.$toast.show(res && res.message)
     }
   }
   if (typeof formatter === 'function') {

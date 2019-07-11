@@ -20,7 +20,6 @@ function _saveFile(data) {
  */
 function _getAuthorization(options, callback) {
   const method = (options.Method || 'get').toLowerCase()
-  // const method = ('get').toLowerCase()
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key
