@@ -75,18 +75,6 @@
 
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '信息平台'
-  // const CLASSIFYLIST = [
-  //   {id: 1, icon: './imgs/classify/f1.png',txt: '新鲜水果'},
-  //   {id: 9, icon: './imgs/classify/f2.png',txt: '应季时蔬'},
-  //   {id: 5, icon: './imgs/classify/f3.png',txt: '轻食糕点'},
-  //   {id: 6, icon: './imgs/classify/f4.png',txt: '水产冻品'},
-  //   {id: 10, icon: './imgs/classify/f5.png',txt: '肉禽蛋品'},
-  //   {id: 3, icon: './imgs/classify/f6.png',txt: '米面粮油'},
-  //   {id: 2, icon: './imgs/classify/f7.png',txt: '休闲零食'},
-  //   {id: 4, icon: './imgs/classify/f8.png',txt: '日用百货'},
-  //   {id: 7, icon: './imgs/classify/f9.png',txt: '酒饮乳品'},
-  //   {id: 8, icon: './imgs/classify/f10.png',txt: '南北干货'}
-  // ]
 
   export default {
     name: PAGE_NAME,
@@ -104,16 +92,15 @@
       this.page = 1
       this.province = ''
       return {
-        // navList: CLASSIFYLIST,
         tabList: [
           {
             title: '商品',
-            number: 3090,
+            number: 0,
             units: '个商品'
           },
           {
             title: '供应商',
-            number: 30901,
+            number: 0,
             units: '家供应商'
           }
         ],
@@ -146,7 +133,8 @@
     created() {
       this._getGoodsClassifyList()
       this._getAreasList()
-      this.getList()
+      this._getMarketList()
+      this._getGoodsList()
     },
     methods: {
       addPage(page) {
@@ -188,6 +176,7 @@
           loading
         }).then(res => {
           this.goodsList = res.data
+          this.tabList[0].number = res.meta.total
           this.setPageDetail(res.meta)
         })
       },
@@ -203,6 +192,7 @@
           loading
         }).then(res => {
           this.marketList = res.data
+          this.tabList[1].number = res.meta.total
           this.setPageDetail(res.meta)
         })
       },
@@ -295,6 +285,9 @@
           border-radius: 20px;
           padding :0 43px
           transition : all 0.3s
+          opacity : 1
+          &:hover
+            opacity : 0.8
           &.active
             background: #FF520F;
             color: #fff
@@ -358,15 +351,23 @@
           justify-content :center
           &:hover >>> .nav-icon-wrapper
             transform :scale(1.2)
+            top: -10px
+          &:hover >>> span
+            opacity :0.8
           .nav-icon-wrapper
             width: 54px
             height: 54px
             border-radius :100%
             overflow: hidden
             margin-bottom :10px
-            transition : transform 0.1s
+            transition : all 0.3s
+            position :relative
+            top: 0
             .nav-icon
               width :100%
               height :100%
+            span
+              opacity :1
+              transition :all 0.3s
 
 </style>

@@ -17,7 +17,7 @@
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">所在地区：</span>
-            <span class="value">{{areas}}</span>
+            <span class="pos area-wrapper">{{areas}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">联  系 人：</span>
@@ -55,7 +55,7 @@
   export default {
     name: COMPONENT_NAME,
     components: {
-      GoodsItem
+      GoodsItem,
     },
     props: {
       marketInfo: {
@@ -95,6 +95,7 @@
         height :100%
         width :225px
         margin-right :10px
+        cursor :pointer
         &:last-child
           margin-right :0
     .left-wrapper
@@ -133,9 +134,21 @@
           .info-item-wrapper
             width : 256px
             padding-bottom :30px
+            position :relative
+            user-select :text
             .key
               width :70px
               color: #999
+            .value
+              no-wrap()
+            .pos
+              position absolute
+            .area-wrapper
+              height :100%
+              top:-3px
+              left :70px
+              width :400px
+              line-height :1.4
         .button
           cursor :pointer
           height :44px
@@ -143,11 +156,17 @@
           background-image: linear-gradient(270deg, #FF7822 0%, #FF520F -99%);
           border-radius: 4px;
           color: #fff
+          transition : all 0.3s
+          opacity :1
+          &:hover
+            opacity :0.7
+
       .l-header
         display :flex
         overflow :hidden
         align-items :center
         line-height :1
+        padding-top :16px
         .icon
           width :19px
           height: 20px

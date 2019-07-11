@@ -144,6 +144,10 @@
           color: #ff520f
         & > span
           cursor :pointer
+          opacity : 1
+          transition :all 0.3s
+          &:hover
+            opacity : 0.6
     .right-wrapper
       cursor :pointer
       position :relative
