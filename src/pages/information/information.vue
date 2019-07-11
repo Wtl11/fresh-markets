@@ -55,7 +55,7 @@
       </section>
       <section v-else class="goods-list">
         <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-          <goods-item :goodsInfo="item"></goods-item>
+          <goods-item :goodsInfo="item" @clickHandle="clickHandle"></goods-item>
         </div>
       </section>
       <section>
@@ -168,7 +168,7 @@
       _getGoodsList(loading) {
         API.Information.getGoodsList({
           data: {
-            limit: 24,
+            limit: 48,
             province: this.province,
             goods_supplier_category_id: this.category_id,
             page: this.page,
@@ -184,7 +184,7 @@
       _getMarketList(loading) {
         API.Information.getMarketList({
           data: {
-            limit: 4,
+            limit: 8,
             province: this.province,
             goods_supplier_category_id: this.category_id,
             page: this.page,
@@ -244,6 +244,13 @@
         } else {
           this._getGoodsList(false)
         }
+      },
+      clickHandle(item) {
+        let routeUrl = this.$router.resolve({
+          path: "/goods-detail",
+          query: {goodsId:item.id, supplierId: item.supplier_id}
+        });
+        window.open(routeUrl.href, '_blank')
       }
     }
   }

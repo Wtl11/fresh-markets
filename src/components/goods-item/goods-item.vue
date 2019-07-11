@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item hand">
+  <div class="goods-item hand" @click="clickHandle">
     <div class="img-box">
       <img v-if="goodsInfo.goods_cover_image" class="goods-img" :src="goodsInfo.goods_cover_image" alt="">
     </div>
@@ -35,6 +35,11 @@
       supplierName() {
         const supplier = this.goodsInfo.supplier || {}
         return supplier.name || ''
+      }
+    },
+    methods: {
+      clickHandle() {
+        this.$emit('clickHandle', this.goodsInfo)
       }
     }
   }
