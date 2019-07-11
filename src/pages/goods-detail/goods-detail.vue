@@ -24,7 +24,7 @@
     </section>
     <!--橙色条-->
     <section class="top-msg">
-      <div class="msg-box">
+      <div class="msg-box hand" @click="goBusiness">
         <p class="title">全部商品</p>
         <span class="text">(已入驻<em class="num">1000</em>个商品)</span>
         <span class="icon"></span>
@@ -83,20 +83,41 @@
       <img src="./goods-image/c.jpg" alt="" class="image">
     </section>
 
+    <!--商品推荐-->
+    <section class="goods-recommend">
+      <h3 class="page-title">其他商品</h3>
+      <div class="goods-list">
+        <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
+          <goods-item></goods-item>
+        </div>
+      </div>
+    </section>
+
     <div class="bottom"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import GoodsItem from '@components/goods-item/goods-item'
   const PAGE_NAME = 'GOODS_DETAIL'
+  const TITLE = '商品详情'
+
 
   const IMAGE_LIST = ['a', 'b', 'c', 'd', 'e']
+  const GOODS_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   export default {
     name: PAGE_NAME,
+    page: {
+      title: TITLE
+    },
+    components: {
+      GoodsItem
+    },
     data() {
       return {
         imageList: IMAGE_LIST,
+        goodsList: GOODS_LIST,
         bigImageUrl: 'a'
       }
     },
@@ -106,6 +127,9 @@
     methods: {
       changeImage(item) {
         this.bigImageUrl = item
+      },
+      goBusiness() {
+        this.$route.push('./business-detail')
       }
     }
   }
@@ -298,13 +322,50 @@
     width: $minWidth
     margin: 10px auto 0
     .page-title
-      padding: 20px 0
+      padding: 20px 15px
+      margin-bottom: 20px
       font-family: $font-family-medium
       color: #333333
       font-size: $font-size-20
       border-bottom: 1px solid $color-line
+      position: relative
+      &:before
+        content: ""
+        width: 4px
+        height: 17px
+        background: #FF520F
+        col-center()
+        left: 0
     .image
       width: 790px
+  .goods-recommend
+    width: $minWidth
+    margin: 20px auto 0
+    .page-title
+      padding: 20px 15px
+      margin-bottom: 20px
+      font-family: $font-family-medium
+      color: #333333
+      font-size: $font-size-20
+      border-bottom: 1px solid $color-line
+      position: relative
+      &:before
+        content: ""
+        width: 4px
+        height: 17px
+        background: #FF520F
+        col-center()
+        left: 0
+    .goods-list
+      overflow: hidden
+    .goods-item-box
+      width: 225px
+      height: 350px
+      float: left
+      margin-right: 10px
+      margin-bottom: 20px
+      &:nth-child(6n)
+        margin-right: 0
   .bottom
-    margin-bottom: 80px
+    padding-bottom: 30px
 </style>
