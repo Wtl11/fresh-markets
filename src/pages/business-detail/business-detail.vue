@@ -38,7 +38,7 @@
           <goods-item :goodsInfo="item"></goods-item>
         </div>
       </div>
-      <div class="pagination">
+      <div v-if="pageDetail.total_page > 1" class="pagination">
         <goods-pagination ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </div>
     </section>
