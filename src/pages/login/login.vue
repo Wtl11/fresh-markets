@@ -44,12 +44,9 @@
         if (storage.get('auth.currentUser', 0)) {
           API.Auth.validate()
             .then((res) => {
-              if (res.error !== vw.$ERR_OK) {
-                vw.$toast.show(res.message)
-                return
-              }
               const user = res.data
               storage.set('auth.currentUser', user)
+              vw._goToMain()
             })
             .finally(() => {
               vw.$loading.hide()
@@ -58,7 +55,6 @@
       })
     },
     methods: {
-      // ...loginMethods,
       _checkLogin() {
         if (_tryingLogin) {
           return false
@@ -80,10 +76,6 @@
         _tryingLogin = true
         API.Auth.logIn(this.loginMsg)
           .then((res) => {
-            if (res.error !== 0) {
-              this.$toast.show(res.message)
-              return
-            }
             const user = res.data
             storage.set('auth.currentUser', user)
             this._goToMain()
