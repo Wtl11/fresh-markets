@@ -16,13 +16,39 @@
         <li v-for="(item, index) in tabList" :key="item.title" class="tab-item-wrapper" :class="{active: tabIndex === index}" @click="changeTabHandle(item, index)"><span>{{item.title}}</span><span class="explain">(已入驻{{item.number}}{{item.units}})</span></li>
       </ul>
       <div class="select-wrapper">
-        <select-classify></select-classify>
+        <select-classify
+          ref="selectFirst"
+          class="border-1"
+          title="一级分类："
+          @selectChange="selectChange($event, 'first')"
+        ></select-classify>
+        <select-classify
+          v-if="isShowSendSelect"
+          ref="selectSecond"
+          class="border-left-1 border-right-1 border-bottom-1"
+          title="二级分类："
+          @selectChange="selectChange($event, 'second')"
+        ></select-classify>
+        <select-classify
+          v-if="isShowThirdSelect"
+          ref="selectThird"
+          class="border-left-1 border-right-1 border-bottom-1"
+          title="区域："
+          @selectChange="selectChange($event, 'third')"
+        ></select-classify>
       </div>
-      <div class="goods-list">
-        <div class="goods-item-box" v-for="(item, idx) in goodsList" :key="idx">
-          <goods-item></goods-item>
+      <keep-alive>
+        <div v-if="tabIndex" class="goods-list">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="market-item-info">
+            <market-info></market-info>
+          </div>
         </div>
-      </div>
+        <div v-else class="goods-list">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
+            <goods-item></goods-item>
+          </div>
+        </div>
+      </keep-alive>
     </article>
     <input type="file" @change="changeHandle">
   </div>
@@ -34,6 +60,7 @@
   import {uploadFiles} from '../../utils/cos/cos'
   import SelectClassify from './select-classify/select-classify'
   import GoodsItem from '@components/goods-item/goods-item'
+  import MarketInfo from './market-info/market-info'
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '信息平台'
   const CLASSIFYLIST = [
@@ -53,7 +80,8 @@
     name: PAGE_NAME,
     components: {
       SelectClassify,
-      GoodsItem
+      GoodsItem,
+      MarketInfo
     },
     page: {
       title: TITLE
@@ -74,7 +102,20 @@
           }
         ],
         tabIndex: 0,
-        goodsList: new Array(30).fill(1)
+        goodsList: new Array(4).fill(1),
+        isShowSendSelect: false,
+        isShowThirdSelect: false
+      }
+    },
+    computed: {
+    },
+    watch: {
+      tabIndex(cur,pre) {
+        if (pre !== cur) {
+          this.$refs.selectThird && this.$refs.selectThird.reset()
+          this.$refs.selectSecond && this.$refs.selectSecond.reset()
+          this.$refs.selectFirst && this.$refs.selectFirst.reset()
+        }
       }
     },
     methods: {
@@ -86,6 +127,21 @@
       },
       changeTabHandle(item, index) {
         this.tabIndex = index
+      },
+      selectChange(id, type) {
+        switch (type) {
+        case 'first':
+          this.isShowSendSelect = id > 0
+          if (!id) {
+            this.isShowThirdSelect = false
+          }
+          break
+        case 'second':
+          this.isShowThirdSelect = id > 0
+          break
+        default:
+          break
+        }
       }
     }
   }
@@ -96,8 +152,20 @@
   $minWidth = 1400px
   @import "~@design"
 
+  .border-1
+    border: 1px solid $color-line
+  .border-top-1
+    border-top : 1px solid $color-line
+  .border-left-1
+    border-left : 1px solid $color-line
+  .border-right-1
+    border-right : 1px solid $color-line
+  .border-bottom-1
+    border-bottom : 1px solid $color-line
+
   .information
     font-family: $font-family-regular
+    min-height :2238px
     .body-wrapper
       width :$minWidth
       margin :0 auto
@@ -138,6 +206,9 @@
           margin-right: 10px
           &:nth-child(6n)
             margin-right: 0
+        .market-item-info
+          width :100%
+          margin-bottom :20px
     .banner-wrapper
       margin : 0 auto
       max-width :$maxWidth

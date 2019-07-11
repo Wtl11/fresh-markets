@@ -1,15 +1,17 @@
 <template>
-  <div class="basic-layout">
-    <aside class="aside">
-      <layout-menu></layout-menu>
-    </aside>
-    <header class="header-wrapper">
-      <layout-crumb></layout-crumb>
-    </header>
-    <section class="content-wrapper">
-      <router-view class="default-router-view"></router-view>
-    </section>
-  </div>
+  <transition name="fade">
+    <div class="basic-layout">
+      <aside class="aside">
+        <layout-menu></layout-menu>
+      </aside>
+      <header class="header-wrapper">
+        <layout-crumb></layout-crumb>
+      </header>
+      <section class="content-wrapper">
+        <router-view class="default-router-view"></router-view>
+      </section>
+    </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">

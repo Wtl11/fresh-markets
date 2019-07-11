@@ -19,6 +19,8 @@
   // import {loginMethods} from './modules/helpers'
   import storage from 'storage-controller'
   import API from '@api'
+  import HTTP from '@utils/http'
+  import {authMethod} from '@state/helpers'
 
   const PAGE_NAME = 'LOGIN'
   const TITLE = '登录'
@@ -38,27 +40,24 @@
       }
     },
     beforeRouteEnter(to, from, next) {
-      console.log(to, from)
       // 判断用户是否已经登录
-      next((vw) => {
-        if (storage.get('auth.currentUser', 0)) {
-          API.Auth.validate()
-            .then((res) => {
-              if (res.error !== vw.$ERR_OK) {
-                vw.$toast.show(res.message)
-                return
-              }
-              const user = res.data
-              storage.set('auth.currentUser', user)
+      if (storage.get('auth.token', 0)) {
+        API.Auth.validate()
+          .then((res) => {
+            next(vm => {
+              vm._goToMain()
             })
-            .finally(() => {
-              vw.$loading.hide()
+          }).catch(() => {
+            next(vm => {
+              vm.$loading.hide()
             })
-        }
-      })
+          })
+      } else {
+        next()
+      }
     },
     methods: {
-      // ...loginMethods,
+      ...authMethod,
       _checkLogin() {
         if (_tryingLogin) {
           return false
@@ -80,12 +79,7 @@
         _tryingLogin = true
         API.Auth.logIn(this.loginMsg)
           .then((res) => {
-            if (res.error !== 0) {
-              this.$toast.show(res.message)
-              return
-            }
-            const user = res.data
-            storage.set('auth.currentUser', user)
+            this.successLogin(res.data)
             this._goToMain()
           })
           .catch(() => {
@@ -97,10 +91,16 @@
           })
       },
       _goToMain() {
-        this.$router.push(`/manager/shop-info`)
+        this.$router.push(`/manager`)
       },
       _becomeSuppliers() {
         this.$router.push(`/user/apply-suppliers`)
+      },
+      successLogin(data) {
+        storage.set('auth.currentUser', data.info)
+        storage.set('auth.token', data.access_token)
+        HTTP.setHeaders({Authorization: data.access_token})
+        this['SET_USER_TYPE'](data.info.identity)
       }
     }
   }

@@ -16,13 +16,13 @@ HTTP.handleError((code) => {
 
 HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
   if (loading) {
-    APP.$loading && APP.$loading.hide()
+    APP && APP.$loading && APP.$loading.hide()
   }
   if (!res || ERR_OK !== res.error) {
     if (typeof toast === 'function') {
       toast(res)
     } else if(toast) {
-      APP.$toast.show(res && res.message)
+      APP && APP.$toast.show(res && res.message)
     }
   }
   if (typeof formatter === 'function') {
@@ -36,7 +36,7 @@ HTTP.reqCommonHandle(({loading}) => {
   if (typeof loading === 'function') {
     loading()
   } else if (loading) {
-    APP.$loading && APP.$loading.show()
+    APP && APP.$loading && APP.$loading.show()
   }
 })
 
@@ -59,6 +59,6 @@ function resetUrl(url) {
   return url
 }
 HTTP.setHeaders({
-  'Authorization': storage.get('auth.currentUser', {}).access_token,
+  'Authorization': storage.get('auth.token'),
   'Current-Corp': process.env.VUE_APP_CURRENT_CORP
 })

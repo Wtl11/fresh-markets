@@ -4,7 +4,10 @@ import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
 import {findLast} from 'lodash'
-import sotre from '@state/store'
+import store from '@state/store'
+import API from '@api'
+import storage from 'storage-controller'
+import HTTP from '@utils/http'
 
 NProgress.configure({showSpinner: false})
 
@@ -12,6 +15,8 @@ Vue.use(VueRouter)
 Vue.use(VueMeta, {
   keyName: 'page'
 })
+
+const LOGIN_PATH = '/user/login'
 
 const router = new VueRouter({
   routes,
@@ -25,14 +30,28 @@ const router = new VueRouter({
   }
 })
 
-router.beforeEach((routeTo, routeFrom, next) => {
+router.beforeEach(async (routeTo, routeFrom, next) => {
   if (routeFrom.name !== null) {
     NProgress.start()
   }
+  let identity = store.getters['auth/currentUserType']
   let record = findLast(routeTo.matched, record => record.meta.authority)
-  if (record && !record.meta.authority.some(val => val === sotre.getters['auth/currentUserType'])) {
-    if (routeTo.path !== '/user/login') {
-      return next({path: '/user/login'})
+  if (record && !identity) {
+    try {
+      let res = await API.Auth.validate()
+      setGlobalParams(res.data)
+      return next()
+    } catch (e) {
+      if (routeTo.path !== LOGIN_PATH) {
+        NProgress.done()
+        return next({path: LOGIN_PATH})
+      }
+    }
+  }
+  if (record && !record.meta.authority.some(val => val === identity)) {
+    if (routeTo.path !== LOGIN_PATH) {
+      NProgress.done()
+      return next({path: LOGIN_PATH})
     }
   }
   return next()
@@ -68,5 +87,13 @@ router.beforeResolve(async (routeTo, routeFrom, next) => {
 router.afterEach((routeTo, routeFrom) => {
   NProgress.done()
 })
+
+// 设置头部信息和权限身份
+function setGlobalParams(data) {
+  storage.set('auth.currentUser', data.info)
+  storage.set('auth.token', data.access_token)
+  HTTP.setHeaders({Authorization: data.access_token})
+  store.commit('auth/SET_USER_TYPE', data.info.identity)
+}
 
 export default router

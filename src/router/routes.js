@@ -10,7 +10,13 @@ export default [
         path: '/user/login',
         name: 'login',
         component: () => import('@pages/login/login')
-      }
+      },
+      // 成为供应商
+      {
+        path: '/user/apply-suppliers',
+        name: 'apply-suppliers',
+        component: () => import('@pages/apply-suppliers/apply-suppliers')
+      },
     ]
   },
   {
@@ -18,11 +24,7 @@ export default [
     redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: () => import('@pages/client-view/client-view')
-      },
+      // 信息平台
       {
         path: '/information',
         name: 'information',
@@ -69,6 +71,25 @@ export default [
           authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-supplier-manage/p-supplier-manage')
+      },
+      // 店铺信息
+      {
+        path: '/manager/shop-info',
+        name: 'shop-info',
+        meta: {
+          title: '店铺信息',
+          icon: require('./icon-store_Information1@2x.png'),
+          iconSelected: require('./icon-store_Information2@2x.png'),
+          crumbs: ['店铺信息'],
+          authority: [USER_TYPE.MERCHANT]
+        },
+        component: () => import('@pages/shop-info/shop-info')
+      },
+      // 新建/编辑商品
+      {
+        path: '/manager/edit-goods',
+        name: 'edit-goods',
+        component: () => import('@pages/edit-goods/edit-goods')
       },
     ]
   },

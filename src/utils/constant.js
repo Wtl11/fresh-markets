@@ -1,6 +1,6 @@
 export const USER_TYPE = {
-  SUPER: 'SUPER',
-  MERCHANT: 'MERCHANT'
+  SUPER: 'platform',
+  MERCHANT: 'supplier'
 }
 
 export const API_PUB = '/market-info'
