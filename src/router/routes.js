@@ -24,15 +24,16 @@ export default [
     redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: () => import('@pages/client-view/client-view')
-      },
+      // 信息平台
       {
         path: '/information',
         name: 'information',
         component: () => import('@pages/information/information')
+      },
+      {
+        path: '/goods-detail',
+        name: 'goods-detail',
+        component: () => import('@pages/goods-detail/goods-detail')
       }
     ]
   },
@@ -75,7 +76,7 @@ export default [
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['店铺信息'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/shop-info/shop-info')
       },

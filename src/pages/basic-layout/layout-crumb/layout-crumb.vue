@@ -5,7 +5,7 @@
     </ul>
     <section class="user-wrapper" @mouseenter="enterHandle" @mouseleave="leaveHandle">
       <img class="avatar" src="http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png" alt="">
-      <span class="user-name">你好: super</span>
+      <span class="user-name">{{userInfo.username}}</span>
       <img class="icon-logout" src="./icon-sign_out1@2x.png" alt="">
       <transition name="fade" @mouseenter="enterHandle" @mouseleave="leaveHandle">
         <dl v-show="showTip" class="login-panel">
@@ -19,7 +19,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import DefaultConfirm from '../../../components/default-confirm/default-confirm'
+  import DefaultConfirm from '@components/default-confirm/default-confirm'
+  import storage from 'storage-controller'
+  import HTTP from '@utils/http'
+  import {authMethod} from '@state/helpers'
+
   const COMPONENT_NAME = 'LAYOUT_CRUMB'
 
   export default {
@@ -31,7 +35,8 @@
       let crumbData = this.getCrumbData(this.$route.meta)
       return {
         crumbData: crumbData,
-        showTip: false
+        showTip: false,
+        userInfo: storage.get('auth.currentUser') || {}
       }
     },
     watch: {
@@ -40,6 +45,7 @@
       }
     },
     methods: {
+      ...authMethod,
       getCrumbData(meta) {
         return meta.crumbs || []
       },
@@ -56,6 +62,10 @@
         this.$refs.confirm && this.$refs.confirm.show('确定要退出?')
       },
       confirmHandle() {
+        storage.remove('auth.currentUser')
+        storage.remove('auth.token')
+        HTTP.setHeaders({Authorization: undefined})
+        this['SET_USER_TYPE'](undefined)
         this.$router.push({name: 'login'})
       }
     }
