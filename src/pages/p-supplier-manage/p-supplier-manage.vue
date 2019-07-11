@@ -27,7 +27,7 @@
               <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
-              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item">
+              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
                 <img :src="require('./img.jpg')" alt="" class="img">
               </div>
               <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item explain">
@@ -55,6 +55,19 @@
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
     </div>
+
+    <default-modal ref="imgModal" class="img-model">
+      <div slot="content">
+        <div class="top">
+          <div class="title">营业执照</div>
+          <span class="close" @click="$refs.imgModal.hideModal()"></span>
+        </div>
+        <div class="model-img-wrap">
+          <img src="./img.jpg" alt="" class="big-img">
+        </div>
+      </div>
+    </default-modal>
+
     <auditing-model ref="auditingModel" @confirm="auditingConfirm"></auditing-model>
     <change-model ref="changeModel" @confirm="changePassword"></change-model>
     <default-confirm ref="confirm" confirm="deleteConfirm"></default-confirm>
@@ -63,6 +76,7 @@
 
 <script type="text/ecmascript-6">
   import Http from '@utils/http'
+  import DefaultModal from '@components/default-modal/default-modal'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import AuditingModel from './auditing-model/auditing-model'
   import ChangeModel from './change-model/change-model'
@@ -161,7 +175,8 @@
     components: {
       DefaultConfirm,
       AuditingModel,
-      ChangeModel
+      ChangeModel,
+      DefaultModal
     },
     data() {
       return {
@@ -186,7 +201,8 @@
           total_page: 1
         },
         defaultIndex: 0,
-        currentItem: {}
+        currentItem: {},
+        currentImgSrc: ''
       }
     },
     computed: {
@@ -294,6 +310,10 @@
             // this.$set(this.statusTab[index], 'num', item.statistic)
           })
         })
+      },
+      showBigImg(src){
+        this.currentImgSrc = src
+        this.$refs.imgModal.showModal()
       },
       auditing(item) {
         this.currentItem = item
@@ -407,4 +427,29 @@
       .list-double-row
         .item-sub
           color: #333
+  .img-model
+    .top
+      align-items: center
+      background: #fff
+      justify-content: space-between
+      padding: 20px
+      layout(row)
+      .title
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        color: $color-text-main
+      .close
+        cursor pointer
+        width: 12px
+        height: 12px
+        icon-image('icon-close')
+    .model-img-wrap
+      background: #fff
+      height: 600px
+      width: 500px
+      text-align center
+      padding:20px
+    .big-img
+      max-width: 100%
+      max-height: 100%
 </style>
