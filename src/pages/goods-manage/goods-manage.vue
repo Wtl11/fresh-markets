@@ -57,7 +57,7 @@
               </div>
 
               <div v-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
-                   :class="item.audit_status === 1 ? 'status-success' : item.audit_status === 2 ? 'status-fail' : ''"
+                   :class="'status-'+item.audit_status"
               >
                 {{item[val.value]}}
               </div>
@@ -251,6 +251,7 @@
   @import "~@design"
   .goods-manage
     display: flex
+    min-width: 1300px
     flex-direction: column
     .down-content
       padding: 0 20px
@@ -306,14 +307,17 @@
         border-radius: 50%
         margin-right: 6px
         background: $color-negative
-      .status-fail:before
-        background: #E1E1E1
-      .status-success:before
-        background: $color-positive
+      .status-1:before
+        background: #F0B359
+      .status-2:before
+        background: #1FBB91
+      .status-3:before
+        background: #ED575A
       .img
         width: 42px
         height: 42px
         border-radius: 4px
+        object-fit: cover
         border: 1px solid $color-line
       .status-item:before
         content: ""

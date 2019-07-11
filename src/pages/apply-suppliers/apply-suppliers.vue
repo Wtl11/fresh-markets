@@ -5,7 +5,7 @@
       <div class="icon"></div>
       <div class="title">申请成为供应商</div>
     </div>
-    <div class="content">
+    <div v-if="!subModify" class="content">
       <div class="content-header content-padding-top">
         <div class="content-title">基本信息</div>
       </div>
@@ -16,7 +16,7 @@
             供应商名称
           </div>
           <div class="form-input-box">
-            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="29"
+            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="25"
                    @mousewheel.native.prevent
             >
           </div>
@@ -87,7 +87,7 @@
           </div>
           <div class="form-input-box">
             <input v-model="shopInfo.contact" type="text" class="form-input" placeholder="请输入联系人信息"
-                   maxlength="29" @mousewheel.native.prevent
+                   maxlength="20" @mousewheel.native.prevent
             >
           </div>
         </div>
@@ -130,18 +130,24 @@
             <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
           </div>
         </div>
-        <div class=""></div>
       </div>
     </div>
-    <div class="button-con">
+    <div v-if="!subModify" class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
       <div class="hand button confirm" @click="_subApply">提交审核</div>
+    </div>
+    <div v-if="subModify" class="approve-tips-model">
+      <div class="tips-con">
+        <img src="./icon-success@2x.png" class="tips-img">
+        <div class="tips-title">提交审核成功，请耐心等待</div>
+        <div class="tips-text">审核结果后会在72小时内以短信形式通知您，请留意手机</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-// import * as Helpers from './helpers'
+  // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
   import CitySelect from './city-select/city-select'
@@ -160,23 +166,13 @@
     },
     data() {
       return {
-        shopInfo: {
-          name: '',
-          province: '',
-          city: '',
-          district: '',
-          image_id: '',
-          goods_start_num: '',
-          category_id: '',
-          contact: '',
-          mobile: '',
-          wechat_image_id: ''
-        },
+        shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
-        uploadImg: {license: '', QRCode: ''},
+        uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
-        uploading: ''
+        uploading: '',
+        subModify: false,
       }
     },
     mounted() {
@@ -184,13 +180,14 @@
     },
     methods: {
       _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1}).then((res) => {
-          this.firstSelect.data = res.data
-        })
+        API.GoodsManage.getCategoryData({parent_id: -1})
+          .then((res) => {
+            this.firstSelect.data = res.data
+          })
       },
       _setSelectValue(data, key, childKey = false) {
         this.shopInfo[key] = data.id
-        if (childKey) {
+        if(childKey) {
           this[childKey].data = data.list
         }
       },
@@ -202,7 +199,7 @@
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
         this.uploadLoading = true
-        uploadFiles({files: [e.target.files[0]]}).then((res) => {
+        uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
@@ -214,14 +211,12 @@
         this.uploadImg[uploadKey] = ''
       },
       _checkForm() {
-        if (submitting) {
+        if(submitting) {
           return false
         }
         let errorMsg = {
           name: '请输入供应商名称',
-          province: '请选择省份',
-          city: '请选择城市',
-          district: '请选择区/县',
+          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
           image_id: '请上传营业执照',
           goods_start_num: '请输入商品起批量',
           category_id: '请选择主营品类',
@@ -230,7 +225,7 @@
           wechat_image_id: '请上传微信二维码'
         }
         for (let k in this.shopInfo) {
-          if (!(this.shopInfo[k] + '').trim()) {
+          if(!(this.shopInfo[k]+'').trim()) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -238,12 +233,12 @@
         return true
       },
       _subApply() {
-        if (!this._checkForm()) return
+        if(!this._checkForm()) return
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {
             console.log(res.data)
-            this.$toast.show('已提交审核！')
+            this.subModify = true
           })
           .finally(() => {
             submitting = false
@@ -261,6 +256,7 @@
   @import "~@design"
 
   .apply-suppliers
+    box-sizing: border-box
     position: absolute
     width: 100%
     min-height: 100%
@@ -434,6 +430,43 @@
                 all-center()
                 width: 25px
                 height: 25px
+
+  .approve-tips-model
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    width: 100%
+    height: 100%
+    z-index: 101
+    layout()
+    align-items: center
+    justify-content: center
+
+    .tips-con
+      layout()
+      align-items: center
+      justify-content: center
+
+      .tips-img
+        width: 114px
+        height: @width
+
+      .tips-title
+        margin: 18px 0
+        font-family: $font-family-medium
+        font-size: 22px
+        color: $color-text-main
+        text-align: center
+        line-height: 1
+
+      .tips-text
+        font-family: $font-family-regular
+        font-size: 14px
+        color: #666666
+        text-align: center
+        line-height: 1
   .button-con
     box-sizing: border-box
     position: absolute
