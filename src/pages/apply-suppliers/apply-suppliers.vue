@@ -211,12 +211,14 @@
         this.uploadImg[uploadKey] = ''
       },
       _checkForm() {
-        if(submitting) {
+        if (submitting) {
           return false
         }
         let errorMsg = {
           name: '请输入供应商名称',
-          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
+          province: '请选择省份',
+          city: '请选择城市',
+          district: '请选择区/县',
           image_id: '请上传营业执照',
           goods_start_num: '请输入商品起批量',
           category_id: '请选择主营品类',
@@ -225,7 +227,7 @@
           wechat_image_id: '请上传微信二维码'
         }
         for (let k in this.shopInfo) {
-          if(!(this.shopInfo[k]+'').trim()) {
+          if (!(this.shopInfo[k] + '').trim()) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -233,7 +235,7 @@
         return true
       },
       _subApply() {
-        if(!this._checkForm()) return
+        if (!this._checkForm()) return
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {

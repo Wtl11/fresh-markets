@@ -29,7 +29,7 @@
           </dd>
           <dt class="qr-code-wrapper">
             <span class="key">微信二维码:</span>
-            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code">
+            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code" @click="qrCodeHandle">
           </dt>
         </dl>
         <button class="button" @click.stop="navHandle">进入店铺 >></button>
@@ -41,7 +41,6 @@
         :key="index"
         :showCompany="false"
         :goodsInfo="item"
-        @clickHandle="clickHandle"
         class="goods-item-wrapper"
       ></goods-item>
     </section>
@@ -56,7 +55,7 @@
   export default {
     name: COMPONENT_NAME,
     components: {
-      GoodsItem,
+      GoodsItem
     },
     props: {
       marketInfo: {
@@ -65,8 +64,7 @@
       }
     },
     data() {
-      return {
-      }
+      return {}
     },
     computed: {
       areas() {
@@ -77,19 +75,15 @@
       }
     },
     methods: {
-      clickHandle(item) {
-        let routeUrl = this.$router.resolve({
-          path: "/goods-detail",
-          query: {goodsId:item.id, supplierId: item.supplier_id}
-        });
-        window.open(routeUrl.href, '_blank')
-      },
       navHandle() {
         let routeUrl = this.$router.resolve({
-          path: "/business-detail",
-          query: {supplierId:this.marketInfo.id}
-        });
+          path: '/business-detail',
+          query: {supplierId: this.marketInfo.id}
+        })
         window.open(routeUrl.href, '_blank')
+      },
+      qrCodeHandle() {
+        window.open(this.marketInfo.wechat_image_url, '_blank')
       }
     }
   }
@@ -148,6 +142,7 @@
               border-radius: 2px;
               overflow :hidden
               display :inline-block
+              cursor :pointer
           .info-item-wrapper
             width : 256px
             padding-bottom :30px

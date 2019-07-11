@@ -77,7 +77,9 @@
         supplierDetail: {}
       }
     },
-    beforeRouteEnter(to, from, next) {next()},
+    beforeRouteEnter(to, from, next) {
+      next()
+    },
     created() {
       this.supplierId = this.$route.query.supplierId || 0
       this.getSupplierDetail()
@@ -85,23 +87,21 @@
     },
     methods: {
       getSupplierDetail() {
-        API.GoodsDetail.getSupplierDetail(this.supplierId)
-          .then(res => {
-            this.supplierDetail = res.data
-          })
+        API.GoodsDetail.getSupplierDetail(this.supplierId).then((res) => {
+          this.supplierDetail = res.data
+        })
       },
       // 获取列表
       getGoodsList() {
-        API.PGoodsManage.getGoodsList({page: this.page, limit: 24, getGoodsList: this.supplierId}, false)
-          .then((res) => {
-            this.goodsList = res.data
-            let statePageTotal = {
-              total: res.meta.total,
-              per_page: res.meta.per_page,
-              total_page: res.meta.last_page
-            }
-            this.pageDetail = statePageTotal
-          })
+        API.PGoodsManage.getGoodsList({page: this.page, limit: 24, getGoodsList: this.supplierId}, false).then((res) => {
+          this.goodsList = res.data
+          let statePageTotal = {
+            total: res.meta.total,
+            per_page: res.meta.per_page,
+            total_page: res.meta.last_page
+          }
+          this.pageDetail = statePageTotal
+        })
       },
       addPage(page) {
         this.page = page

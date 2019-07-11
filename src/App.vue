@@ -15,7 +15,7 @@
         title = typeof title === 'function' ? title(this.$store) : title
         return title || appConfig.title
       }
-    },
+    }
   }
 </script>
 

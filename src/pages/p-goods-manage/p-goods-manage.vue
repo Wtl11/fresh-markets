@@ -154,7 +154,7 @@
       }
       API.PGoodsManage.getGoodsList(data, true)
         .then((res) => {
-          next(vm => {
+          next((vm) => {
             let statePageTotal = {
               total: res.meta.total,
               per_page: res.meta.per_page,
@@ -165,7 +165,7 @@
           })
         })
         .catch(() => {
-          next(vm => {
+          next((vm) => {
             vm.$loading.hide()
           })
         })
@@ -212,23 +212,21 @@
       },
       // 获取分类列表
       getCategoryData() {
-        API.PGoodsManage.getCategoryList({parent_id: -1}, false)
-          .then((res) => {
-            this.firstCategory.data = res.data
-          })
+        API.PGoodsManage.getCategoryList({parent_id: -1}, false).then((res) => {
+          this.firstCategory.data = res.data
+        })
       },
       // 获取列表
       getGoodsList() {
-        API.PGoodsManage.getGoodsList(this.requestData, false)
-          .then((res) => {
-            this.goodsList = res.data
-            let statePageTotal = {
-              total: res.meta.total,
-              per_page: res.meta.per_page,
-              total_page: res.meta.last_page
-            }
-            this.pageDetail = statePageTotal
-          })
+        API.PGoodsManage.getGoodsList(this.requestData, false).then((res) => {
+          this.goodsList = res.data
+          let statePageTotal = {
+            total: res.meta.total,
+            per_page: res.meta.per_page,
+            total_page: res.meta.last_page
+          }
+          this.pageDetail = statePageTotal
+        })
       },
       // 获取Tab栏状态
       getGoodsStatus() {
@@ -254,41 +252,41 @@
           goods_supplier_id: this.currentItem.id,
           audit_status: data.status,
           reason: data.reason
+        }).then((res) => {
+          this.$toast.show('审核成功')
+          this.getGoodsStatus()
+          this.getGoodsList()
         })
-          .then(res => {
-            this.$toast.show('审核成功')
-            this.getGoodsStatus()
-            this.getGoodsList()
-          })
       },
       deleteGoods(item) {
         this.currentItem = item
         this.confirmStatus = 'delete'
-        this.$refs.confirm.show('确定删除'+ item.name+ '?')
+        this.$refs.confirm.show('确定删除' + item.name + '?')
       },
       downGoods(item) {
         this.currentItem = item
         this.confirmStatus = 'down'
-        this.$refs.confirm.show('确定下架'+ item.name+ '?')
+        this.$refs.confirm.show('确定下架' + item.name + '?')
       },
       // 商品下架/删除
       confirm() {
-        this.confirmStatus === 'down' && API.PGoodsManage.goodsDown({goods_supplier_id: this.currentItem.id, is_online: 0}).then((res) => {
-          this.$toast.show('该商品已成功下架')
-          this.getGoodsStatus()
-          this.getGoodsList()
-        })
-        this.confirmStatus === 'delete' && API.PGoodsManage.goodsDelete(this.currentItem.id).then((res) => {
-          this.$toast.show('该商品已成功删除')
-          this.getGoodsStatus()
-          this.getGoodsList()
-        })
+        this.confirmStatus === 'down' &&
+          API.PGoodsManage.goodsDown({goods_supplier_id: this.currentItem.id, is_online: 0}).then((res) => {
+            this.$toast.show('该商品已成功下架')
+            this.getGoodsStatus()
+            this.getGoodsList()
+          })
+        this.confirmStatus === 'delete' &&
+          API.PGoodsManage.goodsDelete(this.currentItem.id).then((res) => {
+            this.$toast.show('该商品已成功删除')
+            this.getGoodsStatus()
+            this.getGoodsList()
+          })
       },
       setData(data) {
         this.requestData = Object.assign({}, this.requestData, data)
       }
     }
-
   }
 </script>
 

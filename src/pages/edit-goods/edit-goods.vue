@@ -109,7 +109,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
+// import * as Helpers from './helpers'
   import API from '@api'
   import Draggable from 'vuedraggable'
   import {uploadFiles} from '../../utils/cos/cos'
@@ -138,18 +138,17 @@
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadLoading: false,
-        uploading: '',
+        uploading: ''
       }
     },
     beforeRouteEnter(to, from, next) {
       const goodsId = to.query.goodsId
       if (goodsId) {
-        API.GoodsManage.getGoodsInfo(goodsId)
-          .then((res) => {
-            next((vw) => {
-              vw._setGoodsInfo(res.data)
-            })
+        API.GoodsManage.getGoodsInfo(goodsId).then((res) => {
+          next((vw) => {
+            vw._setGoodsInfo(res.data)
           })
+        })
       } else {
         next((vw) => {
           vw._getCategoryData()
@@ -169,27 +168,26 @@
         }
       },
       _getCategoryData() {
-        API.GoodsManage.getCategoryData({parent_id: -1,goods_id: this.goodsId||''})
-          .then((res) => {
-            this.firstSelect.data = res.data
-            res.data.forEach((item) => {
-              if (item.is_selected) {
-                this.firstSelect.content = item.name
-                this.secondSelect.data = item.list
-                item.list.forEach((secondItem) => {
-                  if (secondItem.is_selected) {
-                    this.secondSelect.content = secondItem.name
-                    return false
-                  }
-                })
-                return false
-              }
-            })
+        API.GoodsManage.getCategoryData({parent_id: -1, goods_id: this.goodsId || ''}).then((res) => {
+          this.firstSelect.data = res.data
+          res.data.forEach((item) => {
+            if (item.is_selected) {
+              this.firstSelect.content = item.name
+              this.secondSelect.data = item.list
+              item.list.forEach((secondItem) => {
+                if (secondItem.is_selected) {
+                  this.secondSelect.content = secondItem.name
+                  return false
+                }
+              })
+              return false
+            }
           })
+        })
       },
       _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
-        if(childKey) {
+        if (childKey) {
           this[childKey].data = data.list
         }
       },
@@ -197,7 +195,7 @@
       _addImg(key, e) {
         this.uploading = key
         this.uploadLoading = true
-        uploadFiles({files: [e.target.files[0]]}).then(res => {
+        uploadFiles({files: [e.target.files[0]]}).then((res) => {
           this.uploadLoading = false
           const resData = res[0].data
           this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
@@ -207,7 +205,7 @@
         this.goodsInfo[key].splice(index, 1)
       },
       _checkForm() {
-        if(submitting) {
+        if (submitting) {
           return false
         }
         let errorMsg = {
@@ -218,18 +216,18 @@
           goods_detail_images: '请上传商品详情图'
         }
         for (let k in this.goodsInfo) {
-          if(k === 'goods_supplier_skus') {
-            if(!this.goodsInfo.goods_supplier_skus[0].purchase_price.trim()) {
+          if (k === 'goods_supplier_skus') {
+            if (!this.goodsInfo.goods_supplier_skus[0].purchase_price.trim()) {
               this.$toast.show(errorMsg[k])
               return false
             }
-          } else if(k === 'goods_main_images' || k === 'goods_detail_images') {
-            if(this.goodsInfo[k].length<=0) {
+          } else if (k === 'goods_main_images' || k === 'goods_detail_images') {
+            if (this.goodsInfo[k].length <= 0) {
               this.$toast.show(errorMsg[k])
               return false
             }
           } else {
-            if(!(this.goodsInfo[k]+'').trim()) {
+            if (!(this.goodsInfo[k] + '').trim()) {
               this.$toast.show(errorMsg[k])
               return false
             }
@@ -238,18 +236,18 @@
         return true
       },
       _subEdit() {
-        if(!this._checkForm()) return
+        if (!this._checkForm()) return
         submitting = true
         let apiName = 'creatGoodsInfo'
-        if(this.goodsId) {
+        if (this.goodsId) {
           apiName = 'editGoodsInfo'
         }
         API.GoodsManage[apiName](this.goodsInfo, true, this.goodsId)
           .then((res) => {
             this.$toast.show('保存成功！')
-            setTimeout(()=>{
+            setTimeout(() => {
               this.$router.push(`/manager/goods-manage`)
-            },1000)
+            }, 1000)
           })
           .finally(() => {
             submitting = false

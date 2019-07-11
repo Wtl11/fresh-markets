@@ -9,10 +9,10 @@ const root = {modules: {}}
     if (moduleCache[fileName] === moduleDefinition || moduleDefinition.state.todo) return
     moduleCache[fileName] = moduleDefinition
     const modulePath = fileName
-    .replace(/^\.\//, '')
-    .replace(/\.\w+$/, '')
-    .split(/\//)
-    .map(camelCase)
+      .replace(/^\.\//, '')
+      .replace(/\.\w+$/, '')
+      .split(/\//)
+      .map(camelCase)
 
     // 获取当前路径的模块对象
     const {modules} = getNamespace(root, modulePath.slice(-1))

@@ -1,7 +1,4 @@
-import {
-  mapGetters,
-  mapMutations
-} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export const authComputed = {
   ...mapGetters('auth', ['currentUserType'])

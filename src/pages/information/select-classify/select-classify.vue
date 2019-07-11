@@ -57,11 +57,10 @@
         opacityIndex: 99999
       }
     },
-    computed: {
-    },
+    computed: {},
     watch: {
       isOpen(val) {
-        this.height = (val ? Math.max((this.row - 1), 0) * ADD_HEIGHT : 0) + DEFAULT_HEIGHT
+        this.height = (val ? Math.max(this.row - 1, 0) * ADD_HEIGHT : 0) + DEFAULT_HEIGHT
       },
       classifyData() {
         setTimeout(() => {
@@ -69,8 +68,7 @@
         }, 100)
       }
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
       setSelectId(index) {
         this.selectId = index
@@ -87,7 +85,7 @@
         if (this.isOpen) {
           return {opacity: 1}
         } else {
-          return {opacity: (index < this.opacityIndex ? 1 : 0)}
+          return {opacity: index < this.opacityIndex ? 1 : 0}
         }
       },
       getRow() {

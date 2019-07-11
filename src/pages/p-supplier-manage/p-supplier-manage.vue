@@ -149,7 +149,7 @@
       }
       API.PSupplierManage.getSupplierList(data, true)
         .then((res) => {
-          next(vm => {
+          next((vm) => {
             let statePageTotal = {
               total: res.meta.total,
               per_page: res.meta.per_page,
@@ -160,7 +160,7 @@
           })
         })
         .catch(() => {
-          next(vm => {
+          next((vm) => {
             vm.$loading.hide()
           })
         })
@@ -189,16 +189,15 @@
       },
       // 获取列表
       getSupplierList() {
-        API.PSupplierManage.getSupplierList(this.requestData, false)
-          .then((res) => {
-            let statePageTotal = {
-              total: res.meta.total,
-              per_page: res.meta.per_page,
-              total_page: res.meta.last_page
-            }
-            this.supplierList = res.data
-            this.pageDetail = statePageTotal
-          })
+        API.PSupplierManage.getSupplierList(this.requestData, false).then((res) => {
+          let statePageTotal = {
+            total: res.meta.total,
+            per_page: res.meta.per_page,
+            total_page: res.meta.last_page
+          }
+          this.supplierList = res.data
+          this.pageDetail = statePageTotal
+        })
       },
       // 获取Tab栏状态
       getSupplierStatus() {
@@ -209,20 +208,19 @@
               value: item.status,
               num: item.statistic
             }
-            // this.$set(this.statusTab[index], 'num', item.statistic)
+          // this.$set(this.statusTab[index], 'num', item.statistic)
           })
         })
       },
-      showBigImg(src){
+      showBigImg(src) {
         this.currentImgSrc = src
         this.$refs.imgModal.showModal()
       },
       switchBtn(item, index) {
         let isFreeze = item.is_freeze ? 0 : 1
-        API.PSupplierManage.changeStatus({is_freeze: isFreeze, id: item.id})
-          .then(res => {
-            this.getSupplierList()
-          })
+        API.PSupplierManage.changeStatus({is_freeze: isFreeze, id: item.id}).then((res) => {
+          this.getSupplierList()
+        })
       },
       auditing(item) {
         this.currentItem = item
@@ -234,27 +232,25 @@
           id: this.currentItem.id,
           approve_status: data.status,
           note: data.reason
+        }).then((res) => {
+          this.$toast.show('审核成功')
+          this.getStatus()
+          this.getSupplierList()
         })
-          .then(res => {
-            this.$toast.show('审核成功')
-            this.getStatus()
-            this.getSupplierList()
-          })
       },
-      resetPassword(item){
+      resetPassword(item) {
         this.currentItem = item
         this.$refs.changeModel.show()
       },
       changePassword(data) {
-        API.PSupplierManage.resetPassword({password: data.password, id: this.currentItem.id})
-          .then(res => {
-            this.$toast.show('修改密码成功')
-            this.$refs.changeModel.hide()
-          })
+        API.PSupplierManage.resetPassword({password: data.password, id: this.currentItem.id}).then((res) => {
+          this.$toast.show('修改密码成功')
+          this.$refs.changeModel.hide()
+        })
       },
       deleteSupplier(item) {
         this.currentItem = item
-        this.$refs.confirm.show('确定删除'+ item.name+ '供应商?', '删除')
+        this.$refs.confirm.show('确定删除' + item.name + '供应商?', '删除')
       },
       // 删除供应商
       confirm() {
@@ -268,7 +264,6 @@
         this.requestData = Object.assign({}, this.requestData, data)
       }
     }
-
   }
 </script>
 
