@@ -5,9 +5,9 @@
       <ul class="icon-wrapper">
         <li v-for="(item, index) in navList" :key="index" class="icon-item-wrapper">
           <div class="nav-icon-wrapper">
-            <img src="http://pic25.nipic.com/20121205/10197997_003647426000_2.jpg" alt="" class="nav-icon">
+            <img :src="item.icon" alt="" class="nav-icon">
           </div>
-          <span>网红零食</span>
+          <span>{{item.txt}}</span>
         </li>
       </ul>
     </section>
@@ -36,6 +36,18 @@
   import GoodsItem from '@components/goods-item/goods-item'
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '信息平台'
+  const CLASSIFYLIST = [
+    {id: 1, icon: './imgs/classify/f1.png',txt: '新鲜水果'},
+    {id: 9, icon: './imgs/classify/f2.png',txt: '应季时蔬'},
+    {id: 5, icon: './imgs/classify/f3.png',txt: '轻食糕点'},
+    {id: 6, icon: './imgs/classify/f4.png',txt: '水产冻品'},
+    {id: 10, icon: './imgs/classify/f5.png',txt: '肉禽蛋品'},
+    {id: 3, icon: './imgs/classify/f6.png',txt: '米面粮油'},
+    {id: 2, icon: './imgs/classify/f7.png',txt: '休闲零食'},
+    {id: 4, icon: './imgs/classify/f8.png',txt: '日用百货'},
+    {id: 7, icon: './imgs/classify/f9.png',txt: '酒饮乳品'},
+    {id: 8, icon: './imgs/classify/f10.png',txt: '南北干货'}
+  ]
 
   export default {
     name: PAGE_NAME,
@@ -48,7 +60,7 @@
     },
     data() {
       return {
-        navList: new Array(10).fill(1),
+        navList: CLASSIFYLIST,
         tabList: [
           {
             title: '商品',
@@ -160,12 +172,11 @@
             width: 54px
             height: 54px
             border-radius :100%
-            overflow :hidden
+            overflow: hidden
             margin-bottom :10px
             transition : transform 0.1s
             .nav-icon
               width :100%
               height :100%
-              object-fit :cover
 
 </style>
