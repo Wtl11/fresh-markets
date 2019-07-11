@@ -13,38 +13,42 @@
           <p class="identification-name">供应商列表</p>
           <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>
-        <div class="function-btn">
+        <!--<div class="function-btn">
           <router-link tag="div" to="new-coupon" append class="btn-main"><span class="add-icon"></span>新建商品</router-link>
-        </div>
+        </div>-->
       </div>
       <div class="big-list">
         <div class="list-header">
           <div v-for="(item,index) in listTitle" :key="index" class="list-item" :style="{flex: item.flex}">{{item.name}}</div>
         </div>
-        <div v-if="goodsList.length" class="list">
-          <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
+        <div v-if="supplierList.length" class="list">
+          <div v-for="(item, index) in supplierList" :key="index" class="list-content list-box">
             <div v-for="(val, ind) in listTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
               <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
-                <img :src="require('./img.jpg')" alt="" class="img">
+                <img :src="item[val.value]" alt="" class="img">
               </div>
               <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item explain">
                 {{item[val.value] || '---'}}
               </div>
-              <!--状态-->
-              <div v-if="false" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '未开始' : item.status === 1 ? '进行中' : item.status === 2 ? '已结束' : ''}}</div>
+
               <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
-                <span v-if="false" class="list-operation" @click="auditing(item)">审核</span>
-                <router-link tag="span" to="/manager/supplier-detail" class="list-operation">查看</router-link>
-                <span class="list-operation" @click="deleteSupplier(item)">删除</span>
+                <span v-if="+item.approve_status === 0" class="list-operation" @click="auditing(item)">审核</span>
+                <a v-if="+item.approve_status === 1" target="_blank" :href="'/business-detail?id=' + item.id" class="list-operation">查看</a>
+                <span v-if="+item.approve_status === 1" class="list-operation" @click="resetPassword(item)">修改密码</span>
+                <span v-if="+item.approve_status !== 0"  class="list-operation" @click="deleteSupplier(item)">删除</span>
               </div>
 
-              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item.status === 0 ? '审核中' : item.status === 1 ? '审核成功' : item.status === 2 ? '审核失败' : ''}}
+              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="item list-item">
+                <div class="list-item-btn" @click="switchBtn(item, index)">
+                  <base-switch :status="item.is_freeze ? 0 : 1" confirmText="开启" cancelText="冻结"></base-switch>
+                </div>
               </div>
 
-              <div v-if="+val.type === 6 && +requestData.status > 0" :style="{flex: val.flex}" class="status-item item" :class="item.status === 1 ? 'status-success' : item.status === 2 ? 'status-fail' : ''">{{item[val.value]}}
+              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item">
+                {{item.province}}{{item.city}}{{item.district}}
               </div>
             </div>
           </div>
@@ -63,19 +67,19 @@
           <span class="close" @click="$refs.imgModal.hideModal()"></span>
         </div>
         <div class="model-img-wrap">
-          <img src="./img.jpg" alt="" class="big-img">
+          <img :src="currentImgSrc" alt="" class="big-img">
         </div>
       </div>
     </default-modal>
 
     <auditing-model ref="auditingModel" @confirm="auditingConfirm"></auditing-model>
     <change-model ref="changeModel" @confirm="changePassword"></change-model>
-    <default-confirm ref="confirm" confirm="deleteConfirm"></default-confirm>
+    <default-confirm ref="confirm" @confirm="confirm"></default-confirm>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Http from '@utils/http'
+  import API from '@api'
   import DefaultModal from '@components/default-modal/default-modal'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import AuditingModel from './auditing-model/auditing-model'
@@ -84,87 +88,17 @@
   const TITLE = '供应商管理'
 
   const LIST_TITLE = [
-    {name: '供应商编号', flex: 1, value: 'code', type: 1},
+    {name: '供应商编号', flex: 0.8, value: 'id', type: 1},
     {name: '供应商名称', flex: 1, value: 'name', type: 1},
-    {name: '区域', flex: 1, value: 'area', type: 1},
-    {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
+    {name: '区域', flex: 1.2, value: 'area', type: 6},
+    {name: '分类', flex: 1, value: 'goods_material_category', type: 1},
+    {name: '营业执照', flex: 0.7, value: 'image_url', type: 2},
     {name: '联系人', flex: 1, value: 'contact', type: 1},
     {name: '联系方式', flex: 1, value: 'mobile', type: 1},
-    {name: '提交时间', flex: 1, value: 'time', type: 1},
-    {name: '状态', flex: 1, value: 'status', type: 1},
+    {name: '提交时间', flex: 1, value: 'created_at', type: 1},
     {name: '审核说明', flex: 1, value: 'explain', type: 3},
-    {name: '操作', flex: 1.6, value: '', type: 4}
-  ]
-
-  const LIST_TITLE1 = [
-    {name: '供应商编号', flex: 1, value: 'code', type: 1},
-    {name: '供应商名称', flex: 1, value: 'name', type: 1},
-    {name: '区域', flex: 1, value: 'area', type: 1},
-    {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
-    {name: '联系人', flex: 1, value: 'contact', type: 1},
-    {name: '联系方式', flex: 1, value: 'mobile', type: 1},
-    {name: '提交时间', flex: 1, value: 'time', type: 1},
-    {name: '操作', flex: 1.6, value: '', type: 4}
-  ]
-
-  const LIST_TITLE2 = [
-    {name: '供应商编号', flex: 1, value: 'code', type: 1},
-    {name: '供应商名称', flex: 1, value: 'name', type: 1},
-    {name: '区域', flex: 1, value: 'area', type: 1},
-    {name: '分类', flex: 1, value: 'category', type: 1},
-    {name: '营业执照', flex: 0.7, value: 'img_url', type: 2},
-    {name: '联系人', flex: 1, value: 'contact', type: 1},
-    {name: '联系方式', flex: 1, value: 'mobile', type: 1},
-    {name: '提交时间', flex: 1, value: 'time', type: 1},
-    {name: '审核说明', flex: 1, value: 'explain', type: 3},
-    {name: '操作', flex: 1.6, value: '', type: 4}
-  ]
-
-  const GOODS_LIST = [
-    {
-      img_url: './img.jpg',
-      name: '阿克苏苹果阿克苏苹果',
-      area: '白云区国际单位',
-      category: '水果',
-      contact: '王某人',
-      mobile: '13584260103',
-      code: '5645641',
-      time: '2019-07-19 15:18:00'
-    },
-    {
-      img_url: './img.jpg',
-      name: '阿克苏苹果阿克苏苹果',
-      area: '白云区国际单位',
-      category: '水果',
-      contact: '王某人',
-      mobile: '13584260103',
-      explain: '审核',
-      code: '5645641',
-      time: '2019-07-19 15:18:00'
-    },
-    {
-      img_url: './img.jpg',
-      name: '阿克苏苹果阿克苏苹果',
-      area: '白云区国际单位',
-      category: '水果',
-      contact: '王某人',
-      mobile: '13584260103',
-      code: '5645641',
-      time: '2019-07-19 15:18:00'
-    },
-    {
-      img_url: './img.jpg',
-      goods_name: '阿克苏苹果阿克苏苹果',
-      supplier: '隔壁老王',
-      category: '水果',
-      contact: '王某人',
-      mobile: '13584260103',
-      explain: '审核',
-      code: '690205',
-      time: '2019-07-19 15:18:00'
-    }
+    {name: '状态', flex: 1, value: 'status', type: 5},
+    {name: '操作', flex: 1.8, value: '', type: 4}
   ]
 
   export default {
@@ -180,11 +114,10 @@
     },
     data() {
       return {
-        // listTitle: LIST_TITLE,
+        listTitle: LIST_TITLE,
         requestData: {
           keyword: '',
-          category_id: '',
-          status: '',
+          approve_status: '',
           page: 1,
           limit: 10
         },
@@ -194,7 +127,7 @@
           {name: '审核成功', num: 0, value: 1},
           {name: '审核失败', num: 0, value: 2}
         ],
-        goodsList: GOODS_LIST,
+        supplierList: [],
         pageDetail: {
           total: 1,
           per_page: 10,
@@ -202,105 +135,74 @@
         },
         defaultIndex: 0,
         currentItem: {},
-        currentImgSrc: ''
+        currentImgSrc: '',
+        confirmStatus: ''
       }
     },
-    computed: {
-      listTitle() {
-        switch (this.requestData.status) {
-        case '':
-          return LIST_TITLE
-        case 0:
-          return LIST_TITLE1
-        case 1 || 2:
-          return LIST_TITLE2
-        default:
-          return LIST_TITLE
-        }
+    computed: {},
+    beforeRouteEnter(to, from, next) {
+      let data = {
+        approve_status: '',
+        keyword: '',
+        page: 1,
+        limit: 10
       }
+      API.PSupplierManage.getSupplierList(data, true)
+        .then((res) => {
+          next(vm => {
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            vm.supplierList = res.data
+            vm.pageDetail = statePageTotal
+          })
+        })
+        .catch(() => {
+          next(vm => {
+            vm.$loading.hide()
+          })
+        })
     },
     created() {
-      // this.getCategoriesData()
-      // this.getGoodsStatus()
+      this.getSupplierStatus()
     },
-    mounted() {
-      // this.$refs.changeModel.show()
-      // this.$refs.confirm.show('sdfsjdklfjs')
-    },
+    mounted() {},
     methods: {
-      // 选择一级分类
-      firstCategorySelect(data) {
-        this.secondCategorySelect.content = '二级分类'
-        this.secondCategorySelect.data = data.list
-        this.$refs.pagination.beginPage()
-        this.setData({category_id: data.id, page: 1})
-        this.getGoodsList()
-        this.getGoodsStatus()
-      },
-      // 选择二级分类
-      secondCategorySelect(data) {
-        this.secondSelect.content = data.name
-        this.setData({page: 1, category_id: data.id})
-        this.$refs.pagination.beginPage()
-        this.getGoodsList()
-        this.getGoodsStatus()
-      },
       search(keyword) {
         this.setData({page: 1, keyword})
         this.$refs.pagination.beginPage()
-        this.getGoodsList()
-        this.getGoodsStatus()
+        this.getSupplierList()
+        this.getSupplierStatus()
       },
       // 切换tab栏
       changeStatus(selectStatus) {
-        this.setData({page: 1, status: selectStatus.value})
-        this.getGoodsList()
+        this.setData({page: 1, approve_status: selectStatus.value})
+        this.getSupplierList()
         this.$refs.pagination.beginPage()
       },
       // 翻页
       addPage(page) {
-        this.goodsPage = page
-        this.getGoodsList()
+        this.requestData.page = page
+        this.getSupplierList()
       },
       // 获取列表
-      getGoodsList() {
-        console.log('getGoods')
-        // let data = {
-        //   goods_category_id: this.categoryId,
-        //   status: this.status,
-        //   keyword: this.keyWord,
-        //   is_online: '',
-        //   page: this.goodsPage,
-        //   limit: 10
-        // }
-        // Http.Product.getGoodsList(data, false).then((res) => {
-        //   if (res.error === this.$ERR_OK) {
-        //     this.goodsList = res.data
-        //     let statePageTotal = {
-        //       total: res.meta.total,
-        //       per_page: res.meta.per_page,
-        //       total_page: res.meta.last_page
-        //     }
-        //     this.pageDetail = statePageTotal
-        //   } else {
-        //     this.$toast.show(res.message)
-        //   }
-        // })
+      getSupplierList() {
+        API.PSupplierManage.getSupplierList(this.requestData, false)
+          .then((res) => {
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            this.supplierList = res.data
+            this.pageDetail = statePageTotal
+          })
       },
       // 获取Tab栏状态
-      getGoodsStatus() {
-        Http.Goods.getGoodsStatus({
-          goods_category_id: this.goodsFitter.goods_category_id,
-          source: this.goodsFitter.source,
-          complete_status: this.goodsFitter.complete_status,
-          is_presale: this.goodsFitter.is_presale,
-          has_stock: this.goodsFitter.has_stock,
-          keyword: this.goodsFitter.keyword
-        }).then((res) => {
-          if (res.error !== this.$ERR_OK) {
-            this.$toast.show(res.message)
-            return
-          }
+      getSupplierStatus() {
+        API.PSupplierManage.getStatus().then((res) => {
           this.statusTab = res.data.map((item, index) => {
             return {
               name: item.status_str,
@@ -315,35 +217,51 @@
         this.currentImgSrc = src
         this.$refs.imgModal.showModal()
       },
+      switchBtn(item, index) {
+        let isFreeze = item.is_freeze ? 0 : 1
+        API.PSupplierManage.changeStatus({is_freeze: isFreeze, id: item.id})
+          .then(res => {
+            this.getSupplierList()
+          })
+      },
       auditing(item) {
         this.currentItem = item
         this.$refs.auditingModel.show()
       },
       auditingConfirm(data) {
-        console.log(data)
         this.$refs.auditingModel.hide()
+        API.PSupplierManage.auditingSupplier({
+          id: this.currentItem.id,
+          approve_status: data.status,
+          note: data.reason
+        })
+          .then(res => {
+            this.$toast.show('审核成功')
+            this.getStatus()
+            this.getSupplierList()
+          })
+      },
+      resetPassword(item){
+        this.currentItem = item
+        this.$refs.changeModel.show()
       },
       changePassword(data) {
-        console.log(data)
+        API.PSupplierManage.resetPassword({password: data.password, id: this.currentItem.id})
+          .then(res => {
+            this.$toast.show('修改密码成功')
+            this.$refs.changeModel.hide()
+          })
       },
       deleteSupplier(item) {
         this.currentItem = item
-        this.$refs.confirm.show('确定下架'+ item.goods_name+ '?', '删除')
+        this.$refs.confirm.show('确定删除'+ item.name+ '供应商?', '删除')
       },
-      // 商品下架
-      deleteConfirm() {
-        let data = {
-          goods_id: this.currentItem.id,
-          is_online: 0
-        }
-        Http.Goods.downGoods(data).then((res) => {
-          if (res.error === this.$ERR_OK) {
-            this.$refs.confirm.show('该商品已成功下架')
-            this.getGoodsStatus()
-            this.getGoodsList()
-          } else {
-            this.$toast.show(res.message)
-          }
+      // 删除供应商
+      confirm() {
+        API.PSupplierManage.supplierDelete(this.currentItem.id).then((res) => {
+          this.$toast.show('该供应商已成功删除')
+          this.getSupplierStatus()
+          this.getSupplierList()
         })
       },
       setData(data) {
@@ -360,6 +278,7 @@
   .goods-manage
     display: flex
     flex-direction: column
+    min-width: 1300px
     .down-content
       padding: 0 20px
       box-sizing: border-box
@@ -386,7 +305,6 @@
       display: flex
   .list-box,.list-header
     .list-item:last-child
-      max-width: 80px
       padding-right: 0
   .list
     flex: 1
@@ -411,6 +329,7 @@
         width: 42px
         height: 42px
         border-radius: 4px
+        object-fit: cover
         border: 1px solid $color-line
       .status-item:before
         content: ""

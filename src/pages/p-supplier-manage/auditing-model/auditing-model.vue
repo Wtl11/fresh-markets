@@ -10,14 +10,14 @@
       <div class="content center">
         <span class="label"><em class="sign">*</em>审核标签</span>
         <div class="right">
-          <span class="btn hand" :class="{'active': +auditing === 1}" @click="auditingResult(1)">审核通过</span>
-          <span class="btn hand" :class="{'active': +auditing === 0}" @click="auditingResult(0)">审核失败</span>
+          <span class="btn hand" :class="{'active': +status === 1}" @click="auditingResult(1)">审核通过</span>
+          <span class="btn hand" :class="{'active': +status === 2}" @click="auditingResult(2)">审核失败</span>
         </div>
       </div>
       <div class="content margin-bottom">
         <span class="label">审核说明</span>
         <div class="right">
-          <textarea v-model="text" placeholder="请输入审核说明" class="textarea"></textarea>
+          <textarea v-model="reason" placeholder="请输入审核说明" class="textarea"></textarea>
         </div>
       </div>
       <div class="btn-group">
@@ -38,8 +38,8 @@
     },
     data() {
       return {
-        auditing: 1,
-        text: ''
+        status: 1,
+        reason: ''
       }
     },
     methods: {
@@ -50,10 +50,14 @@
         this.$refs.auditingMmodal && this.$refs.auditingMmodal.hideModal()
       },
       auditingResult(result) {
-        this.auditing = result
+        this.status = result
       },
       confirm() {
-        this.$emit('confirm', {auditing: this.auditing, text: this.text})
+        if (+this.status === 2 && this.reason === '') {
+          this.$toast.show('请输入审核说明')
+          return
+        }
+        this.$emit('confirm', {status: this.status, reason: this.reason})
       },
       cancel() {
         this.hide()
@@ -91,13 +95,14 @@
       margin-bottom: 10px
       .label
         width: 60px
-        padding-left: 10px
+        padding-left: 7px
         position: relative
         margin-top: 5px
         font-size: $font-size-14
         font-family: $font-family-regular
         color: $color-text-sub
         .sign
+          font-style: normal
           position: absolute
           left: 0
           top: 2px

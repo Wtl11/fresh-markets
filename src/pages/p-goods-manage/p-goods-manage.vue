@@ -36,7 +36,7 @@
               </div>
 
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item">
-                <img :src="require('./img.jpg')" alt="" class="img">
+                <img :src="item[val.value]" alt="" class="img">
               </div>
 
               <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item list-double-row">
@@ -51,10 +51,12 @@
 
               <div v-if="+val.type === 5" :style="{flex: val.flex}" class="list-operation-box item">
                 <span v-if="+item.audit_status === 1" class="list-operation" @click="auditing(item)">审核</span>
-                <router-link v-if="+item.audit_status !== 1" tag="span" to="/goods-detail" class="list-operation">查看</router-link>
-                <span v-if="+item.audit_status !== 1" class="list-operation" @click="downGoods(item)">下架</span>
-                <span v-if="+item.audit_status !== 1" class="list-operation" @click="deleteGoods(item)">删除</span>
+                <a v-if="+item.audit_status === 2" target="_blank" :href="'/goods-detail?id=' + item.id" class="list-operation">查看</a>
+                <span v-if="+item.audit_status === 2" class="list-operation" @click="downGoods(item)">下架</span>
+                <span v-if="+item.audit_status === 2" class="list-operation" @click="deleteGoods(item)">删除</span>
               </div>
+
+              <div v-if="+val.type === 5 && +item.audit_status !== 1 && +item.audit_status !== 2" :style="{flex: val.flex}" class="list-operation-box item">---</div>
             </div>
           </div>
         </div>
@@ -172,10 +174,7 @@
       this.getCategoryData()
       this.getGoodsStatus()
     },
-    mounted() {
-      // this.$refs.auditingModel.show()
-      // this.$refs.confirm.show('sdfsjdklfjs')
-    },
+    mounted() {},
     methods: {
       // 选择一级分类
       firstCategorySelect(data) {
@@ -220,15 +219,16 @@
       },
       // 获取列表
       getGoodsList() {
-        API.PGoodsManage.getGoodsList(this.requestData, false).then((res) => {
-          this.goodsList = res.data
-          let statePageTotal = {
-            total: res.meta.total,
-            per_page: res.meta.per_page,
-            total_page: res.meta.last_page
-          }
-          this.pageDetail = statePageTotal
-        })
+        API.PGoodsManage.getGoodsList(this.requestData, false)
+          .then((res) => {
+            this.goodsList = res.data
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            this.pageDetail = statePageTotal
+          })
       },
       // 获取Tab栏状态
       getGoodsStatus() {
@@ -278,7 +278,7 @@
           this.getGoodsStatus()
           this.getGoodsList()
         })
-        this.confirmStatus === 'delete' && API.PGoodsManage.goodsDelete({goods_supplier_id: this.currentItem.id}).then((res) => {
+        this.confirmStatus === 'delete' && API.PGoodsManage.goodsDelete(this.currentItem.id).then((res) => {
           this.$toast.show('该商品已成功删除')
           this.getGoodsStatus()
           this.getGoodsList()
@@ -297,6 +297,7 @@
 
   .goods-manage
     display: flex
+    min-width: 1300px
     flex-direction: column
     .down-content
       padding: 0 20px
@@ -360,6 +361,7 @@
         width: 42px
         height: 42px
         border-radius: 4px
+        object-fit: cover
         border: 1px solid $color-line
       .status-item:before
         content: ""
