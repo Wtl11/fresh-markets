@@ -58,7 +58,7 @@
             <div class="form-image">
               <div v-if="goodsInfo.goods_main_images && uploadImg.goods_main_images" class="draggable">
                 <div v-for="(item, index) in uploadImg.goods_main_images" :key="index" class="show-image hand">
-                  <img class="img" :src="item" alt="">
+                  <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
               </div>
@@ -83,7 +83,7 @@
             <div class="form-image">
               <div v-if="goodsInfo.goods_detail_images && uploadImg.goods_detail_images" class="draggable">
                 <div v-for="(item, index) in uploadImg.goods_detail_images" :key="index" class="show-image hand">
-                  <img class="img" :src="item" alt="">
+                  <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
               </div>
@@ -104,7 +104,6 @@
     <div class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
       <div class="hand button" @click="_subEdit">保存</div>
-      <div class="hand button" @click="_getGoodsList">获取商品列表</div>
     </div>
   </div>
 </template>
@@ -128,7 +127,7 @@
         goodsInfo: {
           goods_supplier_category_id: '',
           name: '',
-          goods_supplier_skus: [{purchase_specs: '', purchase_price: ''}],
+          goods_supplier_skus: [{purchase_specs: '', purchase_price: '', goods_sku_code: '', goods_supplier_sku_id: ''}],
           goods_main_images: [],
           goods_detail_images: []
         },
@@ -155,12 +154,6 @@
       this._getCategoryData()
     },
     methods: {
-      _getGoodsList() {
-        API.GoodsManage.getGoodsList({page: 1,limit: 10})
-          .then((res) => {
-            this.firstSelect.data = res.data
-          })
-      },
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
@@ -175,6 +168,7 @@
           goods_main_images: resData.goods_main_images,
           goods_detail_images: resData.goods_detail_images
         }
+        this.uploadImg = {goods_main_images:resData.goods_main_images,goods_detail_images:resData.goods_detail_images}
       },
       _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
@@ -189,7 +183,7 @@
           this.uploadLoading = false
           const resData = res[0].data
           this.goodsInfo[key].push({image_id: resData.id, id: 0})
-          this.uploadImg[key].push(resData.url)
+          this.uploadImg[key].push({image_url: resData.url})
         })
       },
       _delImg(key, index) {
@@ -230,10 +224,16 @@
       _subEdit() {
         if(!this._checkForm()) return
         submitting = true
-        // const apiArr = ['editGoodsInfo','creatGoodsInfo']
-        API.GoodsManage.creatGoodsInfo(this.goodsInfo, true, this.goodsId)
+        let apiName = 'creatGoodsInfo'
+        if(this.goodsId) {
+          apiName = 'editGoodsInfo'
+        }
+        API.GoodsManage[apiName](this.goodsInfo, true, this.goodsId)
           .then((res) => {
-            console.log(res.data)
+            this.$toast.show('保存成功！')
+            setTimeout(()=>{
+              this._goBack()
+            },1000)
           })
           .finally(() => {
             submitting = false
