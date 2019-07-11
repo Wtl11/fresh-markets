@@ -5,7 +5,7 @@
       <div class="icon"></div>
       <div class="title">申请成为供应商</div>
     </div>
-    <div class="content">
+    <div v-if="!subModify" class="content">
       <div class="content-header content-padding-top">
         <div class="content-title">基本信息</div>
       </div>
@@ -16,7 +16,7 @@
             供应商名称
           </div>
           <div class="form-input-box">
-            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="29"
+            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="25"
                    @mousewheel.native.prevent
             >
           </div>
@@ -87,7 +87,7 @@
           </div>
           <div class="form-input-box">
             <input v-model="shopInfo.contact" type="text" class="form-input" placeholder="请输入联系人信息"
-                   maxlength="29" @mousewheel.native.prevent
+                   maxlength="20" @mousewheel.native.prevent
             >
           </div>
         </div>
@@ -130,12 +130,18 @@
             <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
           </div>
         </div>
-        <div class=""></div>
       </div>
     </div>
-    <div class="button-con">
+    <div v-if="!subModify" class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
       <div class="hand button confirm" @click="_subApply">提交审核</div>
+    </div>
+    <div v-if="subModify" class="approve-tips-model">
+      <div class="tips-con">
+        <img src="./icon-success@2x.png" class="tips-img">
+        <div class="tips-title">提交审核成功，请耐心等待</div>
+        <div class="tips-text">审核结果后会在72小时内以短信形式通知您，请留意手机</div>
+      </div>
     </div>
   </div>
 </template>
@@ -166,6 +172,7 @@
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
+        subModify: false,
       }
     },
     mounted() {
@@ -231,7 +238,7 @@
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {
             console.log(res.data)
-            this.$toast.show('已提交审核！')
+            this.subModify = true
           })
           .finally(() => {
             submitting = false
@@ -249,6 +256,7 @@
   @import "~@design"
 
   .apply-suppliers
+    box-sizing: border-box
     position: absolute
     width: 100%
     min-height: 100%
@@ -422,6 +430,43 @@
                 all-center()
                 width: 25px
                 height: 25px
+
+  .approve-tips-model
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    width: 100%
+    height: 100%
+    z-index: 101
+    layout()
+    align-items: center
+    justify-content: center
+
+    .tips-con
+      layout()
+      align-items: center
+      justify-content: center
+
+      .tips-img
+        width: 114px
+        height: @width
+
+      .tips-title
+        margin: 18px 0
+        font-family: $font-family-medium
+        font-size: 22px
+        color: $color-text-main
+        text-align: center
+        line-height: 1
+
+      .tips-text
+        font-family: $font-family-regular
+        font-size: 14px
+        color: #666666
+        text-align: center
+        line-height: 1
   .button-con
     box-sizing: border-box
     position: absolute
