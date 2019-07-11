@@ -12,7 +12,7 @@ export default {
     return http.get({url, data, loading})
   },
   // 获取商品信息
-  getGoodsInfo(id, data, loading = true) {
+  getGoodsInfo(id, data = {}, loading = true) {
     let url = `/market-info/api/supplier/goods-supplier/${id}`
     return http.get({url, data, loading})
   },

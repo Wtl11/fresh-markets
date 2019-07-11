@@ -104,6 +104,7 @@
     <div class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
       <div class="hand button" @click="_subEdit">保存</div>
+      <div class="hand button" @click="_getGoodsList">获取商品列表</div>
     </div>
   </div>
 </template>
@@ -143,12 +144,8 @@
         const goodsId = vw.$route.query.goodsId
         vw.goodsId = goodsId
         if(!goodsId) return
-        API.GoodsManage.getGoodsInfo()
+        API.GoodsManage.getGoodsInfo(goodsId)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              vw.$toast.show(res.message)
-              return
-            }
             console.log(res.data)
             vw._setGoodsInfo(res.data)
           })
@@ -158,20 +155,26 @@
       this._getCategoryData()
     },
     methods: {
-      _getCategoryData() {
-        API.GoodsManage.getCategoryData()
+      _getGoodsList() {
+        API.GoodsManage.getGoodsList({page: 1,limit: 10})
           .then((res) => {
-            // if (res.error !== this.$ERR_OK) {
-            //   this.$toast.show(res.message)
-            //   return
-            // }
+            this.firstSelect.data = res.data
+          })
+      },
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData({parent_id: -1})
+          .then((res) => {
             this.firstSelect.data = res.data
           })
       },
       _setGoodsInfo(resData) {
-        // this.provinceSelect.content = resData.province
-        // this.citySelect.content = resData.city
-        // this.districtSelect.content = resData.district
+        this.goodsInfo = {
+          goods_supplier_category_id: resData.goods_supplier_category_id,
+          name: resData.name,
+          goods_supplier_skus: resData.goods_supplier_skus,
+          goods_main_images: resData.goods_main_images,
+          goods_detail_images: resData.goods_detail_images
+        }
       },
       _setSelectValue(data, key, childKey = false) {
         this.goodsInfo[key] = data.id
@@ -185,11 +188,7 @@
         uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
-          if (resData.error !== this.$ERR_OK) {
-            this.$toast.show(resData.message)
-            return
-          }
-          this.goodsInfo[key].push({id: resData.id})
+          this.goodsInfo[key].push({image_id: resData.id, id: 0})
           this.uploadImg[key].push(resData.url)
         })
       },
@@ -234,10 +233,6 @@
         // const apiArr = ['editGoodsInfo','creatGoodsInfo']
         API.GoodsManage.creatGoodsInfo(this.goodsInfo, true, this.goodsId)
           .then((res) => {
-            if (res.error !== this.$ERR_OK) {
-              this.$toast.show(res.message)
-              return
-            }
             console.log(res.data)
           })
           .finally(() => {
