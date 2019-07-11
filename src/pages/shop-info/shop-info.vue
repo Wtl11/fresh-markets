@@ -97,7 +97,7 @@
           </div>
           <div class="form-input-box">
             <input v-model="shopInfo.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
-                   maxlength="29" @mousewheel.native.prevent
+                   disabled maxlength="29" @mousewheel.native.prevent
             >
           </div>
         </div>
