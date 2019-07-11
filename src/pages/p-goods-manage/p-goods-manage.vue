@@ -322,7 +322,7 @@
       height: 60px
       align-items: center
       display: flex
-  .list-box
+  .list-header,.list-box
     .list-item:last-child
       padding-right: 0
   .list
