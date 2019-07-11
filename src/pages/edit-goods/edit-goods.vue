@@ -56,12 +56,12 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_main_images" class="draggable">
+              <draggable v-if="goodsInfo.goods_main_images" class="draggable">
                 <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
-              </div>
+              </draggable>
               <div v-if="goodsInfo.goods_main_images.length < 5" class="add-image hand">
                 <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_main_images', $event)"
@@ -81,12 +81,12 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <div v-if="goodsInfo.goods_detail_images" class="draggable">
+              <draggable v-if="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
                 <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
-              </div>
+              </draggable>
               <div v-if="goodsInfo.goods_detail_images.length < 15" class="add-image hand">
                 <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_detail_images', $event)"
@@ -111,6 +111,7 @@
 <script type="text/ecmascript-6">
   // import * as Helpers from './helpers'
   import API from '@api'
+  import Draggable from 'vuedraggable'
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
   const TITLE = '新建商品'
@@ -120,6 +121,9 @@
     name: PAGE_NAME,
     page: {
       title: TITLE
+    },
+    components: {
+      Draggable
     },
     data() {
       return {
@@ -189,6 +193,7 @@
           this[childKey].data = data.list
         }
       },
+      _setSort() {},
       _addImg(key, e) {
         this.uploading = key
         this.uploadLoading = true
