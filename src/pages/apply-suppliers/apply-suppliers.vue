@@ -27,9 +27,7 @@
             区域
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="provinceSelect" @setValue="_setSelectValue($event, 'province')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="citySelect" @setValue="_setSelectValue($event, 'city')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="districtSelect" @setValue="_setSelectValue($event, 'district')"></base-drop-down>
+            <city-select ref="city" :height="44" :width="195" @setValue="_setCityValue"></city-select>
           </div>
         </div>
         <div class="form-item  form-image-box">
@@ -78,7 +76,7 @@
             主营品类
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id', 'secondSelect')"></base-drop-down>
             <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
           </div>
         </div>
@@ -137,7 +135,7 @@
     </div>
     <div class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
-      <div class="hand button confirm" @click="_subApply">{{confirmText}}</div>
+      <div class="hand button confirm" @click="_subApply">提交审核</div>
     </div>
   </div>
 </template>
@@ -146,14 +144,10 @@
   // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
+  import CitySelect from './city-select/city-select'
 
   const PAGE_NAME = 'APPLY_SUPPLIERS'
   const TITLE = '申请成为供应商'
-  const SELECT_TEST = [
-    { id: 1, name: '广东' },
-    { id: 2, name: '北京' },
-    { id: 3, name: '上海' }
-  ]
   let submitting = false
 
   export default {
@@ -161,41 +155,39 @@
     page: {
       title: TITLE
     },
+    components: {
+      CitySelect
+    },
     data() {
       return {
         shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
-        provinceSelect: {check: false, show: false, content: '请选择省份', type: 'default', data: SELECT_TEST},
-        citySelect: {check: false, show: false, content: '请选择城市', type: 'default', data: SELECT_TEST},
-        districtSelect: {check: false, show: false, content: '请选择区/县', type: 'default', data: SELECT_TEST},
-        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: SELECT_TEST},
-        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: SELECT_TEST},
+        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
+        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
-        confirmText: '提交审核'
       }
     },
-    beforeRouteEnter(to, from, next) {
-      next((vw) => {
-        API.SupplierInfo.getAreasData()
-          .then((res) => {
-            if (res.error !== 0) {
-              vw.$toast.show(res.message)
-              return
-            }
-            console.log(res.data)
-          })
-      })
+    mounted() {
+      this._getCategoryData()
     },
     methods: {
-      _setSelectValue(data, key) {
-        this.shopInfo[key] = data.id
+      _getCategoryData() {
+        API.GoodsManage.getCategoryData()
+          .then((res) => {
+            this.firstSelect.data = res.data
+          })
       },
-      changeHandle(applyKey, uploadKey, e) {
-        console.log([e.target.files[0]])
-        uploadFiles({files: [e.target.files[0]]}).then(res => {
-          console.log(res)
-        })
+      _setSelectValue(data, key, childKey = false) {
+        this.shopInfo[key] = data.id
+        if(childKey) {
+          this[childKey].data = data.list
+        }
+      },
+      _setCityValue(data) {
+        this.shopInfo.province = data[0].includes('请选择') ? '' : data[0]
+        this.shopInfo.city = data[1].includes('请选择') ? '' : data[1]
+        this.shopInfo.district = data[2].includes('请选择') ? '' : data[2]
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
@@ -203,10 +195,6 @@
         uploadFiles({files: [e.target.files[0]]}).then(res => {
           this.uploadLoading = false
           const resData = res[0].data
-          if (resData.error !== this.$ERR_OK) {
-            this.$toast.show(resData.message)
-            return
-          }
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
         })
@@ -230,7 +218,7 @@
           wechat_image_id: '请上传微信二维码'
         }
         for (let k in this.shopInfo) {
-          if(!this.shopInfo[k].trim()) {
+          if(!(this.shopInfo[k]+'').trim()) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -242,11 +230,8 @@
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {
-            if (res.error !== 0) {
-              this.$toast.show(res.message)
-              return
-            }
             console.log(res.data)
+            this.$toast.show('已提交审核！')
           })
           .finally(() => {
             submitting = false
