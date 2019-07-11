@@ -1,49 +1,110 @@
 <template>
-  <div class="select-classify" :class="{active: isOpen}">
+  <div class="select-classify" :class="{active: isOpen}" :style="{height: height + 'px'}">
     <article class="left-wrapper">{{title}}</article>
     <article ref="middle" class="middle-wrapper">
-      <span v-for="(item, index) in classifyData" :key="index" class="classify-item" :class="{active: selectId === index}" @click="selectHandle(item, index)">{{index === 0 ? '全部': '时令鲜果'}}</span>
+      <template v-for="(item, index) in classifyData">
+        <div
+          v-if="classifyData.length"
+          :key="index"
+          class="classify-item"
+          :class="{active: selectId === index}"
+          :style="classifyItemStyle(index)"
+        >
+          <span
+            @click="selectHandle(item, index)"
+          >{{item.name}}</span>
+        </div>
+      </template>
     </article>
-    <article class="right-wrapper" @click="openHandle"><span class="text">{{isOpen ? '收起' : '展开'}}</span><i class="triangle" :class="{active: isOpen}"></i></article>
+    <article
+      v-if="row > 1"
+      class="right-wrapper"
+      @click="openHandle"
+    ><span
+      class="text"
+    >{{isOpen ? '收起' : '展开'}}</span><i
+      class="triangle" :class="{active: isOpen}"
+    ></i></article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   const COMPONENT_NAME = 'SELECT_CLASSIFY'
-
+  const DEFAULT_HEIGHT = 44
+  const ADD_HEIGHT = 29
   export default {
     name: COMPONENT_NAME,
     props: {
       classifyData: {
         type: Array,
-        default: () => new Array(30).fill(1)
+        default: () => []
       },
       title: {
         type: String,
         default: ''
+      },
+      defaultIndex: {
+        type: Number,
+        default: -1
       }
     },
     data() {
       return {
         isOpen: false,
-        selectId: 0
+        selectId: this.defaultIndex,
+        height: DEFAULT_HEIGHT,
+        row: 1,
+        opacityIndex: 99999
       }
     },
     computed: {
     },
     watch: {
+      isOpen(val) {
+        this.height = (val ? Math.max((this.row - 1), 0) * ADD_HEIGHT : 0) + DEFAULT_HEIGHT
+      },
+      classifyData() {
+        setTimeout(() => {
+          this.getRow()
+        }, 100)
+      }
+    },
+    mounted() {
     },
     methods: {
+      setSelectId(index) {
+        this.selectId = index
+      },
       openHandle() {
         this.isOpen = !this.isOpen
       },
       selectHandle(item, index) {
+        this.getRow()
         this.selectId = index
         this.$emit('selectChange', this.selectId)
       },
-      reset() {
-        this.selectId = 0
-        this.$emit('selectChange', this.selectId)
+      classifyItemStyle(index) {
+        if (this.isOpen) {
+          return {opacity: 1}
+        } else {
+          return {opacity: (index < this.opacityIndex ? 1 : 0)}
+        }
+      },
+      getRow() {
+        let parent = this.$refs.middle
+        if (typeof parent !== 'object') return
+        let children = parent.children
+        let cWidth = 0
+        let pWidth = parent.getBoundingClientRect().width
+        let index = 0
+        for (let item of children) {
+          cWidth += item.getBoundingClientRect().width
+          if (cWidth < pWidth) {
+            index++
+          }
+        }
+        this.opacityIndex = index
+        this.row = Math.ceil(cWidth / pWidth)
       }
     }
   }
@@ -61,13 +122,11 @@
     line-height: 1
     display :flex
     box-sizing border-box
-    transition :all 0.3s ease-in-out
-    height:44px
+    transition :all 0.4s ease-out
     overflow :hidden
     border-radius :1px
     &.active
       overflow :visible
-      height :auto
     .left-wrapper
       padding-left :15px
       width :100px
@@ -78,11 +137,17 @@
         float: left
         line-height :14px
         display :inline
-        cursor :pointer
-        margin-right :40px
-        margin-bottom :15px
+        padding-right :40px
+        padding-bottom :15px
+        transition :all 0s
         &.active
           color: #ff520f
+        & > span
+          cursor :pointer
+          opacity : 1
+          transition :all 0.3s
+          &:hover
+            opacity : 0.6
     .right-wrapper
       cursor :pointer
       position :relative

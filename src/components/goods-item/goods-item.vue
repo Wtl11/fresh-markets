@@ -1,14 +1,14 @@
 <template>
-  <div class="goods-item hand">
+  <div class="goods-item hand" @click="clickHandle">
     <div class="img-box">
-      <img class="goods-img" src="./1557570453198-3.jpg" alt="">
+      <img v-if="goodsInfo.goods_cover_image" class="goods-img" :src="goodsInfo.goods_cover_image" alt="">
     </div>
     <div class="msg-box">
-      <p class="price-txt"><span class="price-icon">¥</span>35.69</p>
-      <p class="goods-title">表情包趣盒卡通巧克力创意零食巧克力休闲食表情包趣盒卡通巧克力创意零食巧克力休闲食</p>
+      <p class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
+      <p class="goods-title">{{goodsInfo.name}}</p>
       <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">
-        <span class="company-txt">水果供应商公示时间水果供应商公示时间</span>
+        <span class="company-txt">{{supplierName}}</span>
       </div>
     </div>
   </div>
@@ -21,13 +21,26 @@
       showCompany: {
         type: Boolean,
         default: true
+      },
+      goodsInfo: {
+        type: Object,
+        default: () => {}
       }
     },
     data() {
       return {
       }
     },
+    computed: {
+      supplierName() {
+        const supplier = this.goodsInfo.supplier || {}
+        return supplier.name || ''
+      }
+    },
     methods: {
+      clickHandle() {
+        this.$emit('clickHandle', this.goodsInfo)
+      }
     }
   }
 </script>

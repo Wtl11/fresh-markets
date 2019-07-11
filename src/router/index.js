@@ -8,6 +8,7 @@ import store from '@state/store'
 import API from '@api'
 import storage from 'storage-controller'
 import HTTP from '@utils/http'
+import {app as APP} from '../main'
 
 NProgress.configure({showSpinner: false})
 
@@ -17,6 +18,7 @@ Vue.use(VueMeta, {
 })
 
 const LOGIN_PATH = '/user/login'
+// const FORBID_PATH = '/forbid'
 
 const router = new VueRouter({
   routes,
@@ -51,6 +53,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
   if (record && !record.meta.authority.some(val => val === identity)) {
     if (routeTo.path !== LOGIN_PATH) {
       NProgress.done()
+      routeTo.path === routeFrom.path && APP && APP.$toast.show('权限不足,请联系管理员.')
       return next({path: LOGIN_PATH})
     }
   }

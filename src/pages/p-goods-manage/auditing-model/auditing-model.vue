@@ -10,8 +10,8 @@
       <div class="content center">
         <span class="label"><em class="sign">*</em>审核标签</span>
         <div class="right">
-          <span class="btn hand" :class="{'active': +status === 1}" @click="auditingResult(1)">审核通过</span>
-          <span class="btn hand" :class="{'active': +status === 0}" @click="auditingResult(0)">审核失败</span>
+          <span class="btn hand" :class="{'active': +status === 2}" @click="auditingResult(2)">审核通过</span>
+          <span class="btn hand" :class="{'active': +status === 3}" @click="auditingResult(3)">审核失败</span>
         </div>
       </div>
       <div class="content margin-bottom">
@@ -38,7 +38,7 @@
     },
     data() {
       return {
-        status: 1,
+        status: 2,
         reason: ''
       }
     },
@@ -48,11 +48,17 @@
       },
       hide() {
         this.$refs.auditingMmodal && this.$refs.auditingMmodal.hideModal()
+        this.status = 2
+        this.reason = ''
       },
       auditingResult(result) {
         this.status = result
       },
       confirm() {
+        if (+this.status === 3 && this.reason === '') {
+          this.$toast.show('请输入审核说明')
+          return
+        }
         this.$emit('confirm', {status: this.status, reason: this.reason})
       }
     }
@@ -88,13 +94,14 @@
       margin-bottom: 10px
       .label
         width: 60px
-        padding-left: 10px
+        padding-left: 7px
         position: relative
         margin-top: 5px
         font-size: $font-size-14
         font-family: $font-family-regular
         color: $color-text-sub
         .sign
+          font-style: normal
           position: absolute
           left: 0
           top: 2px

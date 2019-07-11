@@ -24,7 +24,7 @@ HTTP.resCommonHandle(({res, loading, toast, formatter}) => {
     } else if(toast) {
       APP && APP.$toast.show(res && res.message)
     }
-    throw new Error(res.message)
+    throw new Error(res)
   }
   if (typeof formatter === 'function') {
     return formatter(res)
