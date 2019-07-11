@@ -24,16 +24,15 @@ export default [
     redirect: '/information',
     component: {render: h => h('router-view')},
     children: [
-      // 信息平台
-      {
-        path: '/information',
-        name: 'information',
-        component: () => import('@pages/information/information')
-      },
       {
         path: '/home',
         name: 'home',
         component: () => import('@pages/client-view/client-view')
+      },
+      {
+        path: '/information',
+        name: 'information',
+        component: () => import('@pages/information/information')
       }
     ]
   },
@@ -51,7 +50,7 @@ export default [
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['管理后台', '商品管理'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
+          authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-goods-manage/p-goods-manage')
       },
@@ -63,22 +62,9 @@ export default [
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
           crumbs: ['管理后台', '供应商管理'],
-          authority: [USER_TYPE.MERCHANT, USER_TYPE.SUPER]
-        },
-        component: () => import('@pages/p-supplier-manage/p-supplier-manage')
-      },
-      // asda
-      {
-        path: '/manager/ttt-zzz',
-        name: 'ttt-zzz',
-        meta: {
-          title: '店铺管理5555',
-          icon: require('./icon-store_Information1@2x.png'),
-          iconSelected: require('./icon-store_Information2@2x.png'),
-          crumbs: ['商城33', '营销3', '营销计划3'],
           authority: [USER_TYPE.SUPER]
         },
-        component: () => import('@pages/ttt-zzz/ttt-zzz')
+        component: () => import('@pages/p-supplier-manage/p-supplier-manage')
       },
       // 店铺信息
       {
