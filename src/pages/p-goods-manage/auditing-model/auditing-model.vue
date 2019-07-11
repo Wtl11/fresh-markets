@@ -47,6 +47,8 @@
       },
       hide() {
         this.$refs.auditingMmodal && this.$refs.auditingMmodal.hideModal()
+        this.status = 2
+        this.reason = ''
       },
       auditingResult(result) {
         this.status = result
