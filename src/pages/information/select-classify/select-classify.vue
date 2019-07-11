@@ -139,7 +139,7 @@
         display :inline
         padding-right :40px
         padding-bottom :15px
-        transition :all 0.3s
+        transition :all 0s
         &.active
           color: #ff520f
         & > span
