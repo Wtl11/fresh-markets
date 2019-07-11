@@ -10,14 +10,14 @@
       <div class="content center">
         <span class="label"><em class="sign">*</em>审核标签</span>
         <div class="right">
-          <span class="btn hand" :class="{'active': +auditing === 1}" @click="auditingResult(1)">审核通过</span>
-          <span class="btn hand" :class="{'active': +auditing === 0}" @click="auditingResult(0)">审核失败</span>
+          <span class="btn hand" :class="{'active': +status === 1}" @click="auditingResult(1)">审核通过</span>
+          <span class="btn hand" :class="{'active': +status === 0}" @click="auditingResult(0)">审核失败</span>
         </div>
       </div>
       <div class="content margin-bottom">
         <span class="label">审核说明</span>
         <div class="right">
-          <textarea v-model="text" placeholder="请输入审核说明" class="textarea"></textarea>
+          <textarea v-model="reason" placeholder="请输入审核说明" class="textarea"></textarea>
         </div>
       </div>
       <div class="btn-group">
@@ -38,8 +38,8 @@
     },
     data() {
       return {
-        auditing: 1,
-        text: ''
+        status: 1,
+        reason: ''
       }
     },
     methods: {
@@ -50,10 +50,10 @@
         this.$refs.auditingMmodal && this.$refs.auditingMmodal.hideModal()
       },
       auditingResult(result) {
-        this.auditing = result
+        this.status = result
       },
       confirm() {
-        this.$emit('confirm', {auditing: this.auditing, text: this.text})
+        this.$emit('confirm', {status: this.status, reason: this.reason})
       }
     }
   }
