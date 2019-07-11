@@ -9,27 +9,27 @@
         <dl class="content-wrapper">
           <dd class="info-item-wrapper">
             <span class="key">主营品类：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.goods_material_category}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">商品数量：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.goods_num}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">所在地区：</span>
-            <span class="value">广东省广州市</span>
+            <span class="value">{{areas}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">联  系 人：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.contact}}</span>
           </dd>
           <dd class="info-item-wrapper">
             <span class="key">联系方式：</span>
-            <span class="value">新鲜水果</span>
+            <span class="value">{{marketInfo.mobile}}</span>
           </dd>
           <dt class="qr-code-wrapper">
             <span class="key">微信二维码:</span>
-            <img src="http://www.oppein.cn/updata/uploads/201702/58aa85f323e2e.jpg" alt="" class="qr-code">
+            <img :src="marketInfo.wechat_image_url" alt="" class="qr-code">
           </dt>
         </dl>
         <button class="button">进入店铺 >></button>
@@ -51,11 +51,21 @@
     components: {
       GoodsItem
     },
+    props: {
+      marketInfo: {
+        type: Object,
+        default: () => {}
+      }
+    },
     data() {
       return {
-
       }
-    }
+    },
+    computed: {
+      areas() {
+        return this.marketInfo.province + this.marketInfo.city + this.marketInfo.district
+      }
+    },
   }
 </script>
 
