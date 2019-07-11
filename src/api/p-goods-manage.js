@@ -1,4 +1,5 @@
 import request from '@utils/http'
+import {API_PUB} from '@utils/constant'
 
 export default {
   /**
@@ -6,7 +7,7 @@ export default {
    * @param parent_id
    */
   getCategoryList(data, loading = false) {
-    let url = '/market-info/api/platform/goods-material-category'
+    let url = API_PUB + '/api/platform/goods-material-category'
     return request.get({url, data, loading})
   },
   /**
@@ -14,7 +15,7 @@ export default {
    *
    */
   getGoodsList(data, loading = false) {
-    let url = '/market-info/api/platform/goods-supplier'
+    let url = API_PUB + '/api/platform/goods-supplier'
     return request.get({url, data, loading})
   },
   /**
@@ -23,7 +24,7 @@ export default {
    * @param goods_supplier_id
    */
   goodsDown(data, loading = false) {
-    let url = '/market-info/api/platform/goods-supplier-toggle-online'
+    let url = API_PUB + '/api/platform/goods-supplier-toggle-online'
     return request.post({url, data, loading})
   },
   /**
@@ -31,16 +32,16 @@ export default {
    *
    * @param goods_supplier_id
    */
-  goodsDelete(data, loading = false) {
-    let url = '/market-info/api/platform/goods-supplier-toggle-online'
-    return request.delete({url, data, loading})
+  goodsDelete(id, loading = false) {
+    let url = `${API_PUB}/api/platform/goods-supplier/${id}`
+    return request.delete({url, data: {}, loading})
   },
   /**
    * 审核商品
    *
    */
   auditingGoods(data, loading = false) {
-    let url = '/market-info/api/platform/goods-supplier'
+    let url = API_PUB + '/api/platform/goods-supplier-audit'
     return request.post({url, data, loading})
   },
   /**
@@ -48,7 +49,7 @@ export default {
    *
    */
   getStatus(data, loading = false) {
-    let url = '/market-info/api/platform/goods-supplier-status'
+    let url = API_PUB + '/api/platform/goods-supplier-status'
     return request.get({url, data, loading})
   },
 

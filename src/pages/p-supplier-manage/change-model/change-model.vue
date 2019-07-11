@@ -47,6 +47,10 @@
         this.$refs.passwordModal && this.$refs.passwordModal.hideModal()
       },
       confirm() {
+        if (this.password !== this.rePassword) {
+          this.$toast.show('两次输入密码不相同')
+          return
+        }
         this.$emit('confirm', {password: this.password, rePassword: this.rePassword})
       }
     }

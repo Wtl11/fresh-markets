@@ -6,20 +6,20 @@
       <img src="./pic-logo@2x.png" alt="" class="logo">
       <div class="company-detail">
         <div class="left-detail">
-          <h3 class="company-name">江南皮革厂水果贸易有限公司</h3>
+          <h3 class="company-name">{{supplierDetail.name}}</h3>
           <div class="context">
             <div class="text-box left-text">
-              <p class="text">主营品类： 新鲜水果</p>
-              <p class="text">商品数量： 100个商品</p>
-              <p class="text">所在地区： 江南水乡古镇</p>
+              <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
+              <p class="text">商品数量： {{supplierDetail.goods_num}}个商品</p>
+              <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
             </div>
             <div class="text-box right-text">
-              <p class="text">联 系 人： 李江南</p>
-              <p class="text">联系方式： 13584260103</p>
+              <p class="text">联 系 人： {{supplierDetail.contact}}</p>
+              <p class="text">联系方式： {{supplierDetail.mobile}}</p>
             </div>
           </div>
         </div>
-        <img src="./code.png" alt="" class="qr-code">
+        <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
       </div>
     </section>
     <!--橙色条-->
@@ -33,13 +33,13 @@
 
     <!--商品推荐-->
     <section class="goods-recommend">
-      <div class="goods-list">
+      <div v-if="goodsList.length" class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
-          <goods-item></goods-item>
+          <goods-item :goodsInfo="item"></goods-item>
         </div>
       </div>
       <div class="pagination">
-        <goods-pagination @addPage="addPage"></goods-pagination>
+        <goods-pagination ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </div>
     </section>
 
@@ -48,14 +48,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import API from '@api'
   import GoodsItem from '@components/goods-item/goods-item'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
   const PAGE_NAME = 'BUSINESS_DETAIL'
   const TITLE = '商家信息'
-
-
-  const IMAGE_LIST = ['a', 'b', 'c', 'd', 'e']
-  const GOODS_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   export default {
     name: PAGE_NAME,
@@ -68,20 +65,47 @@
     },
     data() {
       return {
-        imageList: IMAGE_LIST,
-        goodsList: GOODS_LIST,
-        bigImageUrl: 'a'
+        goodsList: [],
+        pageDetail: {
+          total: 1,
+          per_page: 10,
+          total_page: 1
+        },
+        bigImageUrl: '',
+        supplierId: '',
+        page: 1,
+        supplierDetail: {}
       }
     },
     beforeRouteEnter(to, from, next) {next()},
     created() {
+      this.supplierId = this.$route.query.supplierId || 0
+      this.getSupplierDetail()
+      this.getGoodsList()
     },
     methods: {
-      changeImage(item) {
-        this.bigImageUrl = item
+      getSupplierDetail() {
+        API.GoodsDetail.getSupplierDetail(this.supplierId)
+          .then(res => {
+            this.supplierDetail = res.data
+          })
+      },
+      // 获取列表
+      getGoodsList() {
+        API.PGoodsManage.getGoodsList({page: this.page, limit: 24, getGoodsList: this.supplierId}, false)
+          .then((res) => {
+            this.goodsList = res.data
+            let statePageTotal = {
+              total: res.meta.total,
+              per_page: res.meta.per_page,
+              total_page: res.meta.last_page
+            }
+            this.pageDetail = statePageTotal
+          })
       },
       addPage(page) {
-        console.log(page)
+        this.page = page
+        this.getGoodsList()
       }
     }
   }
