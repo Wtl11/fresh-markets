@@ -45,6 +45,8 @@
       },
       hide() {
         this.$refs.passwordModal && this.$refs.passwordModal.hideModal()
+        this.password = ''
+        this.rePassword = ''
       },
       confirm() {
         if (this.password !== this.rePassword) {

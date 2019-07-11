@@ -3,7 +3,7 @@
     <div slot="content" class="default-input">
       <div class="title-input">
         <div class="title">审核</div>
-        <div class="close-box" @click="cancel">
+        <div class="close-box" @click="hide">
           <div class="close hand"></div>
         </div>
       </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="btn-group">
-        <span class="btn cancel" @click="cancel">取消</span>
+        <span class="btn cancel" @click="hide">取消</span>
         <span class="btn confirm" @click="confirm">确定</span>
       </div>
     </div>
@@ -48,6 +48,8 @@
       },
       hide() {
         this.$refs.auditingMmodal && this.$refs.auditingMmodal.hideModal()
+        this.status = 1
+        this.reason = ''
       },
       auditingResult(result) {
         this.status = result
@@ -59,9 +61,6 @@
         }
         this.$emit('confirm', {status: this.status, reason: this.reason})
       },
-      cancel() {
-        this.hide()
-      }
     }
   }
 </script>
