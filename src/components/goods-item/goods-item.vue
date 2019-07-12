@@ -74,6 +74,7 @@
         top: 50%
         transform: translate(-50%, -50%)
         transition: all .3s
+        object-fit :cover
     .msg-box
       flex: 1
       background: $color-white

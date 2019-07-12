@@ -96,9 +96,9 @@
     {name: '联系人', flex: 1, value: 'contact', type: 1},
     {name: '联系方式', flex: 1, value: 'mobile', type: 1},
     {name: '提交时间', flex: 1, value: 'created_at', type: 1},
-    {name: '审核说明', flex: 1, value: 'explain', type: 3},
+    {name: '审核说明', flex: 1, value: 'note', type: 3},
     {name: '状态', flex: 1, value: 'status', type: 5},
-    {name: '操作', flex: 1.8, value: '', type: 4}
+    {name: '操作', flex: 2, value: '', type: 4}
   ]
 
   export default {
@@ -301,6 +301,7 @@
   .list-box,.list-header
     .list-item:last-child
       padding-right: 0
+      max-width: 158px
   .list
     flex: 1
     .list-item

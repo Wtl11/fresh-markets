@@ -3,7 +3,7 @@
     <!--banner-->
     <section class="banner-wrapper">
       <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
-      <img src="./pic-logo@2x.png" alt="" class="logo">
+      <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
       <div class="company-detail">
         <div class="left-detail">
           <h3 class="company-name">{{supplierDetail.name}}</h3>
@@ -26,7 +26,7 @@
     <section class="top-msg">
       <div class="msg-box">
         <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_success_num || 0}}</em>个商品)</span>
+        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
         <!--<span class="icon"></span>-->
       </div>
     </section>
