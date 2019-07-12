@@ -237,7 +237,6 @@
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {
-            console.log(res.data)
             this.subModify = true
           })
           .finally(() => {

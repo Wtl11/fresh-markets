@@ -12,7 +12,6 @@ export const mutations = {
   // 设置用户类型
   SET_USER_TYPE(state, userType) {
     state.currentUserType = userType
-    console.info(state.currentUserType, 6666)
   }
 }
 
