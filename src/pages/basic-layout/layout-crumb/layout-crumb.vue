@@ -4,7 +4,7 @@
       <li v-for="(item, index) in crumbData" :key="index">{{item}}<span v-if="index !== crumbData.length - 1" class="line">/</span></li>
     </ul>
     <section class="user-wrapper" @mouseenter="enterHandle" @mouseleave="leaveHandle">
-      <img class="avatar" src="http://b-ssl.duitang.com/uploads/item/201805/13/20180513224039_tgfwu.png" alt="">
+      <img class="avatar" src="./pic-admin@2x.png" alt="">
       <span class="user-name">{{userInfo.username || userInfo.name}}</span>
       <img class="icon-logout" src="./icon-sign_out1@2x.png" alt="">
       <transition name="fade" @mouseenter="enterHandle" @mouseleave="leaveHandle">
