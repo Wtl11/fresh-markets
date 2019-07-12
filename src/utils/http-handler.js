@@ -4,13 +4,18 @@ import {ERR_OK} from './config'
 import storage from 'storage-controller'
 
 const AUTHORITY_LOST = 10000 // 权限失效
+const GOODS_LOST = 10022 // 集市商品详情，供应商被冻结、删除、商品删除
 
 HTTP.handleError((code) => {
   switch (code) {
     case AUTHORITY_LOST:
-      // APP && APP.$router.replace({name: 'login'})
+      APP && APP.$router.push('/user/login')
+      break
+    case GOODS_LOST:
+      APP && APP.$router.replace('/')
       break
     default:
+      APP && APP.$router.push('/')
       break
   }
 })

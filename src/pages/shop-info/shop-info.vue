@@ -139,7 +139,6 @@
       </div>
     </div>
     <div v-if="!subModify" class="button-con">
-      <div class="hand button cancel">取消</div>
       <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subModify">保存</div>
     </div>
   </div>
@@ -235,6 +234,7 @@
         this.shopInfo[key] = data.id
         if (childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
       },
       _setCityValue(data) {
@@ -250,7 +250,10 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(applyKey, uploadKey) {
         this.shopInfo[applyKey] = ''
@@ -260,6 +263,7 @@
         if (this.approveStatus === 0 || submitting) {
           return false
         }
+        submitting = true
         let errorMsg = {
           name: '请输入供应商名称',
           province: '请选择省份',
@@ -281,13 +285,16 @@
         return true
       },
       _subModify() {
-        if (!this._checkForm()) return
-        submitting = true
+        if (!this._checkForm()) {
+          submitting = false
+          return
+        }
         API.SupplierInfo.editSupplierInfo(this.shopInfo, true, shopId)
           .then((res) => {
-            this.subModify = true
+            this.$toast.show('提交成功，请耐心等候')
+            // this.subModify = true
           })
-          .finally(() => {
+          .catch(() => {
             submitting = false
             this.$loading.hide()
           })
@@ -300,8 +307,12 @@
   @import "~@design"
 
   .shop-info
+    position: relative
     width: 100%
     background: #fff
+    border: 1px solid #E9ECF0
+    border-radius: 4px
+    padding-bottom: 80px
     .title-con
       height: 18px
       margin: 25px 20px
@@ -372,8 +383,9 @@
           &.mini-form-input-box
             layout(row)
             div
-              margin-right: 20px
+              margin-right: 10px
         .form-input
+          box-sizing: border-box
           font-size: $font-size-14
           padding: 0 14px
           border-radius: 2px
@@ -497,12 +509,16 @@
           text-align: center
           line-height: 1
   .button-con
+    position: absolute
+    bottom: 0
+    left: 0
     box-sizing: border-box
     width: 100%
     height: 80px
-    padding-left: 153px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
+    border-bottom-left-radius: 4px
+    border-bottom-right-radius: 4px
     layout(row)
     align-items: center
     justify-content: center

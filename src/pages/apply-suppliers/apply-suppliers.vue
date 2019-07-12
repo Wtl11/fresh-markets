@@ -204,7 +204,10 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(applyKey, uploadKey) {
         this.shopInfo[applyKey] = ''
@@ -237,7 +240,6 @@
         submitting = true
         API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
           .then((res) => {
-            console.log(res.data)
             this.subModify = true
           })
           .finally(() => {
@@ -339,8 +341,9 @@
           &.mini-form-input-box
             layout(row)
             div
-              margin-right: 20px
+              margin-right: 10px
         .form-input
+          box-sizing: border-box
           font-size: $font-size-14
           padding: 0 14px
           border-radius: 2px

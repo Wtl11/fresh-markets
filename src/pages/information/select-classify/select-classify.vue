@@ -65,7 +65,7 @@
       classifyData() {
         setTimeout(() => {
           this.getRow()
-        }, 100)
+        }, 50)
       }
     },
     mounted() {},
@@ -85,24 +85,28 @@
         if (this.isOpen) {
           return {opacity: 1}
         } else {
-          return {opacity: index < this.opacityIndex ? 1 : 0}
+          return {opacity: index < this.opacityIndex || index === 0? 1 : 0}
         }
       },
       getRow() {
         let parent = this.$refs.middle
         if (typeof parent !== 'object') return
         let children = parent.children
-        let cWidth = 0
-        let pWidth = parent.getBoundingClientRect().width
-        let index = 0
+        let index = -1
+        let pTop = parent.getBoundingClientRect().top
+        let row = 1
         for (let item of children) {
-          cWidth += item.getBoundingClientRect().width
-          if (cWidth < pWidth) {
+          let rect = item.getBoundingClientRect()
+          let cTop = rect.top
+          if (cTop === pTop) {
             index++
           }
+          if (cTop > pTop) {
+            row = (cTop - pTop) / rect.height + 1
+          }
         }
-        this.opacityIndex = index
-        this.row = Math.ceil(cWidth / pWidth)
+        this.opacityIndex = Math.max(0, index)
+        this.row = row
       }
     }
   }
@@ -120,7 +124,7 @@
     line-height: 1
     display :flex
     box-sizing border-box
-    transition :all 0.4s ease-out
+    transition :all 0.2s ease-out
     overflow :hidden
     border-radius :1px
     &.active
@@ -156,7 +160,7 @@
       .triangle
         display: inline-block
         position :relative
-        top: 5px
+        top: 3px
         border: 5px solid #4D77BD
         height :0
         width :0

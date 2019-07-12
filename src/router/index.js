@@ -38,7 +38,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
   }
   let identity = store.getters['auth/currentUserType']
   let record = findLast(routeTo.matched, (record) => record.meta.authority)
-  if (record && !identity) {
+  if (record && !identity && routeTo.path !== LOGIN_PATH) {
     try {
       let res = await API.Auth.validate()
       setGlobalParams(res.data)

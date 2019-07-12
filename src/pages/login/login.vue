@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <img src="./pic-login_background@1x.png" alt="" class="login-background">
     <div class="logo"></div>
     <div class="login-con">
       <div class="header">登录/Login</div>
@@ -50,12 +51,15 @@
             })
           })
           .catch(() => {
+            storage.set('auth.token', 0)
             next((vm) => {
               vm.$loading.hide()
             })
           })
       } else {
-        next()
+        next(vm => {
+          vm.$loading.hide()
+        })
       }
     },
     computed: {
@@ -124,13 +128,14 @@
     position: absolute
     width: 100%
     height: 100%
-    bg-image('./pic-login_background')
-    background-repeat: no-repeat
-    background-size: cover
-    background-position: center center
     layout()
     align-items: center
     justify-content: center
+    .login-background
+      fill-box(fixed)
+      width :100vw
+      height :100vh
+
     .logo
       position: absolute
       top: 35px
@@ -139,7 +144,9 @@
       height: 48px
       bg-image('./pic-login_logo')
       background-size: 100%
+      z-index :10
     .login-con
+      position :relative
       width: 360px
       layout()
       justify-content: center
@@ -153,19 +160,21 @@
       .item
         width: 100%
         height: 44px
-        padding: 0 14px
         background: #fff
         border-radius: 4px
         margin-bottom: 24px
         .input
+          box-sizing: border-box
           width: 100%
           height: 44px
+          padding: 0 14px
           background: #fff
           font-family: $font-family-regular
           font-size: 14px
           color: $color-text-main
           letter-spacing: 0
           outline: none
+          border-radius: 4px
           &::placeholder
             font-family: $font-family-regular
             color: #82899C

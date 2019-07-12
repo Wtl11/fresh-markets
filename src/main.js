@@ -5,6 +5,7 @@ import store from '@state/store'
 import '@components/_globals'
 import '@utils/http-handler'
 import {Plugins} from '@utils/plugins'
+import '@utils/env-clear'
 
 Vue.use(Plugins)
 

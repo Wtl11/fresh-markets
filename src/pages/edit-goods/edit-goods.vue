@@ -2,7 +2,7 @@
   <div class="edit-goods">
     <div class="title-con">
       <div class="icon"></div>
-      <div class="title">新建商品</div>
+      <div class="title">{{pageTitle}}</div>
     </div>
     <div class="content">
       <div class="content-header content-padding-top">
@@ -126,7 +126,7 @@
   import Draggable from 'vuedraggable'
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
-  const TITLE = '新建商品'
+  let TITLE = '商品信息'
   let submitting = false
 
   export default {
@@ -139,6 +139,7 @@
     },
     data() {
       return {
+        pageTitle: '编辑商品',
         onlyCheck: false,
         goodsId: '',
         goodsInfo: {
@@ -156,6 +157,7 @@
     },
     beforeRouteEnter(to, from, next) {
       const goodsId = to.query.goodsId
+      to.meta.crumbs[2] = goodsId?'编辑商品':'新建商品'
       if (goodsId) {
         API.GoodsManage.getGoodsInfo(goodsId).then((res) => {
           next((vw) => {
@@ -170,6 +172,8 @@
     },
     mounted() {
       this.onlyCheck = !!(this.$route.query.type === 'check')
+      this.pageTitle = this.goodsId?'编辑商品':'新建商品'
+      document.title = this.pageTitle
     },
     methods: {
       _setGoodsInfo(resData) {
@@ -205,17 +209,24 @@
         this.goodsInfo[key] = data.id
         if (childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
       },
       _setSort() {},
       _addImg(key, e) {
-        this.uploading = key
         this.uploadLoading = true
-        uploadFiles({files: [e.target.files[0]]}).then((res) => {
+        this.uploading = key
+        let imgArr = Array.from(e.target.files)
+        uploadFiles({files: imgArr}).then((res) => {
           this.uploadLoading = false
-          const resData = res[0].data
-          this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
+          res.forEach((item) => {
+            const resData = item.data
+            this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
+          })
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(key, index) {
         this.goodsInfo[key].splice(index, 1)
@@ -224,6 +235,7 @@
         if (submitting) {
           return false
         }
+        submitting = true
         let errorMsg = {
           goods_supplier_category_id: '请选择主营品类',
           name: '请输入商品主标题',
@@ -252,8 +264,10 @@
         return true
       },
       _subEdit() {
-        if (!this._checkForm()) return
-        submitting = true
+        if (!this._checkForm()) {
+          submitting = false
+          return
+        }
         let apiName = 'creatGoodsInfo'
         if (this.goodsId) {
           apiName = 'editGoodsInfo'
@@ -266,7 +280,7 @@
               this.$router.push(`/manager/goods-manage`)
             }, 1000)
           })
-          .finally(() => {
+          .catch(() => {
             submitting = false
             this.$loading.hide()
           })
@@ -283,13 +297,15 @@
 
   .edit-goods
     width: 100%
-    background: #f9f9f9
+    background: #fff
+    padding-bottom: 80px
     .title-con
       height: 18px
       padding: 25px 20px
       layout(row)
       align-items: center
       background :#fff
+      border-radius: 4px
       .icon
         width: 16px
         height: @width
@@ -305,7 +321,7 @@
   .content
     position: relative
     flex: 1
-    min-height: 770px
+    min-height: 764px
     background: $color-white
     padding: 0 20px 30px
     box-sizing: border-box
@@ -363,6 +379,7 @@
               width: 100%
               height: 100%
         .form-input
+          box-sizing: border-box
           font-size: $font-size-14
           padding: 0 14px
           border-radius: 2px
@@ -455,12 +472,16 @@
                 width: 25px
                 height: 25px
   .button-con
+    position: absolute
+    bottom: 0
+    left: 0
     box-sizing: border-box
     width: 100%
     height: 80px
-    padding-left: 153px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
+    border-bottom-left-radius: 4px
+    border-bottom-right-radius: 4px
     layout(row)
     align-items: center
     justify-content: center
