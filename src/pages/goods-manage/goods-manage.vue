@@ -301,11 +301,12 @@
   .list-header,.list-box
     .list-item:last-child
       padding-right: 0
+      max-width: 158px
   .list
     flex: 1
     .list-item
       font-size: $font-size-14
-      line-height:1.2
+      line-height:1.4
       .item
         text-overflow: ellipsis
         overflow: hidden
@@ -315,6 +316,7 @@
         white-space: normal
         display: -webkit-box
         overflow: hidden
+        word-break: break-all
         -webkit-line-clamp: 2
         -webkit-box-orient: vertical
       .list-double-row
