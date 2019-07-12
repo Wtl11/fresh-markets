@@ -246,7 +246,6 @@
       },
       refresh() {
         this._getGoodsList()
-        this._getGoodsStatus()
       }
     }
   }
