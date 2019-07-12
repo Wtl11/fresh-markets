@@ -58,7 +58,7 @@
 
               <!--<div v-if="+val.type === 5 && +item.audit_status !== 1 && +item.audit_status !== 2" :style="{flex: val.flex}" class="list-operation-box item">---</div>-->
 
-              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item explain">
+              <div v-if="+val.type === 6" id="explain" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
             </div>
@@ -340,8 +340,8 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
-      .explain
-        white-space: initial
+      #explain
+        white-space: normal
         display: -webkit-box
         overflow: hidden
         word-break: break-all
