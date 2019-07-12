@@ -164,6 +164,7 @@
         border-radius: 4px
         margin-bottom: 24px
         .input
+          box-sizing: border-box
           width: 100%
           height: 44px
           padding: 0 14px

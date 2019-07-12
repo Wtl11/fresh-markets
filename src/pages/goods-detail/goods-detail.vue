@@ -3,23 +3,25 @@
     <!--banner-->
     <section class="banner-wrapper">
       <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
-      <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
-      <div class="company-detail">
-        <div class="left-detail">
-          <h3 class="company-name">{{supplierDetail.name}}</h3>
-          <div class="context">
-            <div class="text-box left-text">
-              <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
-              <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
-              <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
-            </div>
-            <div class="text-box right-text">
-              <p class="text">联 系 人： {{supplierDetail.contact}}</p>
-              <p class="text">联系方式： {{supplierDetail.mobile}}</p>
+      <div class="banner-w">
+        <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
+        <div class="company-detail">
+          <div class="left-detail">
+            <h3 class="company-name">{{supplierDetail.name}}</h3>
+            <div class="context">
+              <div class="text-box left-text">
+                <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
+                <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
+                <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
+              </div>
+              <div class="text-box right-text">
+                <p class="text">联 系 人： {{supplierDetail.contact}}</p>
+                <p class="text">联系方式： {{supplierDetail.mobile}}</p>
+              </div>
             </div>
           </div>
+          <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
         </div>
-        <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
       </div>
     </section>
     <!--橙色条-->
@@ -55,7 +57,7 @@
             </p>
             <p class="condition">
               <span class="label">起批量</span>
-              <span class="text">{{supplierDetail.goods_start_num || 0}}</span>
+              <span class="text">≥ {{supplierDetail.goods_start_num || 0}}</span>
             </p>
           </div>
           <div class="bottom-context">
@@ -79,14 +81,14 @@
 
     <!--商品详情-->
     <section class="goods-detail-image">
-      <h3 class="page-title">商品信息</h3>
+      <h3 class="page-title">商品详情</h3>
       <img v-for="(image, index) in detailList" :key="index" :src="image && image.image_url" alt="" class="image">
     </section>
 
     <!--商品推荐-->
-    <section class="goods-recommend">
+    <section v-if="goodsList.length" class="goods-recommend">
       <h3 class="page-title">其他商品</h3>
-      <div v-if="goodsList.length" class="goods-list">
+      <div class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
           <goods-item :goodsInfo="item"></goods-item>
         </div>
@@ -181,6 +183,11 @@
     font-size: 16px;
     color: #FFFFFF;
     line-height: 1
+    .banner-w
+      width: $minWidth
+      height: 380px
+      row-center()
+      top: 0
     .banner-img
       width: 100%
       height: 100%
@@ -189,7 +196,7 @@
       width: 160px
       height: 58px
       position: absolute
-      left: 130px
+      left: 0
       top: 50px
     .company-detail
       width: 1020px
@@ -199,7 +206,7 @@
       display: flex
       align-items: center
       position: absolute
-      left: 130px
+      left: 0
       bottom: 36px
       background-image: linear-gradient(270deg, rgba(39,39,39,0.00) 16%, rgba(17,17,17,0.72) 93%)
       border-radius: 8px
@@ -214,10 +221,13 @@
       margin-top: 25px
       display: flex
     .text-box
+      flex: 1
+      overflow: hidden
       padding-right: 90px
     .text
-      margin-bottom: 14px
+      margin-bottom: 12px
       font-size: 14px
+      line-height: 20px
       color: $color-white
       white-space: nowrap
       font-family: $font-family-regular
@@ -244,6 +254,7 @@
       font-size: 20px
       margin-top: -5px
     .text
+      margin-left: 4px
       font-size: $font-size-14
       .num
         font-style: normal

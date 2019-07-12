@@ -81,14 +81,14 @@
   const FIRST_CATEGORY = {
     check: false,
     show: false,
-    content: '一级分类',
+    content: '一级类目',
     type: 'default',
     data: [{name: '水果'}]
   }
   const SECOND_CATEGORY = {
     check: false,
     show: false,
-    content: '二级分类',
+    content: '二级类目',
     type: 'default',
     data: [{name: '水果'}]
   }
@@ -178,7 +178,7 @@
     methods: {
       // 选择一级分类
       firstCategorySelect(data) {
-        this.secondCategory.content = '二级分类'
+        this.secondCategory.content = '二级类目'
         this.secondCategory.data = data.list
         this.$refs.pagination.beginPage()
         this.setData({goods_supplier_category_id: data.id, page: 1})

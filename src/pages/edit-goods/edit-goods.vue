@@ -209,17 +209,24 @@
         this.goodsInfo[key] = data.id
         if (childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
       },
       _setSort() {},
       _addImg(key, e) {
-        this.uploading = key
         this.uploadLoading = true
-        uploadFiles({files: [e.target.files[0]]}).then((res) => {
+        this.uploading = key
+        let imgArr = Array.from(e.target.files)
+        uploadFiles({files: imgArr}).then((res) => {
           this.uploadLoading = false
-          const resData = res[0].data
-          this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
+          res.forEach((item) => {
+            const resData = item.data
+            this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
+          })
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(key, index) {
         this.goodsInfo[key].splice(index, 1)
