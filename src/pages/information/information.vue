@@ -74,7 +74,7 @@
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
 
   const PAGE_NAME = 'INFORMATION'
-  const TITLE = '信息平台'
+  const TITLE = '赞播优鲜-信息平台'
 
   export default {
     name: PAGE_NAME,
