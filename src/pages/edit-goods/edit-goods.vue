@@ -276,6 +276,7 @@
           .then((res) => {
             this.$toast.show('保存成功！')
             setTimeout(() => {
+              submitting = false
               this.$emit('refresh')
               this.$router.push(`/manager/goods-manage`)
             }, 1000)
