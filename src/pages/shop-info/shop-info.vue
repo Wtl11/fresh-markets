@@ -186,9 +186,13 @@
       }
     },
     beforeRouteEnter(to, from, next) {
-      next((vw) => {
-        API.SupplierInfo.getSupplierInfo().then((res) => {
+      API.SupplierInfo.getSupplierInfo().then((res) => {
+        next((vw) => {
           vw._setSupplierInfo(res.data)
+        })
+      }).catch(() => {
+        next((vw) => {
+          vw.$loading.hide()
         })
       })
     },

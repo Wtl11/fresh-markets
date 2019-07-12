@@ -168,8 +168,9 @@
       border-radius: 8px
     .left-detail
       width: 622px
-      padding-bottom: 20px
+      height: 100%
     .company-name
+      margin-top: 8px
       font-size: 32px
       color: $color-white
       font-family: $font-family-medium

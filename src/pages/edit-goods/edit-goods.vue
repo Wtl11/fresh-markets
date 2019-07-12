@@ -127,6 +127,7 @@
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
   let TITLE = '商品信息'
+  const TITLE_TEXT = { check: '查看商品', edit: '编辑商品', create: '新建商品'}
   let submitting = false
 
   export default {
@@ -157,11 +158,17 @@
     },
     beforeRouteEnter(to, from, next) {
       const goodsId = to.query.goodsId
+      const type = to.query.type
       to.meta.crumbs[2] = goodsId?'编辑商品':'新建商品'
+      to.meta.crumbs[2] = TITLE_TEXT[type]||'新建商品'
       if (goodsId) {
         API.GoodsManage.getGoodsInfo(goodsId).then((res) => {
           next((vw) => {
             vw._setGoodsInfo(res.data)
+          })
+        }).catch(() => {
+          next((vw) => {
+            vw.$loading.hide()
           })
         })
       } else {
@@ -171,8 +178,9 @@
       }
     },
     mounted() {
-      this.onlyCheck = !!(this.$route.query.type === 'check')
-      this.pageTitle = this.goodsId?'编辑商品':'新建商品'
+      const type = this.$route.query.type
+      this.onlyCheck = !!(type === 'check')
+      this.pageTitle = TITLE_TEXT[type]||'新建商品'
       document.title = this.pageTitle
     },
     methods: {

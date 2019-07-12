@@ -201,7 +201,7 @@
       },
       // 获取Tab栏状态
       getSupplierStatus() {
-        API.PSupplierManage.getStatus().then((res) => {
+        API.PSupplierManage.getStatus({keyword: this.requestData.keyword}).then((res) => {
           this.statusTab = res.data.map((item, index) => {
             return {
               name: item.status_str,
@@ -312,6 +312,12 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
+      .explain
+        white-space: initial
+        display: -webkit-box
+        overflow: hidden
+        -webkit-line-clamp: 2
+        -webkit-box-orient: vertical
       .goods-name
         display: flex
         flex-direction: column

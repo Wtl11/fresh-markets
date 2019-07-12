@@ -410,7 +410,7 @@
             appearance: none
 
       .input-box
-        font-size: 19px
+        font-size: 14px
         white-space: nowrap
         display: flex
         height: 41px
