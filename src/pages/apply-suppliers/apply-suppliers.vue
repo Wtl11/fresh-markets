@@ -204,7 +204,10 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(applyKey, uploadKey) {
         this.shopInfo[applyKey] = ''
