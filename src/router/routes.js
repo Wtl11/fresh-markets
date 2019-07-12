@@ -91,7 +91,7 @@ export default [
         path: '/manager/goods-manage',
         name: 'goods-manage',
         meta: {
-          title: '编辑商品',
+          title: '商品管理',
           icon: require('./icon-store_Information1@2x.png'),
           iconSelected: require('./icon-store_Information2@2x.png'),
           crumbs: ['商品', '商品管理'],
