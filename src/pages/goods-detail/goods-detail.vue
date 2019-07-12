@@ -107,7 +107,7 @@
     name: PAGE_NAME,
     page() {
       return {
-        title: this.supplierDetail.name || TITLE
+        title: this.goodsDetail.name || TITLE
       }
     },
     components: {
@@ -150,7 +150,7 @@
       },
       // 获取列表
       getGoodsList() {
-        API.GoodsDetail.getGoodsList({page: 1, limit: 12, goods_supplier_id: this.supplierId}, false).then((res) => {
+        API.GoodsDetail.getGoodsList({page: 1, limit: 12, no_goods_supplier_id: this.goodsId}, false).then((res) => {
           this.goodsList = res.data
         })
       },
