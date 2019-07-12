@@ -134,6 +134,7 @@
       width :100px
       color: #999
     .middle-wrapper
+      position :relative
       flex :1
       .classify-item
         float: left
