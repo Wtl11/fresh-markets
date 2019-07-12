@@ -48,8 +48,8 @@
                 <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'edit')">重新提交</span>
                 <span v-else class="list-operation no-line">---</span>
               </div>
-              <div v-else-if="+val.type === 5" :style="{flex: val.flex}" class="item">
-                {{item.audit_status*1 !== 1 ? item[val.value] : '---'}}
+              <div v-else-if="+val.type === 5" :style="{flex: val.flex}" class="item explain">
+                {{item.audit_status*1 !== 1 ? (item[val.value]||'---') : '---'}}
               </div>
               <div v-else-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
                    :class="'status-'+item.audit_status"
@@ -311,6 +311,12 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
+      .explain
+        white-space: initial
+        display: -webkit-box
+        overflow: hidden
+        -webkit-line-clamp: 2
+        -webkit-box-orient: vertical
       .list-double-row
         display: flex
         flex-direction: column
