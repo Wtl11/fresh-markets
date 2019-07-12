@@ -19,11 +19,11 @@
             <span class="key">所在地区：</span>
             <span class="pos area-wrapper">{{areas}}</span>
           </dd>
-          <dd class="info-item-wrapper">
+          <dd class="info-item-wrapper short-width">
             <span class="key">联  系 人：</span>
             <span class="value">{{marketInfo.contact}}</span>
           </dd>
-          <dd class="info-item-wrapper">
+          <dd class="info-item-wrapper short-width">
             <span class="key">联系方式：</span>
             <span class="value">{{marketInfo.mobile}}</span>
           </dd>
@@ -128,6 +128,7 @@
         line-height: 14px
     .right-wrapper
       display :flex
+      flex: 1
       .goods-item-wrapper
         height :100%
         width :225px
@@ -143,7 +144,9 @@
       width :671px
       .l-body
         width :591px
-        margin :60px auto
+        margin-top :60px
+        margin-left: 31px;
+        box-sizing :border-box
         .content-wrapper
           width :100%
           height :167px
@@ -156,6 +159,7 @@
             flex-direction column
             align-items :center
             text-align :center
+            padding-right :16px
             .key
               color: #999
               padding-bottom :10px
@@ -170,11 +174,13 @@
               cursor :pointer
               object-fit:cover
           .info-item-wrapper
-            width : 256px
+            width : 254px
             padding-bottom :30px
             position :relative
             user-select :text
             display :flex
+            &.short-width
+              width :240px
             .key
               width :70px
               color: #999
