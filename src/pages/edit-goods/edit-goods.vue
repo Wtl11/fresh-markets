@@ -128,7 +128,6 @@
   const PAGE_NAME = 'EDIT_GOODS'
   let TITLE = '商品信息'
   const TITLE_TEXT = { check: '查看商品', edit: '编辑商品', create: '新建商品'}
-  let submitting = false
 
   export default {
     name: PAGE_NAME,
@@ -139,6 +138,7 @@
       Draggable
     },
     data() {
+      this.submitting = false
       return {
         pageTitle: '编辑商品',
         onlyCheck: false,
@@ -240,10 +240,10 @@
         this.goodsInfo[key].splice(index, 1)
       },
       _checkForm() {
-        if (submitting) {
+        if (this.submitting) {
           return false
         }
-        submitting = true
+        this.submitting = true
         let errorMsg = {
           goods_supplier_category_id: '请选择主营品类',
           name: '请输入商品主标题',
@@ -273,7 +273,7 @@
       },
       _subEdit() {
         if (!this._checkForm()) {
-          submitting = false
+          this.submitting = false
           return
         }
         let apiName = 'creatGoodsInfo'
@@ -287,14 +287,12 @@
             } else {
               this.$toast.show('保存成功！')
             }
-            setTimeout(() => {
-              submitting = false
-              this.$emit('refresh')
-              this.$router.push(`/manager/goods-manage`)
-            }, 1000)
+            this.submitting = false
+            this.$emit('refresh')
+            this.$router.push(`/manager/goods-manage`)
           })
           .catch(() => {
-            submitting = false
+            this.submitting = false
             this.$loading.hide()
           })
       },
