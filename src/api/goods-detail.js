@@ -11,5 +11,10 @@ export default {
   getSupplierDetail(id, loading = false) {
     let url = `${API_PUB}/api/market/supplier/${id}`
     return http.get({url, data: {}, loading})
+  },
+  // 推荐商品列表
+  getGoodsList(data, loading = false) {
+    let url = `${API_PUB}/api/market/goods-supplier`
+    return http.get({url, data, loading})
   }
 }
