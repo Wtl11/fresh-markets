@@ -25,7 +25,7 @@
   import DefaultConfirm from '@components/default-confirm/default-confirm'
   import storage from 'storage-controller'
   import HTTP from '@utils/http'
-  import {authMethod} from '@state/helpers'
+  import {authMethod, authComputed} from '@state/helpers'
 
   const COMPONENT_NAME = 'LAYOUT_CRUMB'
 
@@ -39,7 +39,13 @@
       return {
         crumbData: crumbData,
         showTip: false,
-        userInfo: storage.get('auth.currentUser') || {}
+        // userInfo: storage.get('auth.currentUser') || {}
+      }
+    },
+    computed: {
+      ...authComputed,
+      userInfo() {
+        return this.currentUser || {}
       }
     },
     watch: {
@@ -69,6 +75,7 @@
         storage.remove('auth.token')
         HTTP.setHeaders({Authorization: undefined})
         this['SET_USER_TYPE'](undefined)
+        this['SET_USER'](undefined)
         this.$router.push({name: 'login'})
       }
     }

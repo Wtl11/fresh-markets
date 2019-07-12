@@ -116,6 +116,7 @@
         storage.set('auth.token', data.access_token)
         HTTP.setHeaders({Authorization: data.access_token})
         this['SET_USER_TYPE'](data.info.identity)
+        this['SET_USER'](data.info)
       }
     }
   }
