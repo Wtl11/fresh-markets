@@ -148,7 +148,7 @@
 // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
-  import CitySelect from './city-select/city-select'
+  import CitySelect from '@components/city-select/city-select'
   const PAGE_NAME = 'SHOP_INFO'
   const TITLE = '店铺信息'
   let submitting = false

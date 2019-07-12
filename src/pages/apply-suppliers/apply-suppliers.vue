@@ -150,7 +150,7 @@
   // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
-  import CitySelect from './city-select/city-select'
+  import CitySelect from '@components/city-select/city-select'
 
   const PAGE_NAME = 'APPLY_SUPPLIERS'
   const TITLE = '申请成为供应商'
