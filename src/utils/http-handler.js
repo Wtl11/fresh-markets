@@ -8,6 +8,7 @@ const AUTHORITY_LOST = 10000 // 权限失效
 HTTP.handleError((code) => {
   switch (code) {
     case AUTHORITY_LOST:
+      // APP && APP.$router.replace({name: 'login'})
       break
     default:
       break
