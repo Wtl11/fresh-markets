@@ -3,7 +3,7 @@
     <!--banner-->
     <section class="banner-wrapper">
       <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
-      <img src="./pic-logo@2x.png" alt="" class="logo">
+      <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
       <div class="company-detail">
         <div class="left-detail">
           <h3 class="company-name">{{supplierDetail.name}}</h3>
