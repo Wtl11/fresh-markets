@@ -65,7 +65,7 @@
       classifyData() {
         setTimeout(() => {
           this.getRow()
-        }, 50)
+        }, 100)
       }
     },
     mounted() {},
@@ -92,13 +92,13 @@
         let parent = this.$refs.middle
         if (typeof parent !== 'object') return
         let children = parent.children
-        let index = -1
+        let index = 0
         let pTop = parent.getBoundingClientRect().top
         let row = 1
         for (let item of children) {
           let rect = item.getBoundingClientRect()
           let cTop = rect.top
-          if (cTop === pTop) {
+          if (cTop <= pTop) {
             index++
           }
           if (cTop > pTop) {
