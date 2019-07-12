@@ -3,7 +3,7 @@
     <section class="left-wrapper">
       <div class="l-header">
         <img src="./icon-supplier_orange@2x.png" alt="" class="icon">
-        <span class="name">水果供应商公示时间</span>
+        <span class="name">{{marketInfo.name}}</span>
       </div>
       <section class="l-body">
         <dl class="content-wrapper">
