@@ -35,14 +35,23 @@
         <button class="button" @click.stop="navHandle">进入店铺 >></button>
       </section>
     </section>
-    <section class="right-wrapper">
-      <goods-item
+    <section v-if="goodsList.length" class="right-wrapper">
+      <template
         v-for="(item, index) in goodsList"
-        :key="index"
-        :showCompany="false"
-        :goodsInfo="item"
-        class="goods-item-wrapper"
-      ></goods-item>
+      >
+        <goods-item
+          v-if="index<3"
+          :key="index"
+          :showCompany="false"
+          :goodsInfo="item"
+          class="goods-item-wrapper"
+        ></goods-item>
+      </template>
+
+    </section>
+    <section v-else class="right-wrapper empty">
+      <img src="../pic-kong@3x.png" alt="" class="e-image">
+      <span class="e-text">暂无商品</span>
     </section>
   </div>
 </template>
@@ -100,6 +109,23 @@
     border :1px solid $color-line
     background :#fff
     display :flex
+    .empty
+      display :flex
+      flex-direction column
+      justify-content :center
+      align-items :center
+      width :100%
+      height :100%
+      .e-image
+        width 160px
+        height: 152px
+      .e-text
+        padding-top :20px
+        font-family: $font-family-regular;
+        font-size: 14px;
+        color: #808080;
+        text-align: center;
+        line-height: 14px
     .right-wrapper
       display :flex
       .goods-item-wrapper
