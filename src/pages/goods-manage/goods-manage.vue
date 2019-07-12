@@ -70,7 +70,7 @@
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
     </div>
-    <router-view class="route-view"></router-view>
+    <router-view class="route-view" @refresh="refresh"></router-view>
   </div>
 </template>
 
@@ -243,6 +243,10 @@
       },
       setData(data) {
         this.requestData = Object.assign({}, this.requestData, data)
+      },
+      refresh() {
+        this._getGoodsList()
+        this._getGoodsStatus()
       }
     }
   }
@@ -255,7 +259,7 @@
     top:0
     left :0
     right :0
-    bottom :0
+    bottom: 0
     z-index :50
 
   .goods-manage

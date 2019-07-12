@@ -114,7 +114,7 @@
       </div>
     </div>
     <div class="button-con">
-      <div class="hand button cancel" @click="_goBack">取消</div>
+      <div class="hand button cancel" @click="_goBack">{{onlyCheck ? '返回' : '取消'}}</div>
       <div v-if="!onlyCheck" class="hand button" @click="_subEdit">保存</div>
     </div>
   </div>
@@ -262,6 +262,7 @@
           .then((res) => {
             this.$toast.show('保存成功！')
             setTimeout(() => {
+              this.$emit('refresh')
               this.$router.push(`/manager/goods-manage`)
             }, 1000)
           })
@@ -304,6 +305,7 @@
   .content
     position: relative
     flex: 1
+    min-height: 770px
     background: $color-white
     padding: 0 20px 30px
     box-sizing: border-box
