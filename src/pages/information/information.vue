@@ -59,7 +59,7 @@
         </div>
       </section>
       <section>
-        <goods-pagination v-if="pageDetail.total_page >= 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
+        <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
     </article>
   </div>

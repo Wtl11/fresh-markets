@@ -122,9 +122,13 @@ export default [
   },
   {
     path: '*',
-    name: 'NOT_FOUND',
-    hideInMenu: true,
-    component: require('@pages/_404/_404').default,
-    props: true
+    redirect: '/'
   }
+  // {
+  //   path: '*',
+  //   name: 'NOT_FOUND',
+  //   hideInMenu: true,
+  //   component: require('@pages/_404/_404').default,
+  //   props: true
+  // }
 ]
