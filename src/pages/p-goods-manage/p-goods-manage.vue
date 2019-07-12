@@ -44,7 +44,7 @@
                 <span class="text bottom">{{item.goods_sku_code}}</span>
               </div>
 
-              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="item list-double-row">
+              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="item">
                 {{(item.supplier && item.supplier.name) || '---'}}
               </div>
 
