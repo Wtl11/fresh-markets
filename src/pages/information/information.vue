@@ -240,11 +240,11 @@
           this.selectSecondArray = this.selectArray[id].list
           this.$refs.selectThird && this.$refs.selectThird.setSelectId(-1)
           this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
-          this.category_id = id
+          this.category_id = this.selectArray[id].id || 0
           this.province = ''
           break
         case 'second':
-          this.category_id = id
+          this.category_id = this.selectSecondArray[id].id || 0
           this.$refs.selectThird && this.$refs.selectThird.setSelectId(-1)
           this.province = ''
           break
