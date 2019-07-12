@@ -28,7 +28,7 @@
                 {{item[val.value] || '---'}}
               </div>
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
-                <img :src="item[val.value]" alt="" class="img">
+                <img :src="item[val.value]" alt="" class="img hand">
               </div>
               <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item explain">
                 {{item[val.value] || '---'}}

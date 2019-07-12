@@ -260,6 +260,7 @@
         if (this.approveStatus === 0 || submitting) {
           return false
         }
+        submitting = true
         let errorMsg = {
           name: '请输入供应商名称',
           province: '请选择省份',
@@ -281,13 +282,15 @@
         return true
       },
       _subModify() {
-        if (!this._checkForm()) return
-        submitting = true
+        if (!this._checkForm()) {
+          submitting = false
+          return
+        }
         API.SupplierInfo.editSupplierInfo(this.shopInfo, true, shopId)
           .then((res) => {
             this.subModify = true
           })
-          .finally(() => {
+          .catch(() => {
             submitting = false
             this.$loading.hide()
           })
@@ -300,8 +303,12 @@
   @import "~@design"
 
   .shop-info
+    position: relative
     width: 100%
     background: #fff
+    border: 1px solid #E9ECF0
+    border-radius: 4px
+    padding-bottom: 80px
     .title-con
       height: 18px
       margin: 25px 20px
@@ -497,12 +504,16 @@
           text-align: center
           line-height: 1
   .button-con
+    position: absolute
+    bottom: 0
+    left: 0
     box-sizing: border-box
     width: 100%
     height: 80px
-    padding-left: 153px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
+    border-bottom-left-radius: 4px
+    border-bottom-right-radius: 4px
     layout(row)
     align-items: center
     justify-content: center

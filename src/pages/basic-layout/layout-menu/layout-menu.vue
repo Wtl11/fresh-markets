@@ -79,7 +79,7 @@
         justify-content :center
         cursor : pointer
         &.active
-          background : #5427D1
+          background : #5125CD
         & > img
           width: 28px
           height: 28px

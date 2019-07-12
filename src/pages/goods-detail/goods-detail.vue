@@ -150,7 +150,7 @@
       },
       // 获取列表
       getGoodsList() {
-        API.GoodsDetail.getGoodsList({page: 1, limit: 12, no_goods_supplier_id: this.goodsId}, false).then((res) => {
+        API.GoodsDetail.getGoodsList({page: 1, limit: 12, supplier_id: this.supplierId, no_goods_supplier_id: this.goodsId}, false).then((res) => {
           this.goodsList = res.data
         })
       },
