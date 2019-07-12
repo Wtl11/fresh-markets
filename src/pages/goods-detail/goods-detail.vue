@@ -26,10 +26,12 @@
     </section>
     <!--橙色条-->
     <section class="top-msg">
-      <div class="msg-box hand" @click="goBusiness">
-        <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
-        <span class="icon"></span>
+      <div class="msg-box">
+        <div class="msg-content hand" @click="goBusiness">
+          <p class="title">全部商品</p>
+          <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
+          <span class="icon"></span>
+        </div>
       </div>
     </section>
     <!--商品信息-->
@@ -246,10 +248,15 @@
       width: $minWidth
       margin: 0 auto
       height: 60px
+      color: #ffffff
+      display: flex
+      font-family: $font-family-regular
+    .msg-content
       display: flex
       align-items: center
-      color: #ffffff
-      font-family: $font-family-regular
+      height: 60px
+      &:hover .icon
+        icon-image(icon-Jump_hover)
     .title
       font-size: 20px
       margin-top: -5px
@@ -265,9 +272,7 @@
       height: 22px
       margin-left: 14px
       icon-image(icon-Jump)
-      &:hover
-        icon-iamge(icon-Jump_hover)
-
+      transition: all 0.2s
 
   .goods-msg
     width: $minWidth
