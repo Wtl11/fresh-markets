@@ -282,7 +282,11 @@
         }
         API.GoodsManage[apiName](this.goodsInfo, true, this.goodsId)
           .then((res) => {
-            this.$toast.show('保存成功！')
+            if (this.goodsId) {
+              this.$toast.show('提交审核！')
+            } else {
+              this.$toast.show('保存成功！')
+            }
             setTimeout(() => {
               submitting = false
               this.$emit('refresh')

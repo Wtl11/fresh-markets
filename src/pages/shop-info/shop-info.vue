@@ -296,7 +296,7 @@
         API.SupplierInfo.editSupplierInfo(this.shopInfo, true, shopId)
           .then((res) => {
             submitting = false
-            this.$toast.show('提交成功，请耐心等候')
+            this.$toast.show('保存成功!')
             // this.subModify = true
           })
           .catch(() => {
