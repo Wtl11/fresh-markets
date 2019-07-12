@@ -115,6 +115,7 @@
       },
       addPage(page) {
         this.page = page
+        window.scrollTo(0, 380)
         this.getGoodsList()
       }
     }
