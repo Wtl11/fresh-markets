@@ -156,19 +156,20 @@
       .item
         width: 100%
         height: 44px
-        padding: 0 14px
         background: #fff
         border-radius: 4px
         margin-bottom: 24px
         .input
           width: 100%
           height: 44px
+          padding: 0 14px
           background: #fff
           font-family: $font-family-regular
           font-size: 14px
           color: $color-text-main
           letter-spacing: 0
           outline: none
+          border-radius: 4px
           &::placeholder
             font-family: $font-family-regular
             color: #82899C

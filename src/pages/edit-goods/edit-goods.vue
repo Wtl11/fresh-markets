@@ -2,7 +2,7 @@
   <div class="edit-goods">
     <div class="title-con">
       <div class="icon"></div>
-      <div class="title">新建商品</div>
+      <div class="title">{{pageTitle}}</div>
     </div>
     <div class="content">
       <div class="content-header content-padding-top">
@@ -126,7 +126,7 @@
   import Draggable from 'vuedraggable'
   import {uploadFiles} from '../../utils/cos/cos'
   const PAGE_NAME = 'EDIT_GOODS'
-  const TITLE = '新建商品'
+  let TITLE = '商品信息'
   let submitting = false
 
   export default {
@@ -139,6 +139,7 @@
     },
     data() {
       return {
+        pageTitle: '编辑商品',
         onlyCheck: false,
         goodsId: '',
         goodsInfo: {
@@ -156,6 +157,7 @@
     },
     beforeRouteEnter(to, from, next) {
       const goodsId = to.query.goodsId
+      to.meta.crumbs[2] = goodsId?'编辑商品':'新建商品'
       if (goodsId) {
         API.GoodsManage.getGoodsInfo(goodsId).then((res) => {
           next((vw) => {
@@ -170,6 +172,8 @@
     },
     mounted() {
       this.onlyCheck = !!(this.$route.query.type === 'check')
+      this.pageTitle = this.goodsId?'编辑商品':'新建商品'
+      document.title = this.pageTitle
     },
     methods: {
       _setGoodsInfo(resData) {
@@ -368,6 +372,7 @@
               width: 100%
               height: 100%
         .form-input
+          box-sizing: border-box
           font-size: $font-size-14
           padding: 0 14px
           border-radius: 2px
