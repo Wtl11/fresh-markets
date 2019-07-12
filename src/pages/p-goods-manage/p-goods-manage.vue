@@ -57,6 +57,10 @@
               </div>
 
               <div v-if="+val.type === 5 && +item.audit_status !== 1 && +item.audit_status !== 2" :style="{flex: val.flex}" class="list-operation-box item">---</div>
+
+              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item explain">
+                {{item[val.value] || '---'}}
+              </div>
             </div>
           </div>
         </div>
@@ -101,7 +105,7 @@
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
-    {name: '审核说明', flex: 1, value: 'reason', type: 1},
+    {name: '审核说明', flex: 1, value: 'reason', type: 6},
     {name: '操作', flex: 2, value: '', type: 5}
   ]
 
@@ -231,7 +235,8 @@
       // 获取Tab栏状态
       getGoodsStatus() {
         API.PGoodsManage.getStatus({
-          goods_supplier_category_id: this.requestData.goods_supplier_category_id
+          goods_supplier_category_id: this.requestData.goods_supplier_category_id,
+          keyword: this.requestData.keyword
         }).then((res) => {
           this.statusTab = res.data.map((item, index) => {
             return {
@@ -335,6 +340,12 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
+      .explain
+        white-space: initial
+        display: -webkit-box
+        overflow: hidden
+        -webkit-line-clamp: 2
+        -webkit-box-orient: vertical
       .list-double-row
         display: flex
         flex-direction: column

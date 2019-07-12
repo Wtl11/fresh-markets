@@ -49,28 +49,26 @@
           @selectChange="selectChange($event, 'third')"
         ></select-classify>
       </div>
-      <keep-alive>
-        <div>
-          <section v-if="tabIndex===1 && marketList.length" class="goods-list">
-            <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
-              <market-info :marketInfo="item"></market-info>
-            </div>
-          </section>
-          <article v-else-if="tabIndex===1 && !isFirstLoadMarket" class="empty-wrapper">
-            <img src="./pic-no_supplier@3x.png" alt="" class="e-img">
-            <span class="e-text">暂无供应商</span>
-          </article>
-          <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
-            <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-              <goods-item :goodsInfo="item"></goods-item>
-            </div>
-          </section>
-          <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">
-            <img src="./pic-kong@3x.png" alt="" class="e-img">
-            <span class="e-text">暂无商品</span>
-          </article>
-        </div>
-      </keep-alive>
+      <div>
+        <section v-if="tabIndex===1 && marketList.length" class="goods-list">
+          <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
+            <market-info :marketInfo="item"></market-info>
+          </div>
+        </section>
+        <article v-else-if="tabIndex===1 && !isFirstLoadMarket" class="empty-wrapper">
+          <img src="./pic-no_supplier@3x.png" alt="" class="e-img">
+          <span class="e-text">暂无供应商</span>
+        </article>
+        <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
+            <goods-item :goodsInfo="item"></goods-item>
+          </div>
+        </section>
+        <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">
+          <img src="./pic-kong@3x.png" alt="" class="e-img">
+          <span class="e-text">暂无商品</span>
+        </article>
+      </div>
       <section>
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
@@ -232,17 +230,27 @@
         })
       },
       setPageDetail(meta) {
-        this.pageDetail = {
-          total: meta.total,
-          per_page: meta.per_page,
-          total_page: meta.last_page
+        if (this.tabIndex === 1) {
+          this.pageDetail = {
+            total: meta.total,
+            per_page: meta.per_page,
+            total_page: meta.last_page
+          }
+        } else {
+          this.pageDetail = {
+            total: meta.total,
+            per_page: meta.per_page,
+            total_page: meta.last_page
+          }
         }
       },
       changeTabHandle(item, index) {
         if (this.tabIndex === index) return
         this.$refs.pagination && this.$refs.pagination.beginPage()
         this.refreshTabNumber = true
-        this.selectChange(0, 'first')
+        this.$refs.selectThird && this.$refs.selectThird.setSelectId(0)
+        this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
+        this.isShowSendSelect = false
         this.tabIndex = index
         this.page = 1
         this.category_id = ''
@@ -278,7 +286,7 @@
         this.getList()
       },
       getList() {
-        if (this.tabIndex) {
+        if (this.tabIndex === 1) {
           this._getMarketList(false)
         } else {
           this._getGoodsList(false)
@@ -361,6 +369,7 @@
             font-size :16px
             color: #3F3F3F;
           .explain
+            padding-left :5px
             font-size :14px
             color: #999
             transition : all 0.3s
@@ -392,7 +401,7 @@
         width: 160px
         height: 58px
         top:50px
-        left: 130px
+        left: 30px
       .banner-img
         width :100%
         height :100%
