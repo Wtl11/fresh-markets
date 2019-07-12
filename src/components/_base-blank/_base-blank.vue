@@ -29,7 +29,7 @@
     top: 0
     left: 0
     width: 100%
-    height: 100%
+    height: 60%
     position: absolute
     display: flex
     align-items: center
@@ -38,7 +38,7 @@
     .blank-img
       width: 88px
       display: block
-      margin-top: 15%
+      margin-top: 14%
     .blank-text
       color: $color-text-assist
       margin-top: 20px
