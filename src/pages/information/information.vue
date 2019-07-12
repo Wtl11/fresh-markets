@@ -269,7 +269,8 @@
           this.province = ''
           break
         case 'third':
-          this.province = this.selectThirdArray[id].name
+          let name = this.selectThirdArray[id].name
+          this.province = name === '全部' ? '' : name
           break
         default:
           break
