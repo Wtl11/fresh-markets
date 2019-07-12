@@ -18,7 +18,7 @@
     <div class="table-content">
       <div class="identification">
         <div class="identification-page">
-          <img src="" class="identification-icon">
+          <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">商品列表</p>
           <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>

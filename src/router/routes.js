@@ -60,8 +60,8 @@ export default [
         name: 'p-supplier-manage',
         meta: {
           title: '供应商管理',
-          icon: require('./icon-goods_manage1@2x.png'),
-          iconSelected: require('./icon-goods_manage2@2x.png'),
+          icon: require('./icon-supplier_1@2x.png'),
+          iconSelected: require('./icon-supplier_2@2x.png'),
           crumbs: ['管理后台', '供应商管理'],
           authority: [USER_TYPE.SUPER]
         },
