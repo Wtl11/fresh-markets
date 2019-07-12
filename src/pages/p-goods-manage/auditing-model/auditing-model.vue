@@ -126,6 +126,7 @@
       .textarea
         width: 340px
         max-width: 340px
+        resize: none
         height: 76px
         background: #F7F9FB
         font-family: $font-family-regular
