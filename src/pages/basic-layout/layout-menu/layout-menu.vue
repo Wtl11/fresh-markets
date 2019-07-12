@@ -48,7 +48,7 @@
         this.$router.push(item.path)
       },
       checkIsActive(item) {
-        return item.path === this.$route.path
+        return this.$route.path.includes(item.path)
       }
     }
   }
