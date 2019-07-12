@@ -197,7 +197,8 @@
       },
       _getGoodsStatus() {
         API.GoodsManage.getGoodsStatus({
-          goods_supplier_category_id: this.requestData.goods_supplier_category_id || ''
+          goods_supplier_category_id: this.requestData.goods_supplier_category_id,
+          keyword: this.requestData.keyword
         }).then((res) => {
           res.data.forEach((item) => {
             if (item.status === '') {
@@ -210,7 +211,8 @@
       },
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1}).then((res) => {
-          this.firstSelect.data = [{id: '', name: '全部一级类目'}, ...res.data]
+          // this.firstSelect.data = [{id: '', name: '一级类目'}, ...res.data]
+          this.firstSelect.data = res.data
         })
       },
       _setSelectValue(data, key, childKey = false) {

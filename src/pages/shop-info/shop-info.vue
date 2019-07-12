@@ -380,8 +380,9 @@
           &.mini-form-input-box
             layout(row)
             div
-              margin-right: 20px
+              margin-right: 10px
         .form-input
+          box-sizing: border-box
           font-size: $font-size-14
           padding: 0 14px
           border-radius: 2px
