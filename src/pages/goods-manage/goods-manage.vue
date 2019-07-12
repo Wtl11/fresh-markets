@@ -261,6 +261,8 @@
     right :0
     bottom: 0
     z-index :50
+    border: 1px solid #E9ECF0
+    border-radius: 4px
 
   .goods-manage
     position :relative
