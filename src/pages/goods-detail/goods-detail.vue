@@ -155,7 +155,7 @@
         })
       },
       changeImage(item) {
-        this.bigImageUrl = item
+        this.bigImageUrl = item.image_url
       },
       goBusiness() {
         this.$router.push(`/business-detail?supplierId=${this.supplierId}`)
