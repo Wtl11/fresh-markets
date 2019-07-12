@@ -302,6 +302,8 @@
   .shop-info
     width: 100%
     background: #fff
+    border: 1px solid #E9ECF0
+    border-radius: 4px
     .title-con
       height: 18px
       margin: 25px 20px
@@ -500,9 +502,9 @@
     box-sizing: border-box
     width: 100%
     height: 80px
-    padding-left: 153px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
+    border-bottom-radius: 4px
     layout(row)
     align-items: center
     justify-content: center

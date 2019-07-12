@@ -290,6 +290,7 @@
       layout(row)
       align-items: center
       background :#fff
+      border-radius: 4px
       .icon
         width: 16px
         height: @width
@@ -305,7 +306,7 @@
   .content
     position: relative
     flex: 1
-    min-height: 770px
+    min-height: 764px
     background: $color-white
     padding: 0 20px 30px
     box-sizing: border-box
@@ -458,9 +459,9 @@
     box-sizing: border-box
     width: 100%
     height: 80px
-    padding-left: 153px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
+    border-bottom-radius: 4px
     layout(row)
     align-items: center
     justify-content: center
