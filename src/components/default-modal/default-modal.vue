@@ -36,9 +36,7 @@
         this.showActive = true
       },
       hideModal() {
-        setTimeout(() => {
-          this.isShow = false
-        }, 100)
+        this.isShow = false
         this.showActive = false
       }
     }
@@ -62,7 +60,7 @@
 
   .model-active
     position: relative
-    animation: layerFadeIn .3s
+    animation: layerFadeIn .4s
 
   .model-un-active
     animation: hideFadeIn .4s
