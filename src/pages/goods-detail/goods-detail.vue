@@ -103,8 +103,6 @@
   const PAGE_NAME = 'GOODS_DETAIL'
   const TITLE = '商品详情'
 
-  const GOODS_LIST = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
   export default {
     name: PAGE_NAME,
     page: {
