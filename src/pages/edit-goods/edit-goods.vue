@@ -334,7 +334,7 @@
   .content
     position: relative
     flex: 1
-    min-height: 764px
+    min-height: 762px
     background: $color-white
     padding: 0 20px 30px
     box-sizing: border-box
