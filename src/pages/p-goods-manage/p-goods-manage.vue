@@ -100,9 +100,9 @@
     {name: '分类', flex: 1, value: 'goods_supplier_category', type: 1},
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
-    {name: '提交时间', flex: 1.2, value: 'time', type: 1},
-    {name: '审核说明', flex: 1, value: 'explain', type: 1},
-    {name: '操作', flex: 1.6, value: '', type: 5}
+    {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
+    {name: '审核说明', flex: 1, value: 'reason', type: 1},
+    {name: '操作', flex: 2, value: '', type: 5}
   ]
 
   export default {
@@ -324,6 +324,7 @@
   .list-header,.list-box
     .list-item:last-child
       padding-right: 0
+      max-width: 158px
   .list
     flex: 1
     .list-item
