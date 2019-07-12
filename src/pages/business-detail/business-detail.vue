@@ -43,7 +43,7 @@
       <div v-if="pageDetail.total_page > 1" class="pagination">
         <goods-pagination ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </div>
-      <div v-if="!goodsList.length" class="no-data">
+      <div v-if="!goodsList.length && loaded" class="no-data">
         <img src="./pic-kong@2x.png" alt="" class="no-image">
         <p class="no-text">暂无商品</p>
       </div>
@@ -82,6 +82,7 @@
         bigImageUrl: '',
         supplierId: '',
         page: 1,
+        loaded: false,
         supplierDetail: {}
       }
     },
@@ -108,6 +109,7 @@
             per_page: res.meta.per_page,
             total_page: res.meta.last_page
           }
+          this.loaded = true
           this.pageDetail = statePageTotal
         })
       },
