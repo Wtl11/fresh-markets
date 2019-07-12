@@ -140,7 +140,7 @@
       <div class="tips-con">
         <img src="./icon-success@2x.png" class="tips-img">
         <div class="tips-title">提交审核成功，请耐心等待</div>
-        <div class="tips-text">审核结果后会在72小时内以短信形式通知您，请留意手机</div>
+        <div class="tips-text">审核结果会在72小时内以短信形式通知您，请留意手机</div>
       </div>
     </div>
   </div>
