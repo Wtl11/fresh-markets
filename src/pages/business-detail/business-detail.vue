@@ -26,7 +26,7 @@
     <section class="top-msg">
       <div class="msg-box">
         <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_success_num || 0}}</em>个商品)</span>
+        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
         <!--<span class="icon"></span>-->
       </div>
     </section>
