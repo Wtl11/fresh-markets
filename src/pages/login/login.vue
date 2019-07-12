@@ -87,9 +87,6 @@
             this.successLogin(res.data)
             this._goToMain()
           })
-          .catch((res) => {
-            this.$toast.show(res.message)
-          })
           .finally(() => {
             _tryingLogin = false
             this.$loading.hide()
