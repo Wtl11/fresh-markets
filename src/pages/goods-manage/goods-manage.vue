@@ -23,7 +23,7 @@
           <base-status-tab :infoTabIndex="0" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>
         <div class="function-btn">
-          <router-link tag="div" to="/manager/goods-manage/edit-goods" append class="btn-main g-btn-item">新建商品<span class="add-icon"></span></router-link>
+          <router-link tag="div" to="/manager/goods-manage/edit-goods?type=create" append class="btn-main g-btn-item">新建商品<span class="add-icon"></span></router-link>
         </div>
       </div>
       <div class="big-list">
@@ -45,7 +45,7 @@
                   <span class="list-operation" @click="downGoods(item, 'check')">查看</span>
                   <span class="list-operation" @click="downGoods(item, 'edit')">编辑</span>
                 </template>
-                <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'subAgain')">重新提交</span>
+                <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'edit')">重新提交</span>
                 <span v-else class="list-operation no-line">---</span>
               </div>
               <div v-else-if="+val.type === 5" :style="{flex: val.flex}" class="item">
@@ -172,6 +172,10 @@
         next((vw) => {
           vw._setGoodsListData(res)
         })
+      }).catch(() => {
+        next((vw) => {
+          vw.$loading.hide()
+        })
       })
     },
     created() {
@@ -182,6 +186,8 @@
       _getGoodsList() {
         API.GoodsManage.getGoodsList(this.requestData).then((res) => {
           this._setGoodsListData(res)
+        }).catch(() => {
+          this.$loading.hide()
         })
         this._getGoodsStatus()
       },
