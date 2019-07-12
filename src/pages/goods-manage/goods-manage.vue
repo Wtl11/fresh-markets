@@ -85,9 +85,9 @@
     {name: '分类', flex: 1, value: 'goods_supplier_category', type: 1},
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
-    {name: '状态', flex: 1, value: 'audit_status_str', type: 1},
+    {name: '状态', flex: 1, value: 'audit_status_str', type: 6},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
-    {name: '审核说明', flex: 1, value: 'audit_status_str', type: 6},
+    {name: '审核说明', flex: 1, value: 'reason', type: 1},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
   const LIST1 = [
@@ -96,7 +96,7 @@
     {name: '分类', flex: 1, value: 'goods_supplier_category', type: 1},
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
-    {name: '状态', flex: 1, value: 'audit_status_str', type: 1},
+    {name: '状态', flex: 1, value: 'audit_status_str', type: 6},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1}
   ]
   const LIST2 = [
@@ -105,7 +105,7 @@
     {name: '分类', flex: 1, value: 'goods_supplier_category', type: 1},
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
-    {name: '状态', flex: 1, value: 'audit_status_str', type: 1},
+    {name: '状态', flex: 1, value: 'audit_status_str', type: 6},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
@@ -115,9 +115,9 @@
     {name: '分类', flex: 1, value: 'goods_supplier_category', type: 1},
     {name: '采购规格', flex: 1, value: 'purchase_specs', type: 1},
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
-    {name: '状态', flex: 1, value: 'audit_status_str', type: 1},
+    {name: '状态', flex: 1, value: 'audit_status_str', type: 6},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
-    {name: '审核说明', flex: 1, value: 'audit_status_str', type: 6},
+    {name: '审核说明', flex: 1, value: 'reason', type: 1},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
 

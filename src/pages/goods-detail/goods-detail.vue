@@ -61,7 +61,7 @@
           <div class="bottom-context">
             <p class="deal">
               <span class="label">成交</span>
-              <span class="text">共成交 <em class="number">{{supplierDetail.goods_success_num || 0}}</em> 件商品</span>
+              <span class="text">共成交 <em class="number">{{goodsDetail.goods_success_num || 0}}</em> 件商品</span>
             </p>
             <p class="safe">
               <span class="label">实力保障</span>
@@ -370,6 +370,7 @@
         left: 0
     .image
       width: 790px
+      display: block
   .goods-recommend
     width: $minWidth
     margin: 20px auto 0
