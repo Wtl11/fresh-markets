@@ -26,7 +26,7 @@
     <section class="top-msg">
       <div class="msg-box hand" @click="goBusiness">
         <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_success_num || 0}}</em>个商品)</span>
+        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
         <span class="icon"></span>
       </div>
     </section>
@@ -61,7 +61,7 @@
           <div class="bottom-context">
             <p class="deal">
               <span class="label">成交</span>
-              <span class="text">共成交 <em class="number">{{supplierDetail.goods_num || 0}}</em> 件商品</span>
+              <span class="text">共成交 <em class="number">{{supplierDetail.goods_success_num || 0}}</em> 件商品</span>
             </p>
             <p class="safe">
               <span class="label">实力保障</span>
@@ -158,7 +158,7 @@
         this.bigImageUrl = item
       },
       goBusiness() {
-        this.$route.push('./business-detail')
+        this.$router.push(`/business-detail?supplierId=${this.supplierId}`)
       }
     }
   }
