@@ -1,6 +1,6 @@
 <template>
   <div class="layout-menu">
-    <img :src="logo" alt="" class="logo">
+    <img :src="logo" alt="" class="logo hand" @click="$router.push('/')">
     <ul class="menu-wrapper">
       <li v-for="(item) in menuData" :key="item.path" class="menu-item-wrapper" :class="{active: checkIsActive(item)}" @click="navHandle(item)">
         <img v-if="checkIsActive(item) &&item.meta && item.meta.iconSelected" :src="item.meta.iconSelected" alt="">

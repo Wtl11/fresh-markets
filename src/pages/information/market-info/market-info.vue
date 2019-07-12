@@ -127,7 +127,6 @@
           .qr-code-wrapper
             height :100%
             display :flex
-            flex: 1
             flex-direction column
             align-items :center
             text-align :center
@@ -148,10 +147,12 @@
             padding-bottom :30px
             position :relative
             user-select :text
+            display :flex
             .key
               width :70px
               color: #999
             .value
+              flex :1
               no-wrap()
             .pos
               position absolute

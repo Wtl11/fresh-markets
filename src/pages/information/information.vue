@@ -12,7 +12,7 @@
             @click="navHandle(index)"
           >
             <div class="nav-icon-wrapper">
-              <img :src="item.image_url" alt="" class="nav-icon">
+              <img v-if="item.image_url" :src="item.image_url" alt="" class="nav-icon">
             </div>
             <span>{{item.name}}</span>
           </li>
@@ -74,7 +74,7 @@
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
 
   const PAGE_NAME = 'INFORMATION'
-  const TITLE = '信息平台'
+  const TITLE = '赞播优鲜-信息平台'
 
   export default {
     name: PAGE_NAME,
@@ -143,7 +143,13 @@
         API.Information.getGoodsClassifyList({
           data: {parent_id: -1},
           formatter: (res) => {
-            res.data.unshift({name: '全部'})
+            let data = res.data.filter(item => {
+              if (item.list && item.list.length) {
+                return item
+              }
+            })
+            data.unshift({name: '全部'})
+            res.data = data
             return res
           }
         }).then((res) => {
