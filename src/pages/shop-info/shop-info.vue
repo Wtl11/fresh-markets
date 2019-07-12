@@ -235,6 +235,7 @@
         this.shopInfo[key] = data.id
         if (childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
       },
       _setCityValue(data) {

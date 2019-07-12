@@ -209,16 +209,20 @@
         this.goodsInfo[key] = data.id
         if (childKey) {
           this[childKey].data = data.list
+          this[childKey].content = '二级类目'
         }
       },
       _setSort() {},
       _addImg(key, e) {
+        // console.log(e.target.files)
         this.uploading = key
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then((res) => {
           this.uploadLoading = false
           const resData = res[0].data
           this.goodsInfo[key].push({image_id: resData.id, id: 0, image_url: resData.url})
+        }).catch(() => {
+          this.uploadLoading = false
         })
       },
       _delImg(key, index) {

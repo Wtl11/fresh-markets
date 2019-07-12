@@ -33,21 +33,14 @@
         <div v-if="goodsList.length" class="list">
           <div v-for="(item, index) in goodsList" :key="index" class="list-content list-box">
             <div v-for="(val, ind) in listTitle" :key="ind" :style="{flex: val.flex}" class="list-item">
-
-              <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
-                {{item[val.value] || '---'}}
-              </div>
-
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item">
                 <img :src="item[val.value]" alt="" class="img">
               </div>
-
-              <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item list-double-row">
+              <div v-else-if="+val.type === 3" :style="{flex: val.flex}" class="item list-double-row">
                 <span class="text top">{{item[val.value]}}</span>
                 <span class="text bottom">{{item.goods_sku_code}}</span>
               </div>
-
-              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
+              <div v-else-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
                 <template v-if="item.audit_status === 2">
                   <span class="list-operation" @click="downGoods(item, 'check')">查看</span>
                   <span class="list-operation" @click="downGoods(item, 'edit')">编辑</span>
@@ -55,11 +48,16 @@
                 <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'subAgain')">重新提交</span>
                 <span v-else class="list-operation no-line">---</span>
               </div>
-
-              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
+              <div v-else-if="+val.type === 5" :style="{flex: val.flex}" class="item">
+                {{item.audit_status*1 !== 1 ? item[val.value] : '---'}}
+              </div>
+              <div v-else-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
                    :class="'status-'+item.audit_status"
               >
                 {{item[val.value]}}
+              </div>
+              <div v-else :style="{flex: val.flex}" class="item">
+                {{item[val.value] || '---'}}
               </div>
             </div>
           </div>
@@ -87,7 +85,7 @@
     {name: '采购单价', flex: 1, value: 'purchase_price', type: 1},
     {name: '状态', flex: 1, value: 'audit_status_str', type: 6},
     {name: '提交时间', flex: 1.2, value: 'submit_time', type: 1},
-    {name: '审核说明', flex: 1, value: 'reason', type: 1},
+    {name: '审核说明', flex: 1, value: 'reason', type: 5},
     {name: '操作', flex: 1.6, value: '', type: 4}
   ]
   const LIST1 = [
