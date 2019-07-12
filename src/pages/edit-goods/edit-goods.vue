@@ -68,7 +68,7 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <draggable v-if="goodsInfo.goods_main_images" class="draggable">
+              <draggable v-if="goodsInfo.goods_main_images" v-model="goodsInfo.goods_main_images" class="draggable">
                 <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span v-if="!onlyCheck" class="close" @click="_delImg('goods_main_images', index)"></span>
@@ -93,7 +93,7 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <draggable v-if="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
+              <draggable v-if="goodsInfo.goods_detail_images" v-model="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
                 <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
                   <span v-if="!onlyCheck" class="close" @click="_delImg('goods_detail_images', index)"></span>

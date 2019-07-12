@@ -68,11 +68,11 @@
           return false
         }
         if (!this.loginMsg.keyword) {
-          this.$toast.show('请输入账号')
+          this.$toast.show('请输入正确的用户名')
           return false
         }
         if (!this.loginMsg.password) {
-          this.$toast.show('请输入密码')
+          this.$toast.show('请输入正确的密码')
           return false
         }
         return true
@@ -88,7 +88,7 @@
             this._goToMain()
           })
           .catch(() => {
-            this.$toast.show('登录失败!')
+            this.$toast.show('网络出小差啦!')
           })
           .finally(() => {
             _tryingLogin = false
