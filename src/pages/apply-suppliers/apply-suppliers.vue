@@ -172,7 +172,7 @@
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
-        subModify: true,
+        subModify: false,
       }
     },
     mounted() {
