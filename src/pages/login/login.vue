@@ -35,8 +35,8 @@
     data() {
       return {
         loginMsg: {
-          keyword: '13535596064',
-          password: '123456'
+          keyword: '',
+          password: ''
         }
       }
     },
@@ -101,7 +101,7 @@
           this.$router.push(`/manager`)
           break
         case USER_TYPE.MERCHANT:
-          this.$router.push(`/manager/shop-info`)
+          this.$router.push(`/manager/goods-manage`)
           break
         default:
           break

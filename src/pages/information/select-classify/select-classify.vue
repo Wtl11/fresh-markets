@@ -137,7 +137,7 @@
         display :inline
         padding-right :40px
         padding-bottom :15px
-        transition :all 0s
+        transition :opacity 0.5s
         &.active
           color: #ff520f
         & > span
