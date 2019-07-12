@@ -95,7 +95,7 @@
       },
       // 获取列表
       getGoodsList() {
-        API.PGoodsManage.getGoodsList({page: this.page, limit: 24, getGoodsList: this.supplierId}, false).then((res) => {
+        API.GoodsDetail.getGoodsList({page: this.page, limit: 24, goods_supplier_id: this.supplierId}, false).then((res) => {
           this.goodsList = res.data
           let statePageTotal = {
             total: res.meta.total,
