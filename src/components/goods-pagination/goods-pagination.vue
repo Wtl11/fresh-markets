@@ -245,7 +245,7 @@
           box-sizing: border-box
           border-radius: 4.8px
           border: 0.5px solid $color-line
-          font-size: 19px
+          font-size: 14px
           color: $color-text-main
           background: $color-white
           margin-right: 13px
@@ -279,6 +279,7 @@
             border-radius: 2px
         .page-child-active
           transition: all 0.3s ease-out
+          font-family: $font-family-medium
           color: #FF520F
           border-color: #FF520F
 
@@ -322,7 +323,7 @@
         border-radius: 2px
         margin: 0 10px
         border: 0.5px solid $color-line
-        font-size: 19px
+        font-size: 14px
       div.border-page
         margin-right: 0
         padding: 0 15px
@@ -368,8 +369,8 @@
           text-align: center
           background: #fff
           border-radius: 2px
-          bottom: 30px
-          font-size: 19px
+          bottom: 45px
+          font-size: 14px
           color: $color-text-sub
           max-height: 290px
           overflow-y: auto
