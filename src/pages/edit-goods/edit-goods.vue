@@ -266,12 +266,13 @@
 
   .edit-goods
     width: 100%
-    background: #fff
+    background: #f9f9f9
     .title-con
       height: 18px
-      margin: 25px 20px
+      padding: 25px 20px
       layout(row)
       align-items: center
+      background :#fff
       .icon
         width: 16px
         height: @width

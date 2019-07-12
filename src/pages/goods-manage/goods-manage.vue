@@ -70,6 +70,7 @@
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
     </div>
+    <router-view class="route-view"></router-view>
   </div>
 </template>
 
@@ -238,7 +239,7 @@
         this._getGoodsList()
       },
       downGoods(item, type) {
-        this.$router.push(`/manager/edit-goods?goodsId=${item.id}&type=${type}`)
+        this.$router.push(`/manager/goods-manage/edit-goods?goodsId=${item.id}&type=${type}`)
       },
       setData(data) {
         this.requestData = Object.assign({}, this.requestData, data)
@@ -249,7 +250,16 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+  .route-view
+    position :absolute
+    top:0
+    left :0
+    right :0
+    bottom :0
+    z-index :50
+
   .goods-manage
+    position :relative
     display: flex
     min-width: 1300px
     flex-direction: column
