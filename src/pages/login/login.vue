@@ -87,8 +87,8 @@
             this.successLogin(res.data)
             this._goToMain()
           })
-          .catch(() => {
-            this.$toast.show('网络出小差啦!')
+          .catch((res) => {
+            this.$toast.show(res.message)
           })
           .finally(() => {
             _tryingLogin = false
