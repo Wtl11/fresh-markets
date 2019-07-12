@@ -57,6 +57,7 @@
       z-index :999
     .content-wrapper
       flex: 1
+      max-width: 100vw
       border-left : $asideWidth solid transparent
       border-top : $topHeight solid transparent
       box-sizing :border-box
