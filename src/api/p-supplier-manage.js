@@ -41,8 +41,8 @@ export default {
   /**
    * 状态
    */
-  getStatus(loading = false) {
+  getStatus(data, loading = false) {
     let url = API_PUB + '/api/platform/platform-supplier-statistic'
-    return request.get({url, data: {}, loading})
+    return request.get({url, data, loading})
   }
 }
