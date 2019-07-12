@@ -3,23 +3,25 @@
     <!--banner-->
     <section class="banner-wrapper">
       <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
-      <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
-      <div class="company-detail">
-        <div class="left-detail">
-          <h3 class="company-name">{{supplierDetail.name}}</h3>
-          <div class="context">
-            <div class="text-box left-text">
-              <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
-              <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
-              <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
-            </div>
-            <div class="text-box right-text">
-              <p class="text">联 系 人： {{supplierDetail.contact}}</p>
-              <p class="text">联系方式： {{supplierDetail.mobile}}</p>
+      <div class="banner-w">
+        <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
+        <div class="company-detail">
+          <div class="left-detail">
+            <h3 class="company-name">{{supplierDetail.name}}</h3>
+            <div class="context">
+              <div class="text-box left-text">
+                <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
+                <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
+                <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
+              </div>
+              <div class="text-box right-text">
+                <p class="text">联 系 人： {{supplierDetail.contact}}</p>
+                <p class="text">联系方式： {{supplierDetail.mobile}}</p>
+              </div>
             </div>
           </div>
+          <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
         </div>
-        <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
       </div>
     </section>
     <!--橙色条-->
@@ -130,6 +132,11 @@
     font-size: 16px;
     color: #FFFFFF;
     line-height: 1
+    .banner-w
+      width: $minWidth
+      height: 380px
+      row-center()
+      top: 0
     .banner-img
       width: 100%
       height: 100%
@@ -138,7 +145,7 @@
       width: 160px
       height: 58px
       position: absolute
-      left: 130px
+      left: 0
       top: 50px
     .company-detail
       width: 1020px
@@ -148,7 +155,7 @@
       display: flex
       align-items: center
       position: absolute
-      left: 130px
+      left: 0
       bottom: 36px
       background-image: linear-gradient(270deg, rgba(39,39,39,0.00) 16%, rgba(17,17,17,0.72) 93%)
       border-radius: 8px
@@ -163,10 +170,13 @@
       margin-top: 25px
       display: flex
     .text-box
+      flex: 1
+      overflow: hidden
       padding-right: 90px
     .text
-      margin-bottom: 14px
+      margin-bottom: 12px
       font-size: 14px
+      line-height: 20px
       color: $color-white
       font-family: $font-family-regular
     .right-text
