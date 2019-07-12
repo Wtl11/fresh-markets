@@ -1,7 +1,7 @@
 <template>
   <div class="apply-suppliers">
-    <div class="logo"></div>
-    <div class="title-con">
+    <div class="logo hand" @click="_goToMain"></div>
+    <div v-if="!subModify" class="title-con">
       <div class="icon"></div>
       <div class="title">申请成为供应商</div>
     </div>
@@ -172,7 +172,7 @@
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
-        subModify: false,
+        subModify: true,
       }
     },
     mounted() {
@@ -249,6 +249,9 @@
       },
       _goBack() {
         this.$router.back()
+      },
+      _goToMain() {
+        this.$router.push(`/information`)
       }
     }
   }
@@ -436,12 +439,10 @@
 
   .approve-tips-model
     position: absolute
-    top: 0
+    top: 74px
     left: 0
-    bottom: 0
+    bottom: 74px
     right: 0
-    width: 100%
-    height: 100%
     z-index: 101
     layout()
     align-items: center
