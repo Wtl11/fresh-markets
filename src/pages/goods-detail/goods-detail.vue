@@ -57,7 +57,7 @@
             </p>
             <p class="condition">
               <span class="label">起批量</span>
-              <span class="text">{{supplierDetail.goods_start_num || 0}}</span>
+              <span class="text">≥ {{supplierDetail.goods_start_num || 0}}</span>
             </p>
           </div>
           <div class="bottom-context">
@@ -86,9 +86,9 @@
     </section>
 
     <!--商品推荐-->
-    <section class="goods-recommend">
+    <section v-if="goodsList.length" class="goods-recommend">
       <h3 class="page-title">其他商品</h3>
-      <div v-if="goodsList.length" class="goods-list">
+      <div class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
           <goods-item :goodsInfo="item"></goods-item>
         </div>
@@ -254,6 +254,7 @@
       font-size: 20px
       margin-top: -5px
     .text
+      margin-left: 4px
       font-size: $font-size-14
       .num
         font-style: normal

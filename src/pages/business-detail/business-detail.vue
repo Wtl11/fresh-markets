@@ -43,6 +43,10 @@
       <div v-if="pageDetail.total_page > 1" class="pagination">
         <goods-pagination ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </div>
+      <div v-if="!goodsList.length" class="no-data">
+        <img src="./pic-kong@2x.png" alt="" class="no-image">
+        <p class="no-text">暂无商品</p>
+      </div>
     </section>
 
     <div class="bottom"></div>
@@ -122,6 +126,7 @@
 
   .goods-detail
     width: 100%
+    min-height: 100vh
     background: #F8F8F8
   .banner-wrapper
     margin: 0 auto
@@ -202,6 +207,7 @@
       font-size: 20px
       margin-top: -5px
     .text
+      margin-left: 4px
       font-size: $font-size-14
       .num
         font-style: normal
@@ -246,6 +252,22 @@
         margin-right: 0
     .pagination
       margin-top: 20px
+    .no-data
+      width: 200px
+      height: 200px
+      margin: 150px auto 0
+    .no-image
+      width: 160px
+      height: 152px
+      display: block
+      margin: 0 auto
+    .no-text
+      font-size: $font-size-14
+      color: #808080
+      margin-top: 18px
+      text-align: center
+      font-family: $font-family-regular
+
   .bottom
     padding-bottom: 48px
 </style>
