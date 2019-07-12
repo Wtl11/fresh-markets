@@ -286,6 +286,7 @@
   .information
     font-family: $font-family-regular
     min-height :2238px
+    padding :50px
     .body-wrapper
       width :$minWidth
       margin :0 auto
