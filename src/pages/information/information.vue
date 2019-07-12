@@ -48,16 +48,18 @@
           @selectChange="selectChange($event, 'third')"
         ></select-classify>
       </div>
-      <section v-if="tabIndex" class="goods-list">
-        <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
-          <market-info :marketInfo="item"></market-info>
-        </div>
-      </section>
-      <section v-else class="goods-list">
-        <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-          <goods-item :goodsInfo="item"></goods-item>
-        </div>
-      </section>
+      <keep-alive>
+        <section v-if="tabIndex" class="goods-list">
+          <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
+            <market-info :marketInfo="item"></market-info>
+          </div>
+        </section>
+        <section v-else class="goods-list">
+          <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
+            <goods-item :goodsInfo="item"></goods-item>
+          </div>
+        </section>
+      </keep-alive>
       <section>
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
@@ -91,6 +93,7 @@
       this.category_id = 0
       this.page = 1
       this.province = ''
+      this.refreshTabNumber = false
       return {
         tabList: [
           {
@@ -138,6 +141,7 @@
     methods: {
       addPage(page) {
         this.page = page
+        this.getList()
       },
       _getGoodsClassifyList() {
         API.Information.getGoodsClassifyList({
@@ -182,7 +186,10 @@
           loading
         }).then((res) => {
           this.goodsList = res.data
-          this.tabList[0].number === 0 && (this.tabList[0].number = res.meta.total)
+          if(this.refreshTabNumber || this.tabList[0].number === 0) {
+            this.tabList[0].number = res.meta.total
+            this.refreshTabNumber = false
+          }
           this.setPageDetail(res.meta)
         })
       },
@@ -198,7 +205,10 @@
           loading
         }).then((res) => {
           this.marketList = res.data
-          this.tabList[1].number === 0 && (this.tabList[1].number = res.meta.total)
+          if(this.refreshTabNumber || this.tabList[1].number === 0) {
+            this.tabList[1].number = res.meta.total
+            this.refreshTabNumber = false
+          }
           this.setPageDetail(res.meta)
         })
       },
@@ -211,6 +221,7 @@
       },
       changeTabHandle(item, index) {
         if (this.tabIndex === index) return
+        this.refreshTabNumber = true
         this.selectChange(0, 'first')
         this.tabIndex = index
         this.page = 1

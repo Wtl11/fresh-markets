@@ -142,6 +142,7 @@
               overflow :hidden
               display :inline-block
               cursor :pointer
+              object-fit:cover
           .info-item-wrapper
             width : 256px
             padding-bottom :30px
