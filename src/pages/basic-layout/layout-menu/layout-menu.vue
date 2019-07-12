@@ -1,6 +1,6 @@
 <template>
   <div class="layout-menu">
-    <img :src="logo" alt="" class="logo hand" @click="$router.push('/')">
+    <img :src="logoIcon" alt="" class="logo hand" @click="$router.push('/')">
     <ul class="menu-wrapper">
       <li v-for="(item) in menuData" :key="item.path" class="menu-item-wrapper" :class="{active: checkIsActive(item)}" @click="navHandle(item)">
         <img v-if="checkIsActive(item) &&item.meta && item.meta.iconSelected" :src="item.meta.iconSelected" alt="">
@@ -8,32 +8,57 @@
         <span>{{item.meta && item.meta.title}}</span>
       </li>
     </ul>
+    <div class="nav-wrapper" @click="navigationHandle">
+      <span class="text">{{navConfig.text}}</span>
+      <div class="icon"></div>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {authComputed} from '@state/helpers'
   import {USER_TYPE} from '@utils/constant'
-
+  // import storage from 'storage-controller'
   const COMPONENT_NAME = 'LAYOUT_MENU'
-
+  const NAV_CONFIG = {
+    [USER_TYPE.MERCHANT]: {
+      text: '访问店铺',
+      url: '/business-detail'
+    },
+    [USER_TYPE.SUPER]: {
+      text: '访问集市',
+      url: '/'
+    }
+  }
   export default {
     name: COMPONENT_NAME,
     data() {
       const menuData = this.createMenuData(this.$router.options.routes)
       return {
-        menuData
+        menuData,
+        USER_TYPE
       }
     },
     computed: {
       ...authComputed,
-      logo() {
+      logoIcon() {
         return this.currentUserType === USER_TYPE.SUPER
           ? require('./pic-white_logo@2x.png')
           : require('./pic-top_logo@2x.png')
+      },
+      navConfig() {
+        return NAV_CONFIG[this.userInfo.identity] || {}
+      },
+      userInfo() {
+        return this.currentUser || {}
       }
     },
+    created() {
+    },
     methods: {
+      navigationHandle() {
+        this.$router.push({path: this.navConfig.url, query: {supplierId: this.userInfo.id}})
+      },
       createMenuData(routes) {
         let r = routes.find((r) => r.path === '/manager')
         let children = [...r.children]
@@ -56,6 +81,29 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+
+  .nav-wrapper
+    position :absolute
+    bottom :10px
+    left :0
+    right :0
+    height :50px
+    display :flex
+    align-items :center
+    justify-content:center
+    cursor :pointer
+    & > .text
+      font-family: $font-family-regular
+      font-size: 16px;
+      color: #C6B2FF;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 16px;
+      padding-right :7px
+    & > .icon
+      width: 18px
+      height: 18px
+      icon-image(icon-visit)
 
   .layout-menu
     height :100%

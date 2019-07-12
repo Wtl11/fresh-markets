@@ -9,6 +9,7 @@ const GOODS_LOST = 10022 // 集市商品详情，供应商被冻结、删除、�
 HTTP.handleError((code) => {
   switch (code) {
     case AUTHORITY_LOST:
+      clearHttpConfig()
       APP && APP.$router.push('/user/login')
       break
     case GOODS_LOST:
@@ -65,7 +66,17 @@ function resetUrl(url) {
   }
   return url
 }
+
 HTTP.setHeaders({
   Authorization: storage.get('auth.token'),
   'Current-Corp': process.env.VUE_APP_CURRENT_CORP
 })
+
+function clearHttpConfig() {
+  storage.remove('auth.token')
+  storage.remove('auth.currentUser')
+  HTTP.setHeaders({
+    Authorization: undefined
+  })
+  APP && APP.$store.commit('auth/SET_USER_TYPE', undefined)
+}
