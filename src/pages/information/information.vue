@@ -21,7 +21,7 @@
     </section>
     <article class="body-wrapper">
       <ul class="tab-wrapper">
-        <li v-for="(item, index) in tabList" :key="item.title" class="tab-item-wrapper" :class="{active: tabIndex === index}" @click="changeTabHandle(item, index)"><span>{{item.title}}</span><span class="explain">(已入驻{{item.number}}{{item.units}})</span></li>
+        <li v-for="(item, index) in tabList" :key="item.title" class="tab-item-wrapper" :class="{active: tabIndex === index}" @click="changeTabHandle(item, index)"><span>{{item.title}}</span><span class="explain">(已入驻<span class="number">{{item.number}}</span>{{item.units}})</span></li>
       </ul>
       <div class="select-wrapper">
         <select-classify
@@ -43,22 +43,33 @@
         <select-classify
           ref="selectThird"
           :classifyData="selectThirdArray"
+          :defaultIndex="0"
           class="border-left-1 border-right-1 border-bottom-1"
           title="区域："
           @selectChange="selectChange($event, 'third')"
         ></select-classify>
       </div>
       <keep-alive>
-        <section v-if="tabIndex" class="goods-list">
-          <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
-            <market-info :marketInfo="item"></market-info>
-          </div>
-        </section>
-        <section v-else class="goods-list">
-          <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-            <goods-item :goodsInfo="item"></goods-item>
-          </div>
-        </section>
+        <div>
+          <section v-if="tabIndex===1 && marketList.length" class="goods-list">
+            <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
+              <market-info :marketInfo="item"></market-info>
+            </div>
+          </section>
+          <article v-else-if="tabIndex===1 && !isFirstLoadMarket" class="empty-wrapper">
+            <img src="./pic-no_supplier@3x.png" alt="" class="e-img">
+            <span class="e-text">暂无供应商</span>
+          </article>
+          <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
+            <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
+              <goods-item :goodsInfo="item"></goods-item>
+            </div>
+          </section>
+          <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">
+            <img src="./pic-kong@3x.png" alt="" class="e-img">
+            <span class="e-text">暂无商品</span>
+          </article>
+        </div>
       </keep-alive>
       <section>
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
@@ -119,7 +130,9 @@
           total: 1,
           per_page: 10,
           total_page: 1
-        }
+        },
+        isFirstLoadGoods: true,
+        isFirstLoadMarket: true
       }
     },
     computed: {},
@@ -128,7 +141,7 @@
         if (pre !== cur) {
           this.$refs.selectFirst && this.$refs.selectFirst.setSelectId(0)
           this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
-          this.$refs.selectThird && this.$refs.selectThird.setSelectId(-1)
+          this.$refs.selectThird && this.$refs.selectThird.setSelectId(0)
         }
       }
     },
@@ -142,6 +155,7 @@
       addPage(page) {
         this.page = page
         this.getList()
+        window.scrollTo(0, 500)
       },
       _getGoodsClassifyList() {
         API.Information.getGoodsClassifyList({
@@ -169,6 +183,7 @@
                 name: item
               }
             })
+            res.data.unshift({name: '全部'})
             return res
           }
         }).then((res) => {
@@ -191,6 +206,8 @@
             this.refreshTabNumber = false
           }
           this.setPageDetail(res.meta)
+        }).finally(() => {
+          this.isFirstLoadGoods = false
         })
       },
       // 供应商
@@ -210,6 +227,8 @@
             this.refreshTabNumber = false
           }
           this.setPageDetail(res.meta)
+        }).finally(() => {
+          this.isFirstLoadMarket = false
         })
       },
       setPageDetail(meta) {
@@ -221,6 +240,7 @@
       },
       changeTabHandle(item, index) {
         if (this.tabIndex === index) return
+        this.$refs.pagination && this.$refs.pagination.beginPage()
         this.refreshTabNumber = true
         this.selectChange(0, 'first')
         this.tabIndex = index
@@ -238,14 +258,14 @@
         case 'first':
           this.isShowSendSelect = id > 0
           this.selectSecondArray = this.selectArray[id].list
-          this.$refs.selectThird && this.$refs.selectThird.setSelectId(-1)
+          this.$refs.selectThird && this.$refs.selectThird.setSelectId(0)
           this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
           this.category_id = this.selectArray[id].id || 0
           this.province = ''
           break
         case 'second':
           this.category_id = this.selectSecondArray[id].id || 0
-          this.$refs.selectThird && this.$refs.selectThird.setSelectId(-1)
+          this.$refs.selectThird && this.$refs.selectThird.setSelectId(0)
           this.province = ''
           break
         case 'third':
@@ -283,10 +303,29 @@
   .border-bottom-1
     border-bottom : 1px solid $color-line
 
+  .empty-wrapper
+    width :$minWidth
+    height :70vh
+    display :flex
+    flex-direction :column
+    justify-content :center
+    align-items :center
+    background :#fff
+    margin : 20px 0
+    .e-img
+      width :160px
+      height: 152px
+    .e-text
+      padding-top :20px
+      font-family: $font-family-regular
+      font-size: 14px;
+      color: #808080;
+      line-height: 1
+
   .information
     font-family: $font-family-regular
     min-height :2238px
-    padding :50px
+    padding-bottom :50px
     .body-wrapper
       width :$minWidth
       margin :0 auto
@@ -311,9 +350,15 @@
             background: #FF520F;
             color: #fff
             & >>> .explain
+              color: rgba(255,255,255,0.8)
+            & >>> .number
               color: #fff
           &:first-child
             margin-right :161px
+          .number
+            font-family :$font-family-medium
+            font-size :16px
+            color: #3F3F3F;
           .explain
             font-size :14px
             color: #999

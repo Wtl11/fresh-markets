@@ -95,11 +95,21 @@
         let cWidth = 0
         let pWidth = parent.getBoundingClientRect().width
         let index = 0
+        // let preCWidth = 0
         for (let item of children) {
-          cWidth += item.getBoundingClientRect().width
+          let w = item.getBoundingClientRect().width
+          cWidth += w
           if (cWidth < pWidth) {
             index++
           }
+          // if (!cWidth) {
+          //   preCWidth += w
+          // }
+          // cWidth += w
+          // index++
+          // if (preCWidth <= pWidth && cWidth >= pWidth) {
+          //   this.opacityIndex = index
+          // }
         }
         this.opacityIndex = index
         this.row = Math.ceil(cWidth / pWidth)
@@ -156,7 +166,7 @@
       .triangle
         display: inline-block
         position :relative
-        top: 5px
+        top: 3px
         border: 5px solid #4D77BD
         height :0
         width :0
