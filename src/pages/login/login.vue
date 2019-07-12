@@ -50,12 +50,15 @@
             })
           })
           .catch(() => {
+            storage.set('auth.token', 0)
             next((vm) => {
               vm.$loading.hide()
             })
           })
       } else {
-        next()
+        next(vm => {
+          vm.$loading.hide()
+        })
       }
     },
     computed: {
