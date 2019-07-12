@@ -334,7 +334,7 @@
     flex: 1
     .list-item
       font-size: $font-size-14
-      line-height:1.2
+      line-height:1.4
       .item
         text-overflow: ellipsis
         overflow: hidden

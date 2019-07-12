@@ -42,9 +42,10 @@
               </div>
 
               <div v-if="+val.type === 5" :style="{flex: val.flex}" class="item list-item">
-                <div class="list-item-btn" @click="switchBtn(item, index)">
+                <div v-if="+item.approve_status !== 2 && +item.approve_status !== 0" class="list-item-btn" @click="switchBtn(item, index)">
                   <base-switch :status="item.is_freeze ? 0 : 1" confirmText="开启" cancelText="冻结"></base-switch>
                 </div>
+                <span v-else>---</span>
               </div>
 
               <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item">
@@ -306,7 +307,7 @@
     flex: 1
     .list-item
       font-size: $font-size-14
-      line-height:1.2
+      line-height:1.4
       .item
         text-overflow: ellipsis
         overflow: hidden
