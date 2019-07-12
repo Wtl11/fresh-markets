@@ -139,7 +139,6 @@
       </div>
     </div>
     <div v-if="!subModify" class="button-con">
-      <div class="hand button cancel">取消</div>
       <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subModify">保存</div>
     </div>
   </div>
@@ -251,7 +250,10 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+        }).catch(() => {
+          this.uploadLoading = false
         })
+        e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
       _delImg(applyKey, uploadKey) {
         this.shopInfo[applyKey] = ''
