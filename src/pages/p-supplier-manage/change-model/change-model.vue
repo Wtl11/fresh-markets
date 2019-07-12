@@ -10,11 +10,11 @@
       <div class="main-input">
         <div class="main-model-box">
           <div class="text">输入新密码</div>
-          <input v-model="password" type="text" maxlength="10" class="main-input-box" placeholder="请输入新密码">
+          <input v-model="password" type="password" maxlength="30" class="main-input-box" placeholder="请输入新密码">
         </div>
         <div class="main-model-box">
           <div class="text">再次输入密码</div>
-          <input v-model="rePassword" type="text" maxlength="10" class="main-input-box" placeholder="再次输入新密码">
+          <input v-model="rePassword" type="password" maxlength="30" class="main-input-box" placeholder="再次输入新密码">
         </div>
 
         <div class="btn-group">
@@ -49,6 +49,10 @@
         this.rePassword = ''
       },
       confirm() {
+        if (!this.password) {
+          this.$toast.show('请输入密码')
+          return
+        }
         if (this.password !== this.rePassword) {
           this.$toast.show('两次输入密码不相同')
           return
