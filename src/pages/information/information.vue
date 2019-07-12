@@ -12,7 +12,7 @@
             @click="navHandle(index)"
           >
             <div class="nav-icon-wrapper">
-              <img :src="item.image_url" alt="" class="nav-icon">
+              <img v-if="item.image_url" :src="item.image_url" alt="" class="nav-icon">
             </div>
             <span>{{item.name}}</span>
           </li>
