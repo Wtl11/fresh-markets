@@ -15,8 +15,13 @@
             类目
           </div>
           <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'goods_supplier_category_id', 'secondSelect')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'goods_supplier_category_id')"></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="firstSelect"
+                            @setValue="_setSelectValue($event, 'goods_supplier_category_id', 'secondSelect')"
+            ></base-drop-down>
+            <base-drop-down :height="44" :width="195" :select="secondSelect"
+                            @setValue="_setSelectValue($event, 'goods_supplier_category_id')"
+            ></base-drop-down>
+            <div v-if="onlyCheck" class="disable-mask"></div>
           </div>
         </div>
         <div class="form-item">
@@ -25,14 +30,19 @@
             商品主标题
           </div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.name" type="text" class="form-input" maxlength="30" @mousewheel.native.prevent>
+            <input v-model="goodsInfo.name" :disabled="onlyCheck" type="text" class="form-input" maxlength="30"
+                   @mousewheel.native.prevent
+            >
           </div>
           <div class="form-tip">商品在店铺商品显示的名称</div>
         </div>
         <div class="form-item">
           <div class="form-title">采购规格</div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_specs" type="text" class="form-input" maxlength="10" @mousewheel.native.prevent>
+            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_specs" :disabled="onlyCheck" type="text"
+                   class="form-input" maxlength="10"
+                   @mousewheel.native.prevent
+            >
           </div>
         </div>
         <div class="form-item">
@@ -41,7 +51,9 @@
             采购价格
           </div>
           <div class="form-input-box">
-            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_price" type="text" class="form-input" @mousewheel.native.prevent>
+            <input v-model="goodsInfo.goods_supplier_skus[0].purchase_price" :disabled="onlyCheck" type="text"
+                   class="form-input" @mousewheel.native.prevent
+            >
           </div>
         </div>
       </div>
@@ -59,11 +71,11 @@
               <draggable v-if="goodsInfo.goods_main_images" class="draggable">
                 <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
-                  <span class="close" @click="_delImg('goods_main_images', index)"></span>
+                  <span v-if="!onlyCheck" class="close" @click="_delImg('goods_main_images', index)"></span>
                 </div>
               </draggable>
-              <div v-if="goodsInfo.goods_main_images.length < 5" class="add-image hand">
-                <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
+              <div v-if="!onlyCheck && goodsInfo.goods_main_images.length < 5" class="add-image hand">
+                <input :disabled="onlyCheck" type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_main_images', $event)"
                 >
                 <div v-if="uploadLoading && uploading === 'goods_main_images'" class="loading-mask">
@@ -84,10 +96,10 @@
               <draggable v-if="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
                 <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
-                  <span class="close" @click="_delImg('goods_detail_images', index)"></span>
+                  <span v-if="!onlyCheck" class="close" @click="_delImg('goods_detail_images', index)"></span>
                 </div>
               </draggable>
-              <div v-if="goodsInfo.goods_detail_images.length < 15" class="add-image hand">
+              <div v-if="!onlyCheck && goodsInfo.goods_detail_images.length < 15" class="add-image hand">
                 <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
                        @change="_addImg('goods_detail_images', $event)"
                 >
@@ -103,7 +115,7 @@
     </div>
     <div class="button-con">
       <div class="hand button cancel" @click="_goBack">取消</div>
-      <div class="hand button" @click="_subEdit">保存</div>
+      <div v-if="!onlyCheck" class="hand button" @click="_subEdit">保存</div>
     </div>
   </div>
 </template>
@@ -127,6 +139,7 @@
     },
     data() {
       return {
+        onlyCheck: false,
         goodsId: '',
         goodsInfo: {
           goods_supplier_category_id: '',
@@ -154,6 +167,9 @@
           vw._getCategoryData()
         })
       }
+    },
+    mounted() {
+      this.onlyCheck = !!(this.$route.query.type === 'check')
     },
     methods: {
       _setGoodsInfo(resData) {
@@ -340,6 +356,10 @@
             layout(row)
             div
               margin-right: 10px
+            .disable-mask
+              position: absolute
+              width: 100%
+              height: 100%
         .form-input
           font-size: $font-size-14
           padding: 0 14px

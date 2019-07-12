@@ -140,7 +140,7 @@
     </div>
     <div v-if="!subModify" class="button-con">
       <div class="hand button cancel">取消</div>
-      <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subModify">{{approveArr[approveStatus]}}</div>
+      <div :class="approveStatus * 1 === 0?'disable':''" class="hand button confirm" @click="_subModify">保存</div>
     </div>
   </div>
 </template>
@@ -152,7 +152,6 @@
   import CitySelect from './city-select/city-select'
   const PAGE_NAME = 'SHOP_INFO'
   const TITLE = '店铺信息'
-  const APPROVE_TEXT = ['审核中...', '提交审核', '提交审核']
   let submitting = false
   let shopId = ''
 
@@ -183,7 +182,6 @@
         uploadImg: {license: '', QRCode: ''},
         uploadLoading: false,
         uploading: '',
-        approveArr: APPROVE_TEXT,
         approveStatus: 1,
         subModify: false
       }

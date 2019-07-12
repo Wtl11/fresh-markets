@@ -53,7 +53,7 @@
                   <span class="list-operation" @click="downGoods(item, 'edit')">编辑</span>
                 </template>
                 <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'subAgain')">重新提交</span>
-                <span v-else class="list-operation no-line" @click="downGoods(item, 'test')">---</span>
+                <span v-else class="list-operation no-line">---</span>
               </div>
 
               <div v-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-        <base-blank v-else blackStyle="margin-top: 6%"></base-blank>
+        <base-blank v-else blackStyle="margin-top: 100px"></base-blank>
       </div>
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
