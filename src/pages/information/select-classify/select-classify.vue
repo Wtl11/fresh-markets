@@ -1,5 +1,5 @@
 <template>
-  <div class="select-classify" :class="{active: isOpen}" :style="{height: height + 'px'}">
+  <div v-if="classifyData.length" class="select-classify" :class="{active: isOpen}" :style="{height: height + 'px'}">
     <article class="left-wrapper">{{title}}</article>
     <article ref="middle" class="middle-wrapper">
       <template v-for="(item, index) in classifyData">

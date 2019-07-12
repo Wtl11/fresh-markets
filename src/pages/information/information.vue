@@ -143,13 +143,14 @@
         API.Information.getGoodsClassifyList({
           data: {parent_id: -1},
           formatter: (res) => {
-            let data = res.data.filter(item => {
-              if (item.list && item.list.length) {
-                return item
-              }
-            })
-            data.unshift({name: '全部'})
-            res.data = data
+            // let data = res.data.filter(item => {
+            //   if (item.list && item.list.length) {
+            //     return item
+            //   }
+            // })
+            // data.unshift({name: '全部'})
+            // res.data = data
+            res.data.unshift({name: '全部'})
             return res
           }
         }).then((res) => {
