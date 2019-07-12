@@ -234,7 +234,7 @@
           note: data.reason
         }).then((res) => {
           this.$toast.show('审核成功')
-          this.getStatus()
+          this.getSupplierStatus()
           this.getSupplierList()
         })
       },
