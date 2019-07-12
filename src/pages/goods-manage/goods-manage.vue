@@ -23,7 +23,7 @@
           <base-status-tab :infoTabIndex="0" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
         </div>
         <div class="function-btn">
-          <router-link tag="div" to="/manager/edit-goods" append class="btn-main g-btn-item">新建商品<span class="add-icon"></span></router-link>
+          <router-link tag="div" to="/manager/goods-manage/edit-goods" append class="btn-main g-btn-item">新建商品<span class="add-icon"></span></router-link>
         </div>
       </div>
       <div class="big-list">
