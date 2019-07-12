@@ -10,7 +10,7 @@
           <div class="context">
             <div class="text-box left-text">
               <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
-              <p class="text">商品数量： {{supplierDetail.goods_num}}个商品</p>
+              <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
               <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
             </div>
             <div class="text-box right-text">
@@ -26,7 +26,7 @@
     <section class="top-msg">
       <div class="msg-box hand" @click="goBusiness">
         <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">1000</em>个商品)</span>
+        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_success_num || 0}}</em>个商品)</span>
         <span class="icon"></span>
       </div>
     </section>
@@ -51,17 +51,17 @@
           <div class="top-context">
             <p class="price">
               <span class="label">价格</span>
-              <span class="num"><em class="sign">¥</em>{{goodsDetail.purchase_price}}</span>
+              <span class="num"><em class="sign">¥</em>{{goodsDetail.purchase_price || '0.00'}}</span>
             </p>
             <p class="condition">
               <span class="label">起批量</span>
-              <span class="text">{{supplierDetail.goods_start_num}}</span>
+              <span class="text">{{supplierDetail.goods_start_num || 0}}</span>
             </p>
           </div>
           <div class="bottom-context">
             <p class="deal">
               <span class="label">成交</span>
-              <span class="text">共成交 <em class="number">{{supplierDetail.goods_num}}</em> 件商品</span>
+              <span class="text">共成交 <em class="number">{{supplierDetail.goods_num || 0}}</em> 件商品</span>
             </p>
             <p class="safe">
               <span class="label">实力保障</span>
@@ -105,8 +105,10 @@
 
   export default {
     name: PAGE_NAME,
-    page: {
-      title: TITLE
+    page() {
+      return {
+        title: this.supplierDetail.name || TITLE
+      }
     },
     components: {
       GoodsItem
@@ -129,7 +131,6 @@
     created() {
       this.goodsId = this.$route.query.goodsId || 0
       this.supplierId = this.$route.query.supplierId || 0
-
       this.getGoodsDetail()
       this.getSupplierDetail()
       this.getGoodsList()
@@ -218,7 +219,10 @@
       margin-bottom: 14px
       font-size: 14px
       color: $color-white
+      white-space: nowrap
       font-family: $font-family-regular
+    .right-text
+      padding-right: 0
     .qr-code
       width: 120px
       height: 120px

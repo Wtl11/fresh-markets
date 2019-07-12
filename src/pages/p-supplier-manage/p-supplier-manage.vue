@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <base-blank v-else blackStyle="margin-top: 6%"></base-blank>
+        <base-blank v-else blackStyle="margin-top: 100px"></base-blank>
       </div>
       <div class="pagination-box">
         <base-pagination ref="pagination" :pagination="requestData.page" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
@@ -234,7 +234,7 @@
           note: data.reason
         }).then((res) => {
           this.$toast.show('审核成功')
-          this.getStatus()
+          this.getSupplierStatus()
           this.getSupplierList()
         })
       },

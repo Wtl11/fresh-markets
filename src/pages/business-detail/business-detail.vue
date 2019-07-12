@@ -10,7 +10,7 @@
           <div class="context">
             <div class="text-box left-text">
               <p class="text">主营品类： {{supplierDetail.goods_material_category}}</p>
-              <p class="text">商品数量： {{supplierDetail.goods_num}}个商品</p>
+              <p class="text">商品数量： {{supplierDetail.goods_num || 0}}个商品</p>
               <p class="text">所在地区： {{supplierDetail.province}}{{supplierDetail.city}}{{supplierDetail.district}}</p>
             </div>
             <div class="text-box right-text">
@@ -26,7 +26,7 @@
     <section class="top-msg">
       <div class="msg-box">
         <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">1000</em>个商品)</span>
+        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_success_num || 0}}</em>个商品)</span>
         <!--<span class="icon"></span>-->
       </div>
     </section>
@@ -58,7 +58,7 @@
     name: PAGE_NAME,
     page() {
       return {
-        title: this.supplierDetail.name ? this.supplierDetail.name : TITLE
+        title: this.supplierDetail.name || TITLE
       }
     },
     components: {
@@ -169,6 +169,8 @@
       font-size: 14px
       color: $color-white
       font-family: $font-family-regular
+    .right-text
+      padding-right: 0
     .qr-code
       width: 120px
       height: 120px
