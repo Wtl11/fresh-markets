@@ -317,6 +317,7 @@
         display: -webkit-box
         overflow: hidden
         -webkit-line-clamp: 2
+        word-break: break-all
         -webkit-box-orient: vertical
       .goods-name
         display: flex

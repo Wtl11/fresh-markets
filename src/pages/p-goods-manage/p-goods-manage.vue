@@ -344,6 +344,7 @@
         white-space: initial
         display: -webkit-box
         overflow: hidden
+        word-break: break-all
         -webkit-line-clamp: 2
         -webkit-box-orient: vertical
       .list-double-row

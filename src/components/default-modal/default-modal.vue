@@ -59,6 +59,8 @@
     align-items: center
 
   .model-active
+    border-radius: 4px
+    overflow: hidden
     position: relative
     animation: layerFadeIn .4s
 
