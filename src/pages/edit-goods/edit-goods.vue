@@ -224,6 +224,7 @@
         if (submitting) {
           return false
         }
+        submitting = true
         let errorMsg = {
           goods_supplier_category_id: '请选择主营品类',
           name: '请输入商品主标题',
@@ -252,8 +253,10 @@
         return true
       },
       _subEdit() {
-        if (!this._checkForm()) return
-        submitting = true
+        if (!this._checkForm()) {
+          submitting = false
+          return
+        }
         let apiName = 'creatGoodsInfo'
         if (this.goodsId) {
           apiName = 'editGoodsInfo'
@@ -266,7 +269,7 @@
               this.$router.push(`/manager/goods-manage`)
             }, 1000)
           })
-          .finally(() => {
+          .catch(() => {
             submitting = false
             this.$loading.hide()
           })
@@ -283,7 +286,8 @@
 
   .edit-goods
     width: 100%
-    background: #f9f9f9
+    background: #fff
+    padding-bottom: 80px
     .title-con
       height: 18px
       padding: 25px 20px
@@ -456,12 +460,16 @@
                 width: 25px
                 height: 25px
   .button-con
+    position: absolute
+    bottom: 0
+    left: 0
     box-sizing: border-box
     width: 100%
     height: 80px
     background: #F9F9F9
     border-top: 0.5px solid #E9ECF0
-    border-bottom-radius: 4px
+    border-bottom-left-radius: 4px
+    border-bottom-right-radius: 4px
     layout(row)
     align-items: center
     justify-content: center
