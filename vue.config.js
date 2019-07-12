@@ -49,14 +49,14 @@ module.exports = {
   },
   chainWebpack(config) {
     config.plugins.delete('prefetch')
-    config.module
-    .rule('images')
-    .use('image-webpack-loader')
-    .loader('image-webpack-loader')
-    .options({
-      bypassOnDebug: true
-    })
-    .end()
+    // config.module
+    // .rule('images')
+    // .use('image-webpack-loader')
+    // .loader('image-webpack-loader')
+    // .options({
+    //   bypassOnDebug: true
+    // })
+    // .end()
     return config
   },
   css: {
