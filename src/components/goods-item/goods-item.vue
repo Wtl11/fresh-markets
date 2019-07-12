@@ -119,6 +119,7 @@
           white-space: nowrap
           font-family: PingFangSC-Regular
           font-size: 14px
+          line-height: 16px
           color: #999999
     &:hover
       border: 1px solid #FF520F
