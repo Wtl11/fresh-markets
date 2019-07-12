@@ -56,8 +56,10 @@
 
   export default {
     name: PAGE_NAME,
-    page: {
-      title: TITLE
+    page() {
+      return {
+        title: this.supplierDetail.name ? this.supplierDetail.name : TITLE
+      }
     },
     components: {
       GoodsItem,
