@@ -1,6 +1,6 @@
 <template>
   <div class="404">
-    404
+    <img class="icon" src="./404.svg" alt="">
   </div>
 </template>
 
@@ -25,6 +25,8 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
 
-  .title
-    text-align: center
+  .icon
+    display block
+    margin :30px auto
+
 </style>

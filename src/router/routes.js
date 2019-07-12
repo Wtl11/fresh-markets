@@ -1,4 +1,10 @@
 import {USER_TYPE} from '@utils/constant'
+
+/**
+ * 权限说明:
+ *  请在对应的路由meta里添加authority: [USER_TYPE.XXX],
+ *  表示哪种身份可以进入该路由,否则跳转至登录页面
+ */
 export default [
   {
     path: '/user',
