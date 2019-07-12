@@ -87,14 +87,14 @@
     show: false,
     content: '一级类目',
     type: 'default',
-    data: [{name: '水果'}]
+    data: []
   }
   const SECOND_CATEGORY = {
     check: false,
     show: false,
     content: '二级类目',
     type: 'default',
-    data: [{name: '水果'}]
+    data: []
   }
 
   const LIST_TITLE = [
