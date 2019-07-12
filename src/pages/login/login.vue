@@ -51,7 +51,7 @@
             })
           })
           .catch(() => {
-            storage.set('auth.token', 0)
+            storage.remove('auth.token')
             next((vm) => {
               vm.$loading.hide()
             })

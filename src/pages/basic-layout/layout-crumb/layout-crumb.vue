@@ -6,7 +6,10 @@
     <section class="user-wrapper" @mouseenter="enterHandle" @mouseleave="leaveHandle">
       <img class="avatar" src="./pic-admin@2x.png" alt="">
       <span class="user-name">{{userInfo.username || userInfo.name}}</span>
-      <img class="icon-logout" src="./icon-sign_out1@2x.png" alt="">
+      <div class="icon-logout">
+        <img class="img" :class="{active: showTip}" src="./icon-sign_out1@2x.png" alt="">
+        <img class="img" :class="{active: !showTip}" src="./icon-sign_out2@2x.png" alt="">
+      </div>
       <transition name="fade" @mouseenter="enterHandle" @mouseleave="leaveHandle">
         <dl v-show="showTip" class="login-panel">
           <dt></dt>
@@ -95,6 +98,7 @@
       position relative
       height :100%
       color: #64A0F7
+      cursor :pointer
       .avatar
         width: 24px
         height: 24px
@@ -106,6 +110,17 @@
         margin-left :8px
         width: 14px
         height: 15px
+        position :relative
+        .img
+          position :absolute
+          top:0
+          left :0
+          width :100%
+          height :100%
+          opacity : 1
+          transition :opacity 0.3s
+          &.active
+            opacity : 0
       .login-panel
         position absolute
         top:50px
