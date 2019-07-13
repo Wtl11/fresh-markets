@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
-import {findLast} from 'lodash'
+// import {findLast} from 'lodash'
 // import store from '@state/store'
 // import API from '@api'
 // import storage from 'storage-controller'
@@ -37,8 +37,8 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     NProgress.start()
   }
   // let identity = store.getters['auth/currentUserType']
-  let record = findLast(routeTo.matched, (record) => record.meta.authority)
-  console.log(record)
+  // let record = findLast(routeTo.matched, (record) => record.meta.authority)
+  // console.log(record)
   // if (record && !identity && routeTo.path !== LOGIN_PATH) {
   //   try {
   //     let res = await API.Auth.validate()
@@ -91,14 +91,5 @@ router.beforeResolve(async (routeTo, routeFrom, next) => {
 router.afterEach((routeTo, routeFrom) => {
   NProgress.done()
 })
-
-// // 设置头部信息和权限身份
-// function setGlobalParams(data) {
-//   storage.set('auth.currentUser', data.info)
-//   storage.set('auth.token', data.access_token)
-//   HTTP.setHeaders({Authorization: data.access_token})
-//   store.commit('auth/SET_USER_TYPE', data.info.identity)
-//   store.commit('auth/SET_USER', data.info)
-// }
 
 export default router
