@@ -17,7 +17,7 @@
       <div class="page-icon page-icon-two" :class="{'page-icon-two-disable':isHand.handRight !== 'pointer'}" :style="{'cursor': isHand.handRight}" @click="addPage" @mouseenter="notAllowed">
       </div>
       <div class="page-box">
-        <div class="border-page page-total" :class="{'page-total-active': showMorePage}" @click.stop="showPageDetail">
+        <div class="border-page page-total" :class="[{'page-total-active': showMorePage}, {'one-page': +pageDetail.total_page === 1}]" @click.stop="showPageDetail">
           {{page}}/{{pageDetail.total_page}}
           <span class="page-tap">
             <i class="page-top" :class="{'page-bottom':showMorePage}"></i>
@@ -226,7 +226,7 @@
     display: flex
     align-items: center
     justify-content: center
-    color: $color-text-main
+    color: #666
     font-size: $font-size-14
     .page-title
       font-size: $font-size-14
@@ -243,10 +243,10 @@
           height: 41px
           line-height: 41px
           box-sizing: border-box
-          border-radius: 4.8px
+          border-radius: 2px
           border: 0.5px solid $color-line
           font-size: 14px
-          color: $color-text-main
+          color: #666
           background: $color-white
           margin-right: 13px
           position: relative
@@ -292,11 +292,11 @@
 
       .page-icon
         cursor: pointer
-        icon-image('icon-left')
+        icon-image('icon-left_no')
         margin-right: 13px
         height: 41px
         width: 41px
-        border-radius: 4.8px
+        border-radius: 2px
         transition: all 0.3s
         &:hover
           transition: all 0.3s
@@ -308,10 +308,10 @@
           icon-image('icon-left_no')
       .page-icon-two
         transition: all 0.3s
-        icon-image('icon-right')
+        icon-image('icon-right_no')
         &:hover
           transition: all 0.3s
-          icon-image('pic-paging_right2')
+          icon-image('icon-right_hover')
       .page-icon-two-disable
         icon-image('icon-right_no')
         &:hover
@@ -329,7 +329,7 @@
         padding: 0 15px
         height: 41px
         line-height: 41px
-        border-radius: 4.8px
+        border-radius: 2px
         cursor: pointer
         background: $color-white
       div.page-total
@@ -337,9 +337,13 @@
         padding-right: 24px
         position: relative
         margin: 0
+        color: #666
         transition: all 0.2s
         &:hover
           border-color: #ACACAC
+          .page-tap .page-top
+            background: url("./icon-up@2x.png")
+            background-size: 100% 100%
         .page-tap
           position: absolute
           right: 0
@@ -351,16 +355,18 @@
             position: absolute
             left: 50%
             top: 50%
-            margin-left: -4px
-            margin-top: -5.5px
-            width: 8px
-            height: 11px
+            margin-left: -7px
+            margin-top: -6px
+            width: 13px
+            height: 13px
             background: url("./icon-pressed_down.png")
             background-size: 100% 100%
             transition: all 0.2s
             transform: rotate(0deg)
           .page-bottom
             transform: rotate(180deg)
+            background: url("./icon-up@2x.png")
+            background-size: 100% 100%
         .page-list
           position: absolute
           width: 100%
@@ -381,6 +387,7 @@
             transition: all .3s ease-in-out
           .page-item
             cursor: pointer
+            color: #666
             height: 29px
             line-height: 29px
             &:hover
@@ -398,7 +405,7 @@
           z-index: 10
           height: 41px
           width: 73px
-          border-radius: 4.8px
+          border-radius: 2px
           margin: 0
           text-align: center
           transition: all 0.4s ease-out
