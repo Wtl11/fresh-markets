@@ -1,6 +1,10 @@
 <template>
   <div class="layout-menu">
-    <img :src="logoIcon" alt="" class="logo hand" @click="$router.push('/')">
+<!--    <div class="header">-->
+<!--      <img src="" alt="" class="h-icon">-->
+<!--      <span class="h-text" :style="headerTextStyle">{{headerText}}</span>-->
+<!--    </div>-->
+    <img :src="logoIcon" alt="" class="header">
     <ul class="menu-wrapper">
       <li v-for="(item) in menuData" :key="item.path" class="menu-item-wrapper" :class="{active: checkIsActive(item)}" @click="navHandle(item)">
         <img v-if="checkIsActive(item) &&item.meta && item.meta.iconSelected" :src="item.meta.iconSelected" alt="">
@@ -43,9 +47,17 @@
       ...authComputed,
       logoIcon() {
         return this.currentUserType === USER_TYPE.SUPER
-          ? require('./pic-white_logo@2x.png')
-          : require('./pic-top_logo@2x.png')
+          ? require('./pic-jishi_logo@2x.png')
+          : require('./pic-supplier_logo@2x.png')
       },
+      // headerText() {
+      //   return this.currentUserType === USER_TYPE.SUPER
+      //     ? '集市平台'
+      //     : '供应商后台'
+      // },
+      // headerTextStyle() {
+      //   return this.currentUserType === USER_TYPE.SUPER ? '        font-size :18px;': ''
+      // },
       navConfig() {
         return NAV_CONFIG[this.userInfo.identity] || {}
       },
@@ -57,7 +69,9 @@
     },
     methods: {
       navigationHandle() {
-        this.$router.push({path: this.navConfig.url, query: {supplierId: this.userInfo.id}})
+        // this.$router.push({path: this.navConfig.url, query: {supplierId: this.userInfo.id}})
+        let routeUrl = this.$router.resolve({path: this.navConfig.url, query: {supplierId: this.userInfo.id}})
+        window.open(routeUrl.href, '_blank')
       },
       createMenuData(routes) {
         let r = routes.find((r) => r.path === '/manager')
@@ -92,6 +106,14 @@
     align-items :center
     justify-content:center
     cursor :pointer
+    &:before
+      content: ''
+      position :absolute
+      height :1px
+      background #393D79
+      top: 0
+      left: 10px
+      right: @left
     & > .text
       font-family: $font-family-regular
       font-size: 16px
@@ -114,11 +136,23 @@
 
   .layout-menu
     height :100%
-    background :#5729D6
+    background: #343870;
     box-shadow: 3px 0 4px 0 rgba(0,8,39,0.15);
-    .logo
+    .header
+      display :flex
       width :130px
       height :60px
+      align-items :center
+      justify-content :center
+      .h-icon
+        height: 20px
+        width: @height
+      .h-text
+        padding-left :3px
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #FFFFFF;
+        line-height: 1
     .menu-wrapper
       font-family: PingFangSC-Regular;
       font-size: 14px;
@@ -134,10 +168,14 @@
         justify-content :center
         cursor : pointer
         &.active
-          background : #5125CD
+          background: #3F4478;
+          & > span
+            opacity :1
+            color: #1FBB91
         & > img
           width: 28px
           height: 28px
         & > span
+          opacity :0.5
           margin-top :13px
 </style>

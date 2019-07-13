@@ -103,8 +103,6 @@ export default [
             name: 'edit-goods',
             meta: {
               title: '编辑商品',
-              // icon: require('./icon-store_Information1@2x.png'),
-              // iconSelected: require('./icon-store_Information2@2x.png'),
               crumbs: ['商品', '商品管理', '编辑商品'],
               authority: [USER_TYPE.MERCHANT]
             },
@@ -118,8 +116,8 @@ export default [
         name: 'shop-info',
         meta: {
           title: '店铺信息',
-          icon: require('./icon-store_Information1@2x.png'),
-          iconSelected: require('./icon-store_Information2@2x.png'),
+          icon: require('./icon-shop_message1@2x.png'),
+          iconSelected: require('./icon-shop_message2@2x.png'),
           crumbs: ['店铺信息'],
           authority: [USER_TYPE.MERCHANT]
         },
