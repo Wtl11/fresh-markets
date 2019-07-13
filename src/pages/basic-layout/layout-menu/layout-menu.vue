@@ -94,16 +94,23 @@
     cursor :pointer
     & > .text
       font-family: $font-family-regular
-      font-size: 16px;
-      color: #C6B2FF;
-      letter-spacing: 0;
-      text-align: center;
-      line-height: 16px;
+      font-size: 16px
+      color: #C6B2FF
+      letter-spacing: 0
+      text-align: center
+      line-height: 16px
       padding-right :7px
+      transition: all 0.2s
     & > .icon
       width: 18px
       height: 18px
       icon-image(icon-visit)
+      transition: all 0.2s
+    &:hover
+      >.text
+        color: #FFF
+      >.icon
+        icon-image(icon-visit_hover)
 
   .layout-menu
     height :100%
