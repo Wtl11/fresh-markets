@@ -67,7 +67,7 @@ export default [
           title: '商品管理',
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
-          crumbs: ['管理后台', '商品管理'],
+          crumbs: ['商品管理'],
           authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-goods-manage/p-goods-manage')
@@ -79,7 +79,7 @@ export default [
           title: '供应商管理',
           icon: require('./icon-supplier_1@2x.png'),
           iconSelected: require('./icon-supplier_2@2x.png'),
-          crumbs: ['管理后台', '供应商管理'],
+          crumbs: ['供应商管理'],
           authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-supplier-manage/p-supplier-manage')
@@ -103,7 +103,7 @@ export default [
             name: 'edit-goods',
             meta: {
               title: '编辑商品',
-              crumbs: ['商品', '商品管理', '编辑商品'],
+              crumbs: ['商品管理', '编辑商品'],
               authority: [USER_TYPE.MERCHANT]
             },
             component: () => import('@pages/edit-goods/edit-goods')
