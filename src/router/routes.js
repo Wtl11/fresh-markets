@@ -92,7 +92,7 @@ export default [
           title: '商品管理',
           icon: require('./icon-goods_manage1@2x.png'),
           iconSelected: require('./icon-goods_manage2@2x.png'),
-          crumbs: ['商品', '商品管理'],
+          crumbs: ['商品管理'],
           authority: [USER_TYPE.MERCHANT]
         },
         component: () => import('@pages/goods-manage/goods-manage'),
