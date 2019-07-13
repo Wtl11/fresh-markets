@@ -11,6 +11,12 @@ export default [
     component: {render: (h) => h('router-view')},
     redirect: '/user/login',
     children: [
+      // 登陆-平台
+      {
+        path: '/user/login-platform',
+        name: 'login-platform',
+        component: () => import('@pages/login-platform/login-platform')
+      },
       // 登陆
       {
         path: '/user/login',

@@ -1,16 +1,21 @@
 import HTTP from './http'
 import {app as APP} from '../main'
 import {ERR_OK} from './config'
-import storage from 'storage-controller'
+import store from '@state/store'
 
-const AUTHORITY_LOST = 10000 // 权限失效
+const AUTHORITY_LOST = 10000 // 供应商权限失效
+const AUTHORITY_LOST_PLATFORM = 10024 // 平台权限失效
 const GOODS_LOST = 10022 // 集市商品详情，供应商被冻结、删除、商品删除
 
 HTTP.handleError((code) => {
   switch (code) {
     case AUTHORITY_LOST:
-      clearHttpConfig()
+      store.dispatch('auth/clearAuth')
       APP && APP.$router.push('/user/login')
+      break
+    case AUTHORITY_LOST_PLATFORM:
+      store.dispatch('auth/clearAuth')
+      APP && APP.$router.push('/user/login-platform')
       break
     case GOODS_LOST:
       APP && APP.$router.replace('/')
@@ -65,18 +70,4 @@ function resetUrl(url) {
     return url
   }
   return url
-}
-
-HTTP.setHeaders({
-  Authorization: storage.get('auth.token'),
-  'Current-Corp': process.env.VUE_APP_CURRENT_CORP
-})
-
-function clearHttpConfig() {
-  storage.remove('auth.token')
-  storage.remove('auth.currentUser')
-  HTTP.setHeaders({
-    Authorization: undefined
-  })
-  APP && APP.$store.commit('auth/SET_USER_TYPE', undefined)
 }

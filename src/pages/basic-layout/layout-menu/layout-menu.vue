@@ -18,7 +18,7 @@
 <script type="text/ecmascript-6">
   import {authComputed} from '@state/helpers'
   import {USER_TYPE} from '@utils/constant'
-  // import storage from 'storage-controller'
+
   const COMPONENT_NAME = 'LAYOUT_MENU'
   const NAV_CONFIG = {
     [USER_TYPE.MERCHANT]: {

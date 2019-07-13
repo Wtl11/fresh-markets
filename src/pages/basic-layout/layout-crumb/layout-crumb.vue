@@ -23,9 +23,8 @@
 
 <script type="text/ecmascript-6">
   import DefaultConfirm from '@components/default-confirm/default-confirm'
-  import storage from 'storage-controller'
-  import HTTP from '@utils/http'
   import {authMethod, authComputed} from '@state/helpers'
+  import { USER_TYPE } from '@utils/constant'
 
   const COMPONENT_NAME = 'LAYOUT_CRUMB'
 
@@ -39,7 +38,6 @@
       return {
         crumbData: crumbData,
         showTip: false,
-        // userInfo: storage.get('auth.currentUser') || {}
       }
     },
     computed: {
@@ -71,12 +69,19 @@
         this.$refs.confirm && this.$refs.confirm.show('确定要退出?')
       },
       confirmHandle() {
-        storage.remove('auth.currentUser')
-        storage.remove('auth.token')
-        HTTP.setHeaders({Authorization: undefined})
-        this['SET_USER_TYPE'](undefined)
-        this['SET_USER'](undefined)
-        this.$router.push({name: 'login'})
+        let path = '/'
+        switch (this.currentUserType) {
+        case USER_TYPE.SUPER:
+          path = '/user/login-platform'
+          break
+        case USER_TYPE.MERCHANT:
+          path = '/user/login'
+          break
+        default:
+          break
+        }
+        this.clearAuth()
+        this.$router.push({path})
       }
     }
   }

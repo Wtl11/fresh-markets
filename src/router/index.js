@@ -4,11 +4,11 @@ import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
 import {findLast} from 'lodash'
-import store from '@state/store'
-import API from '@api'
-import storage from 'storage-controller'
-import HTTP from '@utils/http'
-import {app as APP} from '../main'
+// import store from '@state/store'
+// import API from '@api'
+// import storage from 'storage-controller'
+// import HTTP from '@utils/http'
+// import {app as APP} from '../main'
 
 NProgress.configure({showSpinner: false})
 
@@ -17,7 +17,7 @@ Vue.use(VueMeta, {
   keyName: 'page'
 })
 
-const LOGIN_PATH = '/user/login'
+// const LOGIN_PATH = '/user/login'
 // const FORBID_PATH = '/forbid'
 
 const router = new VueRouter({
@@ -36,27 +36,28 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
   if (routeFrom.name !== null) {
     NProgress.start()
   }
-  let identity = store.getters['auth/currentUserType']
+  // let identity = store.getters['auth/currentUserType']
   let record = findLast(routeTo.matched, (record) => record.meta.authority)
-  if (record && !identity && routeTo.path !== LOGIN_PATH) {
-    try {
-      let res = await API.Auth.validate()
-      setGlobalParams(res.data)
-      return next()
-    } catch (e) {
-      if (routeTo.path !== LOGIN_PATH) {
-        NProgress.done()
-        return next({path: LOGIN_PATH})
-      }
-    }
-  }
-  if (record && !record.meta.authority.some((val) => val === identity)) {
-    if (routeTo.path !== LOGIN_PATH) {
-      NProgress.done()
-      routeTo.path === routeFrom.path && APP && APP.$toast.show('权限不足,请联系管理员.')
-      return next({path: LOGIN_PATH})
-    }
-  }
+  console.log(record)
+  // if (record && !identity && routeTo.path !== LOGIN_PATH) {
+  //   try {
+  //     let res = await API.Auth.validate()
+  //     setGlobalParams(res.data)
+  //     return next()
+  //   } catch (e) {
+  //     if (routeTo.path !== LOGIN_PATH) {
+  //       NProgress.done()
+  //       return next({path: LOGIN_PATH})
+  //     }
+  //   }
+  // }
+  // if (record && !record.meta.authority.some((val) => val === identity)) {
+  //   if (routeTo.path !== LOGIN_PATH) {
+  //     NProgress.done()
+  //     routeTo.path === routeFrom.path && APP && APP.$toast.show('权限不足,请联系管理员.')
+  //     return next({path: LOGIN_PATH})
+  //   }
+  // }
   return next()
 })
 
@@ -91,13 +92,13 @@ router.afterEach((routeTo, routeFrom) => {
   NProgress.done()
 })
 
-// 设置头部信息和权限身份
-function setGlobalParams(data) {
-  storage.set('auth.currentUser', data.info)
-  storage.set('auth.token', data.access_token)
-  HTTP.setHeaders({Authorization: data.access_token})
-  store.commit('auth/SET_USER_TYPE', data.info.identity)
-  store.commit('auth/SET_USER', data.info)
-}
+// // 设置头部信息和权限身份
+// function setGlobalParams(data) {
+//   storage.set('auth.currentUser', data.info)
+//   storage.set('auth.token', data.access_token)
+//   HTTP.setHeaders({Authorization: data.access_token})
+//   store.commit('auth/SET_USER_TYPE', data.info.identity)
+//   store.commit('auth/SET_USER', data.info)
+// }
 
 export default router
