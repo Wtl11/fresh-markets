@@ -1,9 +1,9 @@
 <template>
   <div class="layout-menu">
-<!--    <div class="header">-->
-<!--      <img src="" alt="" class="h-icon">-->
-<!--      <span class="h-text" :style="headerTextStyle">{{headerText}}</span>-->
-<!--    </div>-->
+    <!--    <div class="header">-->
+    <!--      <img src="" alt="" class="h-icon">-->
+    <!--      <span class="h-text" :style="headerTextStyle">{{headerText}}</span>-->
+    <!--    </div>-->
     <img :src="logoIcon" alt="" class="header">
     <ul class="menu-wrapper">
       <li v-for="(item) in menuData" :key="item.path" class="menu-item-wrapper" :class="{active: checkIsActive(item)}" @click="navHandle(item)">
