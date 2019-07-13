@@ -159,8 +159,8 @@
     beforeRouteEnter(to, from, next) {
       const goodsId = to.query.goodsId
       const type = to.query.type
-      to.meta.crumbs[2] = goodsId?'编辑商品':'新建商品'
-      to.meta.crumbs[2] = TITLE_TEXT[type]||'新建商品'
+      to.meta.crumbs[to.meta.crumbs.length - 1] = goodsId?'编辑商品':'新建商品'
+      to.meta.crumbs[to.meta.crumbs.length - 1] = TITLE_TEXT[type]||'新建商品'
       if (goodsId) {
         API.GoodsManage.getGoodsInfo(goodsId).then((res) => {
           next((vw) => {
