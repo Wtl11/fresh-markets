@@ -2,7 +2,7 @@
   <div class="goods-detail">
     <!--banner-->
     <section class="banner-wrapper">
-      <img src="./pic-banner_samll@2x.png" alt="" class="banner-img">
+      <img src="./pic-banner_samll.png" alt="" class="banner-img">
       <div class="banner-w">
         <img src="./pic-logo@2x.png" alt="" class="logo hand" @click="$router.push('/')">
         <div class="company-detail">
@@ -27,9 +27,11 @@
     <!--橙色条-->
     <section class="top-msg">
       <div class="msg-box">
-        <p class="title">全部商品</p>
-        <span class="text">(已入驻<em class="num">{{supplierDetail.goods_num || 0}}</em>个商品)</span>
-        <!--<span class="icon"></span>-->
+        <div class="msg-content">
+          <p class="title">全部商品</p>
+          <span class="text">(已入驻 <em class="num">{{supplierDetail.goods_num || 0}}</em> 个商品)</span>
+          <!--<span class="icon"></span>-->
+        </div>
       </div>
     </section>
 
@@ -137,8 +139,9 @@
     min-width: $minWidth
     height: 380px
     position: relative
-    font-size: 16px;
-    color: #FFFFFF;
+    font-size: 16px
+    color: #FFFFFF
+    background: #111
     line-height: 1
     .banner-w
       width: $minWidth
@@ -153,8 +156,8 @@
       width: 160px
       height: 58px
       position: absolute
-      left: 0
-      top: 50px
+      right: 0
+      top: 40px
     .company-detail
       width: 1020px
       height: 206px
@@ -164,7 +167,7 @@
       align-items: center
       position: absolute
       left: 0
-      bottom: 36px
+      top: 40px
       background-image: linear-gradient(270deg, rgba(39,39,39,0.00) 16%, rgba(17,17,17,0.72) 93%)
       border-radius: 8px
     .left-detail
@@ -187,6 +190,7 @@
       font-size: 14px
       line-height: 20px
       color: $color-white
+      white-space: nowrap
       font-family: $font-family-regular
     .right-text
       padding-right: 0
@@ -196,17 +200,22 @@
   .top-msg
     max-width: $maxWidth
     min-width: $minWidth
-    margin: 0 auto
-    background: #FF520F
-    height: 60px
+    margin: -70px auto 0
+    height: 70px
+    position: relative
     .msg-box
       width: $minWidth
       margin: 0 auto
-      height: 60px
+      height: 70px
+      color: #ffffff
+      display: flex
+      font-family: $font-family-regular
+    .msg-content
       display: flex
       align-items: center
-      color: #ffffff
-      font-family: $font-family-regular
+      height: 70px
+      &:hover .icon
+        icon-image(icon-Jump2)
     .title
       font-size: 20px
       margin-top: -5px
@@ -222,9 +231,7 @@
       height: 22px
       margin-left: 14px
       icon-image(icon-Jump)
-      &:hover
-        icon-iamge(icon-Jump_hover)
-
+      transition: all 0.2s
 
   .goods-recommend
     width: $minWidth
