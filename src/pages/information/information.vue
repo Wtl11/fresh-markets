@@ -11,7 +11,7 @@
             class="icon-item-wrapper"
             @click="navHandle(index)"
           >
-            <div class="nav-icon-wrapper">
+            <div class="nav-icon-wrapper" :class="{active: navId === item.id}">
               <img v-if="item.image_url" :src="item.image_url" alt="" class="nav-icon">
             </div>
             <span>{{item.name}}</span>
@@ -130,7 +130,8 @@
           total_page: 1
         },
         isFirstLoadGoods: true,
-        isFirstLoadMarket: true
+        isFirstLoadMarket: true,
+        navId: -1
       }
     },
     computed: {},
@@ -153,7 +154,7 @@
       addPage(page) {
         this.page = page
         this.getList()
-        window.scrollTo(0, 500)
+        window.scrollTo(0, 400)
       },
       _getGoodsClassifyList() {
         API.Information.getGoodsClassifyList({
@@ -270,6 +271,7 @@
           this.$refs.selectSecond && this.$refs.selectSecond.setSelectId(-1)
           this.category_id = this.selectArray[id].id || 0
           this.province = ''
+          this.navId = this.selectArray[id].id || -1
           break
         case 'second':
           this.category_id = this.selectSecondArray[id].id || 0
@@ -368,6 +370,7 @@
             font-family :$font-family-medium
             font-size :16px
             color: #3F3F3F;
+            padding :0 3px
           .explain
             padding-left :5px
             font-size :14px
@@ -391,7 +394,7 @@
     .banner-wrapper
       margin : 0 auto
       max-width :$maxWidth
-      height :500px
+      height :400px
       position :relative
       font-size: 16px;
       color: #FFFFFF;
@@ -408,7 +411,7 @@
         object-fit :cover
       .icon-wrapper
         position :absolute
-        height :126px
+        height :115px
         left :0
         right :0
         bottom :0
@@ -437,6 +440,9 @@
             transition : all 0.3s
             position :relative
             top: 0
+            &.active
+              transform :scale(1.2)
+              top: -10px
             .nav-icon
               width :100%
               height :100%
