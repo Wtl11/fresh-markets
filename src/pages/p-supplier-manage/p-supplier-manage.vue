@@ -30,7 +30,7 @@
               <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
                 <img :src="item[val.value]" alt="" class="img hand">
               </div>
-              <div v-if="+val.type === 3" :style="{flex: val.flex}" class="item explain">
+              <div v-if="+val.type === 3" id="explain" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
 
@@ -313,8 +313,8 @@
         overflow: hidden
         white-space: nowrap
         font-size: 14px
-      .explain
-        white-space: initial
+      #explain
+        white-space: normal
         display: -webkit-box
         overflow: hidden
         -webkit-line-clamp: 2

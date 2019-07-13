@@ -48,7 +48,7 @@
                 <span v-else-if="item.audit_status === 3" class="list-operation" @click="downGoods(item, 'edit')">重新提交</span>
                 <span v-else class="list-operation no-line">---</span>
               </div>
-              <div v-else-if="+val.type === 5" :style="{flex: val.flex}" class="item explain">
+              <div v-else-if="+val.type === 5" id="explain" :style="{flex: val.flex}" class="item">
                 {{item.audit_status*1 !== 1 ? (item[val.value]||'---') : '---'}}
               </div>
               <div v-else-if="+val.type === 6" :style="{flex: val.flex}" class="status-item item"
@@ -301,20 +301,22 @@
   .list-header,.list-box
     .list-item:last-child
       padding-right: 0
+      max-width: 158px
   .list
     flex: 1
     .list-item
       font-size: $font-size-14
-      line-height:1.2
+      line-height:1.4
       .item
         text-overflow: ellipsis
         overflow: hidden
         white-space: nowrap
         font-size: 14px
-      .explain
-        white-space: initial
+      #explain
+        white-space: normal
         display: -webkit-box
         overflow: hidden
+        word-break: break-all
         -webkit-line-clamp: 2
         -webkit-box-orient: vertical
       .list-double-row
