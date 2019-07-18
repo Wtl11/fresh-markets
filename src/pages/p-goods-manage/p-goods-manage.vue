@@ -207,6 +207,7 @@
       changeStatus(selectStatus) {
         this.setData({page: 1, audit_status: selectStatus.value})
         this.getGoodsList()
+        this.getGoodsStatus()
         this.$refs.pagination.beginPage()
       },
       // 翻页

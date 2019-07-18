@@ -190,6 +190,7 @@
       changeStatus(selectStatus) {
         this.setData({page: 1, approve_status: selectStatus.value})
         this.getSupplierList()
+        this.getSupplierStatus()
         this.$refs.pagination.beginPage()
       },
       // 翻页
