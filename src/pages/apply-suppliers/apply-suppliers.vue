@@ -67,18 +67,6 @@
         <div class="form-item">
           <div class="form-title">
             <span class="start">*</span>
-            商品起批量
-          </div>
-          <div class="form-input-box">
-            <input v-model="shopInfo.goods_start_num" type="text" class="form-input" placeholder="请输入起批量件数"
-                   maxlength="29" @mousewheel.native.prevent
-            >
-          </div>
-          <div class="form-input-unit">件</div>
-        </div>
-        <div class="form-item">
-          <div class="form-title">
-            <span class="start">*</span>
             主营品类
           </div>
           <div class="form-input-box mini-form-input-box">
@@ -174,7 +162,18 @@
     },
     data() {
       return {
-        shopInfo: {name: '', province: '', city: '', district: '', image_id: '', goods_start_num: '', category_id: '', contact: '', mobile: '', wechat_image_id: ''},
+        shopInfo: {
+          name: '',
+          province: '',
+          city: '',
+          district: '',
+          image_id: '',
+          goods_start_num: '',
+          category_id: '',
+          contact: '',
+          mobile: '',
+          wechat_image_id: ''
+        },
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadImg: {license:'',QRCode:''},
@@ -218,10 +217,11 @@
         })
         e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
       },
+      // 删除图片
       deleteImageHandle({key, index}) {
         this[key].splice(index, 1)
       },
-      // 添加多张图片
+      // 添加图片
       addImagesHandle(e, {key, limit}) {
         if (this.uploading === key) {
           this.$toast.show('图片上传中,请勿重复操作！')
@@ -299,6 +299,9 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+
+  .form-image.more
+    display :inline-block !important
 
   .apply-suppliers
     box-sizing: border-box

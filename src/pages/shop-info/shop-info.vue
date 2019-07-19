@@ -34,40 +34,56 @@
             <span class="start">*</span>
             营业执照
           </div>
+<!--          <div class="form-image-box">-->
+<!--            <div class="form-image">-->
+<!--              <div v-if="shopInfo.image_id && uploadImg.license" class="draggable">-->
+<!--                <div class="show-image hand">-->
+<!--                  <img class="img" :src="uploadImg.license" alt="">-->
+<!--                  <span class="close" @click="_delImg('image_id', 'license')"></span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div v-else class="add-image hand">-->
+<!--                <input type="file"-->
+<!--                       class="sendImage hand"-->
+<!--                       multiple="multiple"-->
+<!--                       accept="image/*"-->
+<!--                       @change="_addImg('image_id', 'license', $event)"-->
+<!--                >-->
+<!--                <div v-if="uploadLoading && uploading === 'image_id'" class="loading-mask">-->
+<!--                  <img src="./loading.gif" class="loading">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>-->
+<!--          </div>-->
           <div class="form-image-box">
-            <div class="form-image">
-              <div v-if="shopInfo.image_id && uploadImg.license" class="draggable">
-                <div class="show-image hand">
-                  <img class="img" :src="uploadImg.license" alt="">
-                  <span class="close" @click="_delImg('image_id', 'license')"></span>
+            <section style="display: flex; align-items: center">
+              <draggable v-model="uploadCertificateList">
+                <article v-for="(item, index) in uploadCertificateList" :key="item.id" class="form-image more">
+                  <div v-if="item.url" class="draggable">
+                    <div class="show-image hand">
+                      <img class="img" :src="item.url" alt="">
+                      <span class="close" @click="deleteImageHandle({key: 'uploadCertificateList', index: index})"></span>
+                    </div>
+                  </div>
+                </article>
+              </draggable>
+              <article v-if="uploadCertificateList.length < 5" class="form-image more">
+                <div class="add-image hand">
+                  <input type="file"
+                         class="sendImage hand"
+                         multiple="multiple"
+                         accept="image/*"
+                         @change="addImagesHandle($event, {key: 'uploadCertificateList', limit: 5})"
+                  >
+                  <div v-if="uploading === 'uploadCertificateList'" class="loading-mask">
+                    <img src="./loading.gif" class="loading">
+                  </div>
                 </div>
-              </div>
-              <div v-else class="add-image hand">
-                <input type="file"
-                       class="sendImage hand"
-                       multiple="multiple"
-                       accept="image/*"
-                       @change="_addImg('image_id', 'license', $event)"
-                >
-                <div v-if="uploadLoading && uploading === 'image_id'" class="loading-mask">
-                  <img src="./loading.gif" class="loading">
-                </div>
-              </div>
-            </div>
-            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
+              </article>
+            </section>
+            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片, 最多可上传5张图片</div>
           </div>
-        </div>
-        <div class="form-item">
-          <div class="form-title">
-            <span class="start">*</span>
-            商品起批量
-          </div>
-          <div class="form-input-box">
-            <input v-model="shopInfo.goods_start_num" type="text" class="form-input" placeholder="请输入起批量件数"
-                   maxlength="29" @mousewheel.native.prevent
-            >
-          </div>
-          <div class="form-input-unit">件</div>
         </div>
         <div class="form-item">
           <div class="form-title">
@@ -149,6 +165,9 @@
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
   import CitySelect from '@components/city-select/city-select'
+  import Draggable from 'vuedraggable'
+
+
   const PAGE_NAME = 'SHOP_INFO'
   const TITLE = '店铺信息'
   let submitting = false
@@ -160,7 +179,8 @@
       title: TITLE
     },
     components: {
-      CitySelect
+      CitySelect,
+      Draggable
     },
     data() {
       return {
@@ -182,7 +202,8 @@
         uploadLoading: false,
         uploading: '',
         approveStatus: 1,
-        subModify: false
+        subModify: false,
+        uploadCertificateList: []
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -245,6 +266,38 @@
         this.shopInfo.province = data[0].includes('请选择') ? '' : data[0]
         this.shopInfo.city = data[1].includes('请选择') ? '' : data[1]
         this.shopInfo.district = data[2].includes('请选择') ? '' : data[2]
+      },
+      // 删除图片
+      deleteImageHandle({key, index}) {
+        this[key].splice(index, 1)
+      },
+      // 添加图片
+      addImagesHandle(e, {key, limit}) {
+        if (this.uploading === key) {
+          this.$toast.show('图片上传中,请勿重复操作！')
+          return
+        }
+        let arr = e.target.files
+        let files = []
+        let increasedQuantity = Math.max(limit - this[key].length, 0)
+        for (let f of arr) {
+          if (files.length < increasedQuantity) {
+            files.push(f)
+          }
+        }
+        this.uploading = key
+        uploadFiles({files}).then(res => {
+          this[key] = this[key].concat(res.map(item => {
+            let data = item.data || {}
+            return {
+              url: data.url,
+              id: data.id
+            }
+          }))
+          this.uploading = ''
+          e.target.value = ''
+        })
+
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
@@ -310,6 +363,9 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
+
+  .form-image.more
+    display :inline-block !important
 
   .shop-info
     position: relative
