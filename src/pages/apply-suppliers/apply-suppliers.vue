@@ -36,26 +36,32 @@
             营业执照
           </div>
           <div class="form-image-box">
-            <div class="form-image">
-              <div v-if="shopInfo.image_id && uploadImg.license" class="draggable">
-                <div class="show-image hand">
-                  <img class="img" :src="uploadImg.license" alt="">
-                  <span class="close" @click="_delImg('image_id', 'license')"></span>
+            <section style="display: flex; align-items: center">
+              <draggable v-model="uploadCertificateList">
+                <article v-for="(item, index) in uploadCertificateList" :key="item.id" class="form-image more">
+                  <div v-if="item.url" class="draggable">
+                    <div class="show-image hand">
+                      <img class="img" :src="item.url" alt="">
+                      <span class="close" @click="deleteImageHandle({key: 'uploadCertificateList', index: index})"></span>
+                    </div>
+                  </div>
+                </article>
+              </draggable>
+              <article v-if="uploadCertificateList.length < 5" class="form-image more">
+                <div class="add-image hand">
+                  <input type="file"
+                         class="sendImage hand"
+                         multiple="multiple"
+                         accept="image/*"
+                         @change="addImagesHandle($event, {key: 'uploadCertificateList', limit: 5})"
+                  >
+                  <div v-if="uploading === 'uploadCertificateList'" class="loading-mask">
+                    <img src="./loading.gif" class="loading">
+                  </div>
                 </div>
-              </div>
-              <div v-else class="add-image hand">
-                <input type="file"
-                       class="sendImage hand"
-                       multiple="multiple"
-                       accept="image/*"
-                       @change="_addImg('image_id', 'license', $event)"
-                >
-                <div v-if="uploadLoading && uploading === 'image_id'" class="loading-mask">
-                  <img src="./loading.gif" class="loading">
-                </div>
-              </div>
-            </div>
-            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
+              </article>
+            </section>
+            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片, 最多可上传5张图片</div>
           </div>
         </div>
         <div class="form-item">
@@ -151,6 +157,7 @@
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
   import CitySelect from '@components/city-select/city-select'
+  import Draggable from 'vuedraggable'
 
   const PAGE_NAME = 'APPLY_SUPPLIERS'
   const TITLE = '申请成为供应商'
@@ -162,7 +169,8 @@
       title: TITLE
     },
     components: {
-      CitySelect
+      CitySelect,
+      Draggable
     },
     data() {
       return {
@@ -173,6 +181,7 @@
         uploadLoading: false,
         uploading: '',
         subModify: false,
+        uploadCertificateList: []
       }
     },
     mounted() {
@@ -208,6 +217,37 @@
           this.uploadLoading = false
         })
         e.target.value = ''// 清除选择的图片，否则同一个图片无法再次上传
+      },
+      deleteImageHandle({key, index}) {
+        this[key].splice(index, 1)
+      },
+      // 添加多张图片
+      addImagesHandle(e, {key, limit}) {
+        if (this.uploading === key) {
+          this.$toast.show('图片上传中,请勿重复操作！')
+          return
+        }
+        let arr = e.target.files
+        let files = []
+        let increasedQuantity = Math.max(limit - this[key].length, 0)
+        for (let f of arr) {
+          if (files.length < increasedQuantity) {
+            files.push(f)
+          }
+        }
+        this.uploading = key
+        uploadFiles({files}).then(res => {
+          this[key] = this[key].concat(res.map(item => {
+            let data = item.data || {}
+            return {
+              url: data.url,
+              id: data.id
+            }
+          }))
+          this.uploading = ''
+          e.target.value = ''
+        })
+
       },
       _delImg(applyKey, uploadKey) {
         this.shopInfo[applyKey] = ''
@@ -313,7 +353,7 @@
         height: 2px
         background: $color-main
         border-radius: 2px
-        bottom: 0px
+        bottom: 0
         left: 0
       .content-title
         color: #333333

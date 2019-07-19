@@ -1,7 +1,31 @@
 const appConfig = require('./src/app.config')
 const TerserPlugin = require('terser-webpack-plugin');
 
-
+const splitChunks = {}
+if (process.env.VUE_APP_ENV === 'production'){
+  splitChunks.cacheGroups = {
+    vendors: {
+      name: 'chunk-vendors',
+        test: /node_modules/,
+        priority: -10,
+        chunks: 'initial',
+        minChunks: 1,
+        maxInitialRequests: 5,
+        minSize: 1024 * 244,
+        maxSize: 1024 * 1024 / 2
+    },
+    common: {
+      name: 'chunk-common',
+        minChunks: 2,
+        priority: -20,
+        chunks: 'initial',
+        reuseExistingChunk: true,
+        maxInitialRequests: 5,
+        minSize: 1024 * 244,
+        maxSize: 1024 * 1024 / 2
+    },
+  }
+}
 module.exports = {
   // baseUrl: process.env.VUE_APP_ENV !== 'production' ? './' : '/',
   configureWebpack: {
@@ -21,30 +45,7 @@ module.exports = {
       runtimeChunk: {
         name: 'manifest',
       },
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            name: 'chunk-vendors',
-            test: /node_modules/,
-            priority: -10,
-            chunks: 'initial',
-            minChunks: 1,
-            maxInitialRequests: 5,
-            minSize: 1024 * 244,
-            maxSize: 1024 * 1024 / 2
-          },
-          common: {
-            name: 'chunk-common',
-            minChunks: 2,
-            priority: -20,
-            chunks: 'initial',
-            reuseExistingChunk: true,
-            maxInitialRequests: 5,
-            minSize: 1024 * 244,
-            maxSize: 1024 * 1024 / 2
-          },
-        }
-      }
+      splitChunks
     },
   },
   chainWebpack(config) {
