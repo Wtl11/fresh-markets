@@ -42,7 +42,7 @@ if (process.env.VUE_APP_ENV === 'production'){
   }
 }
 module.exports = {
-  // baseUrl: process.env.VUE_APP_ENV !== 'production' ? './' : '/',
+  baseUrl: process.env.VUE_APP_ENV !== 'production' ? './' : '/',
   configureWebpack: {
     name: appConfig.title,
     resolve: {
