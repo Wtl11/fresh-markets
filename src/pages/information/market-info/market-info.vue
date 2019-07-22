@@ -45,6 +45,7 @@
           :showCompany="false"
           :goodsInfo="item"
           class="goods-item-wrapper"
+          @toLogin="toLogin"
         ></goods-item>
       </template>
 
@@ -85,6 +86,11 @@
     },
     methods: {
       navHandle() {
+        this._t = true // todo
+        if (this._t) {
+          this.toLogin()
+          return
+        }
         let routeUrl = this.$router.resolve({
           path: '/business-detail',
           query: {supplierId: this.marketInfo.id}
@@ -93,6 +99,9 @@
       },
       qrCodeHandle() {
         window.open(this.marketInfo.wechat_image_url, '_blank')
+      },
+      toLogin() {
+        this.$emit('toLogin')
       }
     }
   }

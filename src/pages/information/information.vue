@@ -52,7 +52,7 @@
       <div>
         <section v-if="tabIndex===1 && marketList.length" class="goods-list">
           <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
-            <market-info :marketInfo="item"></market-info>
+            <market-info :marketInfo="item" @toLogin="toLoginHandle"></market-info>
           </div>
         </section>
         <article v-else-if="tabIndex===1 && !isFirstLoadMarket" class="empty-wrapper">
@@ -61,7 +61,7 @@
         </article>
         <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
           <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-            <goods-item :goodsInfo="item"></goods-item>
+            <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
           </div>
         </section>
         <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">
@@ -73,6 +73,7 @@
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
     </article>
+    <information-login ref="login"></information-login>
   </div>
 </template>
 
@@ -83,6 +84,7 @@
   import GoodsItem from '@components/goods-item/goods-item'
   import MarketInfo from './market-info/market-info'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
+  import InformationLogin from './information-login/information-login'
 
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '赞播集市'
@@ -93,7 +95,8 @@
       SelectClassify,
       GoodsItem,
       MarketInfo,
-      GoodsPagination
+      GoodsPagination,
+      InformationLogin
     },
     page: {
       title: TITLE
@@ -151,6 +154,9 @@
       this._getGoodsList()
     },
     methods: {
+      toLoginHandle() {
+        this.$refs.login && this.$refs.login.show()
+      },
       addPage(page) {
         this.page = page
         this.getList()

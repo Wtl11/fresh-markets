@@ -35,6 +35,9 @@ export default [
     path: '/',
     redirect: '/information',
     component: {render: (h) => h('router-view')},
+    meta: {
+      authority: [USER_TYPE.INFORMATION]
+    },
     children: [
       // 信息平台
       {
@@ -83,6 +86,19 @@ export default [
           authority: [USER_TYPE.SUPER]
         },
         component: () => import('@pages/p-supplier-manage/p-supplier-manage')
+      },
+      // 加盟商白名单
+      {
+        path: '/manager/p-alliance-list',
+        name: 'p-alliance-list',
+        meta: {
+          title: '账号白名单',
+          icon: require('./icon-supplier_1@2x.png'),
+          iconSelected: require('./icon-supplier_2@2x.png'),
+          crumbs: ['账号白名单'],
+          authority: [USER_TYPE.SUPER]
+        },
+        component: () => import('@pages/p-alliance-list/p-alliance-list')
       },
       // 商品管理
       {

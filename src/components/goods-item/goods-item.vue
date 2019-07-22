@@ -4,7 +4,8 @@
       <img v-if="goodsInfo.goods_cover_image" class="goods-img" :src="goodsInfo.goods_cover_image" alt="">
     </div>
     <div class="msg-box">
-      <p class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
+<!--      <p class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>-->
+      <p class="un-price">登录查看采购价</p>
       <p class="goods-title">{{goodsInfo.name}}</p>
       <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">
@@ -38,6 +39,11 @@
     },
     methods: {
       clickHandle() {
+        this._t = true // todo
+        if (this._t) {
+          this.$emit('toLogin')
+          return
+        }
         let routeUrl = this.$router.resolve({
           path: '/goods-detail',
           query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
@@ -81,6 +87,11 @@
       padding: 13px 14px 0
       display: flex
       flex-direction: column
+      .un-price
+        font-family: PingFangSC-Regular;
+        font-size: 16px;
+        color: #4D77BD;
+        line-height: 20px;
       .price-txt
         font-family: PingFangSC-Medium
         font-size: 20px
