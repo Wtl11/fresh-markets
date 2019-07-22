@@ -54,7 +54,8 @@
       return {
         tel: '',
         code: '',
-        codeText: ''
+        codeText: '',
+        goodsInfo: {}
       }
     },
     computed: {
@@ -67,7 +68,8 @@
     },
     methods: {
       ...authMethod,
-      show() {
+      show(goodsInfo) {
+        this.goodsInfo = goodsInfo
         this.$refs.modal && this.$refs.modal.showModal()
       },
       hide() {
@@ -118,6 +120,13 @@
           this.setTokenInformation(res.data.access_token)
           this.hide()
           this.$emit('refresh', 'login')
+          let routeUrl = this.$router.resolve({
+            path: '/goods-detail',
+            query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
+          })
+          setTimeout(() => {
+            window.open(routeUrl.href, '_blank')
+          }, 100)
         })
       }
     }

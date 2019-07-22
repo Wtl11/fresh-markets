@@ -39,7 +39,7 @@
     <section class="goods-recommend">
       <div v-if="goodsList.length" class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
-          <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
+          <goods-item :goodsInfo="item" @toLogin="toLoginHandle(item)"></goods-item>
         </div>
       </div>
       <div v-if="pageDetail.total_page > 1" class="pagination">
@@ -103,8 +103,8 @@
       this.getGoodsList()
     },
     methods: {
-      toLoginHandle() {
-        this.$refs.login && this.$refs.login.show()
+      toLoginHandle(item) {
+        this.$refs.login && this.$refs.login.show(item)
       },
       refreshHandle() {
         this.getGoodsList()
