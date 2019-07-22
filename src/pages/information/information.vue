@@ -161,10 +161,10 @@
     methods: {
       ...authMethod,
       refreshHandle() {
-        this._getGoodsClassifyList()
-        this._getAreasList()
         this._getMarketList()
         this._getGoodsList()
+        this._getGoodsClassifyList()
+        this._getAreasList()
       },
       toLoginHandle() {
         this.$refs.login && this.$refs.login.show()

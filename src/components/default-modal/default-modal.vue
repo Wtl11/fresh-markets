@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <section v-show="isShow" :style="styles" class="default-modal">
-      <div :class="showActive ? 'model-active' : 'model-un-active'">
+      <div :class="showActive ? 'model-active' : 'model-un-active'" @click.stop="">
         <slot name="content"></slot>
       </div>
     </section>

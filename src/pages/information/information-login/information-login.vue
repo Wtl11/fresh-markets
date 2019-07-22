@@ -1,11 +1,11 @@
 <template>
-  <default-modal ref="modal" class="i-modal">
+  <default-modal ref="modal" class="i-modal" @click.stop="">
     <div slot="content" class="information-login">
       <header class="header-wrapper">
         <span>登录查看商品采购价</span>
-        <img src="./icon-close@2x.png" alt="" @click="hide">
+        <img src="./icon-close@2x.png" alt="" @click.stop="hide">
       </header>
-      <form class="form">
+      <article class="form">
         <div class="input-wrapper">
           <input v-model="tel"
                  type="tel"
@@ -29,9 +29,9 @@
                @click="getCodeHandle"
             >{{codeText ? codeText + 's' : '获取验证码'}}</p>
           </section>
-          <button class="submit-wrapper" :class="{active: checkTel && code}" @click="loginHandle">登录</button>
+          <button class="submit-wrapper" :class="{active: checkTel && code}" @click.stop="loginHandle">登录</button>
         </div>
-      </form>
+      </article>
     </div>
   </default-modal>
 </template>
