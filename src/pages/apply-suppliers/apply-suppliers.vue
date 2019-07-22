@@ -167,12 +167,11 @@
           province: '',
           city: '',
           district: '',
-          image_id: '',
-          goods_start_num: '',
+          images: [],
           category_id: '',
           contact: '',
           mobile: '',
-          wechat_image_id: ''
+          wechat_image_id: '',
         },
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
@@ -259,16 +258,31 @@
         }
         let errorMsg = {
           name: '请输入供应商名称',
-          province: '请选择省份', city: '请选择城市', district: '请选择区/县',
-          image_id: '请上传营业执照',
-          goods_start_num: '请输入商品起批量',
+          province: '请选择省份',
+          city: '请选择城市',
+          district: '请选择区/县',
+          images: '请上传营业执照',
           category_id: '请选择主营品类',
           contact: '请输入联系人',
           mobile: '请输入联系电话',
           wechat_image_id: '请上传微信二维码'
         }
-        for (let k in this.shopInfo) {
-          if(!(this.shopInfo[k]+'').trim()) {
+        this.shopInfo.images = this.uploadCertificateList
+        // for (let k in this.shopInfo) {
+        //   console.log(k)
+        //   if (this.shopInfo[k].map) {
+        //     this.shopInfo[k].length < 1 && this.$toast.show(errorMsg[k])
+        //     return this.shopInfo[k].length
+        //   } else {
+        //     if (!(this.shopInfo[k]+'').trim()) {
+        //       this.$toast.show(errorMsg[k])
+        //       return false
+        //     }
+        //   }
+        // }
+        for (let k in errorMsg) {
+          let flag = this.shopInfo[k].toString().trim()
+          if (!flag) {
             this.$toast.show(errorMsg[k])
             return false
           }
@@ -278,7 +292,9 @@
       _subApply() {
         if(!this._checkForm()) return
         submitting = true
-        API.SupplierInfo.creatSupplierInfo(this.shopInfo, true)
+        let images = this.shopInfo.images.map(item => item.id)
+        let data = {...this.shopInfo, image_id: images}
+        API.SupplierInfo.creatSupplierInfo(data, true)
           .then((res) => {
             this.subModify = true
           })

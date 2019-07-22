@@ -168,6 +168,7 @@
           city: '',
           district: '',
           image_id: '',
+          images: [],
           goods_start_num: '',
           category_id: '',
           contact: '',
@@ -210,8 +211,10 @@
           category_id: resData.category_id,
           contact: resData.contact,
           mobile: resData.mobile,
-          wechat_image_id: resData.wechat_image_id
+          wechat_image_id: resData.wechat_image_id,
+          images: resData.images
         }
+        this.uploadCertificateList = this.shopInfo.images
         this.uploadImg = {license: resData.image_url, QRCode: resData.wechat_image_url}
         this.$refs.city.infoCity([this.shopInfo.province, this.shopInfo.city, this.shopInfo.district])
       },
@@ -304,13 +307,14 @@
           province: '请选择省份',
           city: '请选择城市',
           district: '请选择区/县',
-          image_id: '请上传营业执照',
+          images: '请上传营业执照',
           goods_start_num: '请输入商品起批量',
           category_id: '请选择主营品类',
           contact: '请输入联系人',
           mobile: '请输入联系电话',
           wechat_image_id: '请上传微信二维码'
         }
+        this.shopInfo.images = this.uploadCertificateList
         for (let k in this.shopInfo) {
           if (!(this.shopInfo[k] + '').trim()) {
             this.$toast.show(errorMsg[k])
@@ -324,7 +328,9 @@
           submitting = false
           return
         }
-        API.SupplierInfo.editSupplierInfo(this.shopInfo, true, shopId)
+        let images = this.shopInfo.images.map(item => item.id)
+        let data = {...this.shopInfo, image_id: images}
+        API.SupplierInfo.editSupplierInfo(data, true, shopId)
           .then((res) => {
             submitting = false
             this.$toast.show('保存成功!')
