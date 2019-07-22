@@ -415,6 +415,8 @@
         &.right
           right: 20px
     .big-img
+      all-center()
       max-width: 100%
       max-height: 100%
+      object-fit :cover
 </style>

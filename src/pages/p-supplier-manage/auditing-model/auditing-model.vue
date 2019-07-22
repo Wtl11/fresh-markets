@@ -110,7 +110,7 @@
         display: flex
         align-items: center
       .btn
-        width: 96px
+        padding :0 16px
         height: 32px
         line-height: 32px
         color: $color-text-main
@@ -119,6 +119,7 @@
         border: 1px solid $color-line
         transition: all 0.3s
         margin-right: 10px
+        font-size :14px
       .active
         color: #ffffff
         background: $color-btn
@@ -152,6 +153,7 @@
       border: 1px solid $color-main
       cursor: pointer
       transition: all 0.3s
+      font-size :14px
     .cancel
       border: 1px solid $color-line
       &:hover

@@ -572,7 +572,7 @@
       height: 40px
       margin-right: 20px
       font-family: $font-family-regular
-      font-size: 16px
+      font-size: 14px
       letter-spacing: 0
       line-height: 40px
       text-align: center

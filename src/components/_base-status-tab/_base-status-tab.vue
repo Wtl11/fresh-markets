@@ -77,7 +77,7 @@
     position: relative
     .status-tab-item
       border-radius: 100px
-      width: 106px
+      padding :0 16px
       color: $color-text-main
       line-height: 30px
       text-align: center
@@ -90,10 +90,10 @@
     .status-tab-item-active
       color: $color-white
   .status-slider
-    width: 106px
     position: absolute
     top: 0
     left: 0
+    right :0
     height: 30px
     border-radius: 100px
     transition: left 0.2s
