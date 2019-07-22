@@ -39,7 +39,7 @@
     <section class="goods-recommend">
       <div v-if="goodsList.length" class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
-          <goods-item :goodsInfo="item"></goods-item>
+          <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
         </div>
       </div>
       <div v-if="pageDetail.total_page > 1" class="pagination">
@@ -50,7 +50,7 @@
         <p class="no-text">暂无商品</p>
       </div>
     </section>
-
+    <information-login ref="login" @refresh="refreshHandle"></information-login>
     <div class="bottom"></div>
     <common-footer></common-footer>
   </div>
@@ -61,6 +61,7 @@
   import GoodsItem from '@components/goods-item/goods-item'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
   import CommonFooter from '@components/common-footer/common-footer'
+  import InformationLogin from '@components/information-login/information-login'
 
   const PAGE_NAME = 'BUSINESS_DETAIL'
   const TITLE = '商家信息'
@@ -75,7 +76,8 @@
     components: {
       GoodsItem,
       GoodsPagination,
-      CommonFooter
+      CommonFooter,
+      InformationLogin
     },
     data() {
       return {
@@ -101,6 +103,12 @@
       this.getGoodsList()
     },
     methods: {
+      toLoginHandle() {
+        this.$refs.login && this.$refs.login.show()
+      },
+      refreshHandle() {
+        this.getGoodsList()
+      },
       getSupplierDetail() {
         API.GoodsDetail.getSupplierDetail(this.supplierId).then((res) => {
           this.supplierDetail = res.data

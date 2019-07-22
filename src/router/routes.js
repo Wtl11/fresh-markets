@@ -35,9 +35,6 @@ export default [
     path: '/',
     redirect: '/information',
     component: {render: (h) => h('router-view')},
-    meta: {
-      authority: [USER_TYPE.INFORMATION]
-    },
     children: [
       // 信息平台
       {
@@ -48,6 +45,9 @@ export default [
       {
         path: '/goods-detail',
         name: 'goods-detail',
+        meta: {
+          authority: [USER_TYPE.INFORMATION]
+        },
         component: () => import('@pages/goods-detail/goods-detail')
       },
       {

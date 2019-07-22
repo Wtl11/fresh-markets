@@ -88,10 +88,10 @@
     },
     methods: {
       navHandle() {
-        if (!this.tokenInformation) {
-          this.toLogin()
-          return
-        }
+        // if (!this.tokenInformation) {
+        //   this.toLogin()
+        //   return
+        // }
         let routeUrl = this.$router.resolve({
           path: '/business-detail',
           query: {supplierId: this.marketInfo.id}

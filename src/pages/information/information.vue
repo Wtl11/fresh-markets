@@ -85,7 +85,7 @@
   import GoodsItem from '@components/goods-item/goods-item'
   import MarketInfo from './market-info/market-info'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
-  import InformationLogin from './information-login/information-login'
+  import InformationLogin from '@components/information-login/information-login'
   import {authMethod} from '@state/helpers'
   import CommonFooter from '@components/common-footer/common-footer'
 
