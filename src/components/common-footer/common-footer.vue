@@ -58,7 +58,6 @@
   @import "~@design"
 
   .common-footer
-    margin-top :40px
     height :130px
     background: #222222;
     font-family: $font-family-regular

@@ -69,7 +69,7 @@
           <span class="e-text">暂无商品</span>
         </article>
       </div>
-      <section>
+      <section style="margin-bottom: 40px">
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
     </article>
