@@ -73,7 +73,7 @@
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
     </article>
-    <information-login ref="login"></information-login>
+    <information-login ref="login" @refresh="refreshHandle"></information-login>
   </div>
 </template>
 
@@ -85,6 +85,8 @@
   import MarketInfo from './market-info/market-info'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
   import InformationLogin from './information-login/information-login'
+  import {authMethod} from '@state/helpers'
+
 
   const PAGE_NAME = 'INFORMATION'
   const TITLE = '赞播集市'
@@ -154,6 +156,13 @@
       this._getGoodsList()
     },
     methods: {
+      ...authMethod,
+      refreshHandle() {
+        this._getGoodsClassifyList()
+        this._getAreasList()
+        this._getMarketList()
+        this._getGoodsList()
+      },
       toLoginHandle() {
         this.$refs.login && this.$refs.login.show()
       },

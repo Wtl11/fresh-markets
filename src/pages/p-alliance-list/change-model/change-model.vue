@@ -2,21 +2,20 @@
   <default-modal ref="passwordModal">
     <div slot="content" class="default-input">
       <div class="title-input">
-        <div class="title">修改密码</div>
+        <div class="title">创建账号白名单</div>
         <div class="close-box" @click="hide">
           <div class="close hand"></div>
         </div>
       </div>
       <div class="main-input">
         <div class="main-model-box">
-          <div class="text">输入新密码</div>
-          <input v-model="password" type="password" maxlength="30" class="main-input-box" placeholder="请输入新密码">
+          <div class="text">加盟商名称</div>
+          <input v-model="name" type="text" maxlength="30" class="main-input-box" placeholder="请输入加盟商名称">
         </div>
         <div class="main-model-box">
-          <div class="text">再次输入密码</div>
-          <input v-model="rePassword" type="password" maxlength="30" class="main-input-box" placeholder="再次输入新密码">
+          <div class="text">加盟商账号</div>
+          <input v-model="tel" type="tel" maxlength="11" class="main-input-box" placeholder="请输入11位手机号">
         </div>
-
         <div class="btn-group">
           <div class="btn cancel" @click="hide">取消</div>
           <div class="btn confirm" @click="confirm">确定</div>
@@ -27,6 +26,9 @@
 </template>
 <script type="text/ecmascript-6">
   import DefaultModal from '@components/default-modal/default-modal'
+  import {checkIsPhoneNumber} from '@utils/common'
+  import API from '@api'
+
   const COMPONENT_NAME = 'CHANGE_MODEL'
 
   export default {
@@ -35,8 +37,13 @@
     props: {},
     data() {
       return {
-        password: '',
-        rePassword: ''
+        name: '',
+        tel: ''
+      }
+    },
+    computed: {
+      checkTel() {
+        return checkIsPhoneNumber(this.tel)
       }
     },
     methods: {
@@ -45,19 +52,30 @@
       },
       hide() {
         this.$refs.passwordModal && this.$refs.passwordModal.hideModal()
-        this.password = ''
-        this.rePassword = ''
+        this.name = ''
+        this.tel = ''
       },
       confirm() {
-        if (!this.password) {
-          this.$toast.show('请输入密码')
+        if (!this.name) {
+          this.$toast.show('请输入加盟商名称')
           return
         }
-        if (this.password !== this.rePassword) {
-          this.$toast.show('两次输入密码不相同')
+        if (!this.checkTel) {
+          this.$toast.show('请输入正确的加盟商账号')
           return
         }
-        this.$emit('confirm', {password: this.password, rePassword: this.rePassword})
+        if (this._clicking) {
+          this.$toast.show('请勿频繁操作!')
+          return
+        }
+        this._clicking = true
+        setTimeout(() => {
+          this._clicking = false
+        }, 1000)
+        API.Alliance.pushAlliance({name: this.name, mobile: this.tel}).then((res) => {
+          this.$emit('refresh')
+          this.hide()
+        })
       }
     }
   }

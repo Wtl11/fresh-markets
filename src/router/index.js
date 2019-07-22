@@ -3,9 +3,10 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
-// import {findLast} from 'lodash'
-// import store from '@state/store'
-// import API from '@api'
+import {findLast} from 'lodash'
+import {USER_TYPE} from '@utils/constant'
+import store from '@state/store'
+import API from '@api'
 // import storage from 'storage-controller'
 // import HTTP from '@utils/http'
 // import {app as APP} from '../main'
@@ -37,8 +38,12 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     NProgress.start()
   }
   // let identity = store.getters['auth/currentUserType']
-  // let record = findLast(routeTo.matched, (record) => record.meta.authority)
-  // console.log(record)
+  let record = findLast(routeTo.matched, (record) => record.meta.authority)
+  if (record && record.meta.authority.some((val) => val === USER_TYPE.INFORMATION)) {
+    API.Auth.validateInformation().then(res => {
+      store.dispatch('auth/setTokenInformation', res.data && res.data.access_token)
+    })
+  }
   // if (record && !identity && routeTo.path !== LOGIN_PATH) {
   //   try {
   //     let res = await API.Auth.validate()

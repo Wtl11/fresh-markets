@@ -93,8 +93,8 @@ export default [
         name: 'p-alliance-list',
         meta: {
           title: '账号白名单',
-          icon: require('./icon-supplier_1@2x.png'),
-          iconSelected: require('./icon-supplier_2@2x.png'),
+          icon: require('./icon-white_roster1@2x.png'),
+          iconSelected: require('./icon-white_roster2@2x.png'),
           crumbs: ['账号白名单'],
           authority: [USER_TYPE.SUPER]
         },

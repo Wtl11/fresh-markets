@@ -17,5 +17,25 @@ export default {
   validate() {
     let url = API_PUB + '/api/supplier/token-validate'
     return http.get({url})
-  }
+  },
+  /**
+   * ***************集市***************
+   */
+  // 登录
+  loginInformation(data, loading = true) {
+    let url = API_PUB + '/api/market/login'
+    return http.post({url, data, loading})
+  },
+  // 发送短信验证码
+  getCodeInformation(data, loading = true) {
+    let url = API_PUB + '/api/market/login-send-code'
+    return http.post({url, data, loading})
+  },
+  validateInformation(data, loading = false) {
+    let url = API_PUB + '/api/market/token-validate'
+    return http.get({url, data, loading})
+  },
+  /**
+   * ***************集市***************
+   */
 }

@@ -59,6 +59,7 @@
 
 <script type="text/ecmascript-6">
   import GoodsItem from '@components/goods-item/goods-item'
+  import {authComputed} from '@state/helpers'
 
   const COMPONENT_NAME = 'MARKET_INFO'
 
@@ -77,6 +78,7 @@
       return {}
     },
     computed: {
+      ...authComputed,
       areas() {
         return this.marketInfo.province + this.marketInfo.city + this.marketInfo.district
       },
@@ -86,8 +88,7 @@
     },
     methods: {
       navHandle() {
-        this._t = true // todo
-        if (this._t) {
+        if (!this.tokenInformation) {
           this.toLogin()
           return
         }

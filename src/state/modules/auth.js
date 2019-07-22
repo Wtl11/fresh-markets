@@ -4,12 +4,15 @@ import HTTP from '@utils/http'
 export const state = {
   currentUserType: undefined, // 当前用户类型
   currentUser: undefined,
-  token: 0
+  token: undefined,
+  // 集市
+  tokenInformation: undefined
 }
 
 export const getters = {
   currentUserType: (state) => state.currentUserType,
-  currentUser: (state) => state.currentUser
+  currentUser: (state) => state.currentUser,
+  tokenInformation: (state) => state.tokenInformation
 }
 
 export const mutations = {
@@ -22,13 +25,18 @@ export const mutations = {
   },
   SET_TOKEN(state, token) {
     state.token = token
+  },
+  SET_TOKEN_INFORMATION(state, token) {
+    state.tokenInformation = token
   }
 }
 
 export const actions = {
   init({commit}) {
     const auth = storage.get('auth', {})
+    const tokenInformation = storage.get('tokenInformation')
     setAuthConfig({auth, commit})
+    setTokenInformation({tokenInformation, commit})
   },
   setAuth({commit, state}, auth) {
     storage.set('auth', auth)
@@ -37,6 +45,11 @@ export const actions = {
   clearAuth({commit, state}) {
     storage.remove('auth')
     setAuthConfig({auth: undefined, commit})
+  },
+  setTokenInformation({commit, state}, tokenInformation) {
+    storage.set('tokenInformation', tokenInformation)
+    setTokenInformation({tokenInformation, commit})
+    commit('SET_TOKEN_INFORMATION', tokenInformation)
   }
 }
 
@@ -53,4 +66,11 @@ function setAuthConfig({auth = {}, commit}) {
   })
 }
 
-
+// 设置头部信息-集市
+function setTokenInformation({tokenInformation, commit}) {
+  commit('SET_TOKEN_INFORMATION', tokenInformation)
+  HTTP.setHeaders({
+    'Authorization-Franch': tokenInformation,
+    'Current-Corp': process.env.VUE_APP_CURRENT_CORP
+  })
+}

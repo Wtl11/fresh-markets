@@ -34,28 +34,6 @@
             <span class="start">*</span>
             营业执照
           </div>
-<!--          <div class="form-image-box">-->
-<!--            <div class="form-image">-->
-<!--              <div v-if="shopInfo.image_id && uploadImg.license" class="draggable">-->
-<!--                <div class="show-image hand">-->
-<!--                  <img class="img" :src="uploadImg.license" alt="">-->
-<!--                  <span class="close" @click="_delImg('image_id', 'license')"></span>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div v-else class="add-image hand">-->
-<!--                <input type="file"-->
-<!--                       class="sendImage hand"-->
-<!--                       multiple="multiple"-->
-<!--                       accept="image/*"-->
-<!--                       @change="_addImg('image_id', 'license', $event)"-->
-<!--                >-->
-<!--                <div v-if="uploadLoading && uploading === 'image_id'" class="loading-mask">-->
-<!--                  <img src="./loading.gif" class="loading">-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>-->
-<!--          </div>-->
           <div class="form-image-box">
             <section style="display: flex; align-items: center">
               <draggable v-model="uploadCertificateList">

@@ -4,8 +4,8 @@
       <img v-if="goodsInfo.goods_cover_image" class="goods-img" :src="goodsInfo.goods_cover_image" alt="">
     </div>
     <div class="msg-box">
-<!--      <p class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>-->
-      <p class="un-price">登录查看采购价</p>
+      <p v-if="goodsInfo.purchase_price >= 0" class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
+      <p v-else class="un-price">登录查看采购价</p>
       <p class="goods-title">{{goodsInfo.name}}</p>
       <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  import {authComputed} from '@state/helpers'
   export default {
     name: 'GoodsItem',
     props: {
@@ -32,6 +33,7 @@
       return {}
     },
     computed: {
+      ...authComputed,
       supplierName() {
         const supplier = this.goodsInfo.supplier || {}
         return supplier.name || ''
@@ -39,8 +41,7 @@
     },
     methods: {
       clickHandle() {
-        this._t = true // todo
-        if (this._t) {
+        if (!this.tokenInformation) {
           this.$emit('toLogin')
           return
         }

@@ -5,6 +5,7 @@ import store from '@state/store'
 
 const AUTHORITY_LOST = 10000 // 供应商权限失效
 const AUTHORITY_LOST_PLATFORM = 10024 // 平台权限失效
+const AUTHORITY_LOST_INFORMATION = 10025 // 集市权限失效
 const GOODS_LOST = 10022 // 集市商品详情，供应商被冻结、删除、商品删除
 
 HTTP.handleError((code) => {
@@ -19,6 +20,9 @@ HTTP.handleError((code) => {
       break
     case GOODS_LOST:
       APP && APP.$router.replace('/')
+      break
+    case AUTHORITY_LOST_INFORMATION:
+      APP && APP.$router.push('/')
       break
     default:
       APP && APP.$router.push('/')

@@ -29,7 +29,7 @@
                @click="getCodeHandle"
             >{{codeText ? codeText + 's' : '获取验证码'}}</p>
           </section>
-          <button class="submit-wrapper" :class="{active: checkTel && code}" @click="login">登录</button>
+          <button class="submit-wrapper" :class="{active: checkTel && code}" @click="loginHandle">登录</button>
         </div>
       </form>
     </div>
@@ -39,6 +39,9 @@
 <script type="text/ecmascript-6">
   import DefaultModal from '@components/default-modal/default-modal'
   import {checkIsPhoneNumber} from '@utils/common'
+  import {authMethod} from '@state/helpers'
+
+  import API from '@api'
 
   const COMPONENT_NAME = 'INFORMATION_LOGIN'
 
@@ -63,6 +66,7 @@
       clearInterval(this._timer)
     },
     methods: {
+      ...authMethod,
       show() {
         this.$refs.modal && this.$refs.modal.showModal()
       },
@@ -70,6 +74,10 @@
         this.$refs.modal && this.$refs.modal.hideModal()
       },
       getCodeHandle() {
+        if (!this.checkTel) {
+          this.$toast.show('请输入正确的手机号码')
+          return
+        }
         if (this.codeText) return
         this.codeText = 59
         this._timer = setInterval(() => {
@@ -79,8 +87,14 @@
             this.codeText = ''
           }
         }, 1000)
+        this._getCode()
       },
-      login() {
+      _getCode() {
+        API.Auth.getCodeInformation({mobile: this.tel}).then(res => {
+          this.$toast.show('验证码已发送,请注意查收!')
+        })
+      },
+      loginHandle() {
         if (!this.checkTel) {
           this.$toast.show('请输入正确的手机号码')
           return
@@ -97,7 +111,14 @@
         setTimeout(() => {
           this._logining = false
         }, 1000)
-        console.log('login')
+        this._login()
+      },
+      _login() {
+        API.Auth.loginInformation({mobile: this.tel, auth_code: this.code}).then(res => {
+          this.setTokenInformation(res.data.access_token)
+          this.hide()
+          this.$emit('refresh', 'login')
+        })
       }
     }
   }
@@ -150,7 +171,7 @@
       align-items:center
       justify-content :space-between
       & > img
-        width: 8px
+        width: 12px
         height: @width
         cursor :pointer
         extend-click()

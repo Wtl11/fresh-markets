@@ -8,14 +8,14 @@
     </div>
     <div class="table-content">
       <div class="identification">
-        <div class="identification-page">
+        <div class="identification-page" style="display: flex; width: 100%">
           <img src="./icon-supplier_list@2x.png" class="identification-icon">
-          <p class="identification-name">加盟商白名单</p>
-<!--          <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>-->
+          <p class="identification-name" style="flex: 1">加盟商白名单</p>
+          <button class="btn-main" style="margin-right: 10px;position: relative">批量导入
+          <input type="file" style="opacity: 0;width: 100%;height: 100%;position: absolute" @change="importHandle">
+          </button>
+          <button class="btn-main" @click="addListHandle"><span class="add-icon"></span> 创建白名单</button>
         </div>
-        <!--<div class="function-btn">
-          <router-link tag="div" to="new-coupon" append class="btn-main"><span class="add-icon"></span>新建商品</router-link>
-        </div>-->
       </div>
       <div class="big-list">
         <div class="list-header">
@@ -27,26 +27,8 @@
               <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
-              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
-                <img :src="item[val.value]" alt="" class="img hand">
-              </div>
-              <div v-if="+val.type === 3" id="explain" :style="{flex: val.flex}" class="item">
-                {{item[val.value] || '---'}}
-              </div>
-
-              <div v-if="+val.type === 4" :style="{flex: val.flex}" class="list-operation-box item">
+              <div v-if="+val.type === 4" :style="{ width: val.width}" class="list-operation-box item">
                 <span class="list-operation" @click="deleteSupplier(item)">删除</span>
-              </div>
-
-              <div v-if="+val.type === 5" :style="{flex: val.flex}" class="item list-item">
-                <div v-if="+item.approve_status !== 2 && +item.approve_status !== 0" class="list-item-btn" @click="switchBtn(item, index)">
-                  <base-switch :status="item.is_freeze ? 0 : 1" confirmText="开启" cancelText="冻结"></base-switch>
-                </div>
-                <span v-else>---</span>
-              </div>
-
-              <div v-if="+val.type === 6" :style="{flex: val.flex}" class="item">
-                {{item.province}}{{item.city}}{{item.district}}
               </div>
             </div>
           </div>
@@ -69,9 +51,8 @@
       </div>
     </default-modal>
 
-    <auditing-model ref="auditingModel" @confirm="auditingConfirm"></auditing-model>
-    <change-model ref="changeModel" @confirm="changePassword"></change-model>
-    <default-confirm ref="confirm" @confirm="confirm"></default-confirm>
+    <change-model ref="changeModel" @refresh="refreshHandle"></change-model>
+    <default-confirm ref="confirm" @confirm="delAllianceHandle"></default-confirm>
   </div>
 </template>
 
@@ -80,23 +61,16 @@
   import API from '@api'
   import DefaultModal from '@components/default-modal/default-modal'
   import DefaultConfirm from '@components/default-confirm/default-confirm'
-  import AuditingModel from './auditing-model/auditing-model'
+  // import AuditingModel from './auditing-model/auditing-model'
   import ChangeModel from './change-model/change-model'
+
   const PAGE_NAME = 'P_ALLIANCE_LIST'
   const TITLE = '加盟商白名单'
 
   const LIST_TITLE = [
-    {name: '加盟商名称', flex: 2, value: 'id', type: 1},
-    {name: '加盟商账号 ', flex: 2, value: 'name', type: 1},
-    // {name: '区域', flex: 1.2, value: 'area', type: 6},
-    // {name: '分类', flex: 1, value: 'goods_material_category', type: 1},
-    // {name: '营业执照', flex: 0.7, value: 'image_url', type: 2},
-    // {name: '联系人', flex: 1, value: 'contact', type: 1},
-    // {name: '联系方式', flex: 1, value: 'mobile', type: 1},
-    // {name: '提交时间', flex: 1, value: 'created_at', type: 1},
-    // {name: '审核说明', flex: 1, value: 'note', type: 3},
-    // {name: '状态', flex: 1, value: 'status', type: 5},
-    {name: '操作', flex: 1, value: '', type: 4}
+    {name: '加盟商名称', flex: 1, value: 'name', type: 1},
+    {name: '加盟商账号 ', flex: 1, value: 'mobile', type: 1},
+    {name: '操作', flex: 1, value: '', type: 4, width: 78}
   ]
 
   export default {
@@ -106,7 +80,7 @@
     },
     components: {
       DefaultConfirm,
-      AuditingModel,
+      // AuditingModel,
       ChangeModel,
       DefaultModal
     },
@@ -115,7 +89,6 @@
         listTitle: LIST_TITLE,
         requestData: {
           keyword: '',
-          approve_status: '',
           page: 1,
           limit: 10
         },
@@ -140,12 +113,11 @@
     computed: {},
     beforeRouteEnter(to, from, next) {
       let data = {
-        approve_status: '',
         keyword: '',
         page: 1,
         limit: 10
       }
-      API.PSupplierManage.getSupplierList(data, true)
+      API.Alliance.getList(data, true)
         .then((res) => {
           next((vm) => {
             let statePageTotal = {
@@ -163,32 +135,15 @@
           })
         })
     },
-    created() {
-      // this.getSupplierStatus()
-    },
-    mounted() {},
     methods: {
-      search(keyword) {
-        this.setData({page: 1, keyword})
-        this.$refs.pagination.beginPage()
-        this.getSupplierList()
-        this.getSupplierStatus()
+      addListHandle() {
+        this.$refs.changeModel && this.$refs.changeModel.show()
       },
-      // 切换tab栏
-      changeStatus(selectStatus) {
-        this.setData({page: 1, approve_status: selectStatus.value})
-        this.getSupplierList()
-        this.getSupplierStatus()
-        this.$refs.pagination.beginPage()
+      refreshHandle() {
+        this._getList()
       },
-      // 翻页
-      addPage(page) {
-        this.requestData.page = page
-        this.getSupplierList()
-      },
-      // 获取列表
-      getSupplierList() {
-        API.PSupplierManage.getSupplierList(this.requestData, false).then((res) => {
+      _getList() {
+        API.Alliance.getList(this.requestData).then(res => {
           let statePageTotal = {
             total: res.meta.total,
             per_page: res.meta.per_page,
@@ -198,69 +153,40 @@
           this.pageDetail = statePageTotal
         })
       },
-      // 获取Tab栏状态
-      getSupplierStatus() {
-        API.PSupplierManage.getStatus({keyword: this.requestData.keyword}).then((res) => {
-          this.statusTab = res.data.map((item, index) => {
-            return {
-              name: item.status_str,
-              value: item.status,
-              num: item.statistic
-            }
-            // this.$set(this.statusTab[index], 'num', item.statistic)
-          })
-        })
+      search(keyword) {
+        this.setData({page: 1, keyword})
+        this.$refs.pagination.beginPage()
+        this._getList()
       },
-      showBigImg(src) {
-        this.currentImgSrc = src
-        this.$refs.imgModal.showModal()
-      },
-      switchBtn(item, index) {
-        let isFreeze = item.is_freeze ? 0 : 1
-        API.PSupplierManage.changeStatus({is_freeze: isFreeze, id: item.id}).then((res) => {
-          this.getSupplierList()
-        })
-      },
-      auditing(item) {
-        this.currentItem = item
-        this.$refs.auditingModel.show()
-      },
-      auditingConfirm(data) {
-        this.$refs.auditingModel.hide()
-        API.PSupplierManage.auditingSupplier({
-          id: this.currentItem.id,
-          approve_status: data.status,
-          note: data.reason
-        }).then((res) => {
-          this.$toast.show('审核成功')
-          this.getSupplierStatus()
-          this.getSupplierList()
-        })
-      },
-      resetPassword(item) {
-        this.currentItem = item
-        this.$refs.changeModel.show()
-      },
-      changePassword(data) {
-        API.PSupplierManage.resetPassword({password: data.password, id: this.currentItem.id}).then((res) => {
-          this.$toast.show('修改密码成功')
-          this.$refs.changeModel.hide()
-        })
+      addPage(page) {
+        this.requestData.page = page
+        this._getList()
       },
       deleteSupplier(item) {
         this.currentItem = item
-        this.$refs.confirm.show('确定删除' + item.name + '供应商?', '删除')
+        this.$refs.confirm.show(`删除账号白名单后该加盟商(${item.name})将无法登录集市`, '删除提示')
       },
-      // 删除供应商
-      confirm() {
-        API.PSupplierManage.supplierDelete(this.currentItem.id).then((res) => {
-          this.$toast.show('该供应商已成功删除')
-          this.getSupplierStatus()
-          this.getSupplierList()
+      delAllianceHandle() {
+        API.Alliance.deleteAlliance(this.currentItem.id).then(res => {
+          this._getList()
         })
       },
       setData(data) {
         this.requestData = Object.assign({}, this.requestData, data)
+      },
+      importHandle(e) {
+        let param = this._infoFile(e.target.files[0])
+        this.$loading.show('上传中...')
+        API.Alliance.importAlliance(param).then(res => {
+          e.target.value = ''
+          this._getList()
+        })
+      },
+      // 格式化文件
+      _infoFile(file) {
+        let param = new FormData() // 创建form对象
+        param.append('file', file, file.name) // 通过append向form对象添加数据
+        return param
       }
     }
   }
