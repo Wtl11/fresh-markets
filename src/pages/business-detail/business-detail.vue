@@ -52,6 +52,7 @@
     </section>
 
     <div class="bottom"></div>
+    <common-footer></common-footer>
   </div>
 </template>
 
@@ -59,6 +60,8 @@
   import API from '@api'
   import GoodsItem from '@components/goods-item/goods-item'
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
+  import CommonFooter from '@components/common-footer/common-footer'
+
   const PAGE_NAME = 'BUSINESS_DETAIL'
   const TITLE = '商家信息'
 
@@ -71,7 +74,8 @@
     },
     components: {
       GoodsItem,
-      GoodsPagination
+      GoodsPagination,
+      CommonFooter
     },
     data() {
       return {

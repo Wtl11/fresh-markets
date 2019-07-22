@@ -98,12 +98,15 @@
     </section>
 
     <div class="bottom"></div>
+    <common-footer></common-footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import API from '@api'
   import GoodsItem from '@components/goods-item/goods-item'
+  import CommonFooter from '@components/common-footer/common-footer'
+
   const PAGE_NAME = 'GOODS_DETAIL'
   const TITLE = '商品详情'
 
@@ -115,7 +118,8 @@
       }
     },
     components: {
-      GoodsItem
+      GoodsItem,
+      CommonFooter
     },
     data() {
       return {

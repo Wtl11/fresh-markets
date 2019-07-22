@@ -73,6 +73,7 @@
         <goods-pagination v-if="pageDetail.total_page > 1" ref="pagination" :pagination="page" :pageDetail="pageDetail" @addPage="addPage"></goods-pagination>
       </section>
     </article>
+    <common-footer></common-footer>
     <information-login ref="login" @refresh="refreshHandle"></information-login>
   </div>
 </template>
@@ -86,6 +87,7 @@
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
   import InformationLogin from './information-login/information-login'
   import {authMethod} from '@state/helpers'
+  import CommonFooter from '@components/common-footer/common-footer'
 
 
   const PAGE_NAME = 'INFORMATION'
@@ -98,7 +100,8 @@
       GoodsItem,
       MarketInfo,
       GoodsPagination,
-      InformationLogin
+      InformationLogin,
+      CommonFooter
     },
     page: {
       title: TITLE
@@ -350,8 +353,7 @@
 
   .information
     font-family: $font-family-regular
-    min-height :2238px
-    padding-bottom :50px
+    padding-bottom :0
     .body-wrapper
       width :$minWidth
       margin :0 auto
