@@ -56,6 +56,21 @@
             >
           </div>
         </div>
+        <section class="form-item">
+          <div class="form-title">
+            <span class="start">*</span>
+            商品起批量
+          </div>
+          <div class="form-input-box">
+            <input v-model="goodsInfo.goods_start_num"
+                   :disabled="onlyCheck"
+                   type="number"
+                   class="form-input"
+                   @mousewheel.native.prevent
+                   placeholder="默认为1件起批"
+            >
+          </div>
+        </section>
       </div>
       <div class="content-header content-padding-top">
         <div class="content-title">图文信息</div>
@@ -147,6 +162,7 @@
           goods_supplier_category_id: '',
           name: '',
           goods_supplier_skus: [{purchase_specs: '', purchase_price: '', goods_sku_code: '', goods_supplier_sku_id: ''}],
+          goods_start_num: '',
           goods_main_images: [],
           goods_detail_images: []
         },
@@ -177,6 +193,11 @@
         })
       }
     },
+    watch: {
+      'goodsInfo.goods_start_num'(val) {
+        console.log(val)
+      }
+    },
     mounted() {
       const type = this.$route.query.type
       this.onlyCheck = !!(type === 'check')
@@ -191,6 +212,7 @@
           goods_supplier_category_id: resData.goods_supplier_category_id,
           name: resData.name,
           goods_supplier_skus: resData.goods_supplier_skus,
+          goods_start_num: resData.goods_start_num,
           goods_main_images: resData.goods_main_images,
           goods_detail_images: resData.goods_detail_images
         }
@@ -249,11 +271,17 @@
           name: '请输入商品主标题',
           goods_supplier_skus: '请输入采购价格',
           goods_main_images: '请上传商品封面图',
-          goods_detail_images: '请上传商品详情图'
+          goods_detail_images: '请上传商品详情图',
+          goods_start_num: '起批量不能小于1'
         }
         for (let k in this.goodsInfo) {
           if (k === 'goods_supplier_skus') {
             if (!this.goodsInfo.goods_supplier_skus[0].purchase_price.trim()) {
+              this.$toast.show(errorMsg[k])
+              return false
+            }
+          } else if (k === 'goods_start_num') {
+            if (+this.goodsInfo.goods_start_num < 1) {
               this.$toast.show(errorMsg[k])
               return false
             }
