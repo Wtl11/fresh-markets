@@ -66,8 +66,8 @@
                    :disabled="onlyCheck"
                    type="number"
                    class="form-input"
-                   @mousewheel.native.prevent
                    placeholder="默认为1件起批"
+                   @mousewheel.native.prevent
             >
           </div>
         </section>

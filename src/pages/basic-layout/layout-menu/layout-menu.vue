@@ -10,6 +10,7 @@
         <img v-if="checkIsActive(item) &&item.meta && item.meta.iconSelected" :src="item.meta.iconSelected" alt="">
         <img v-else-if="item.meta && item.meta.icon" :src="item.meta.icon" alt="">
         <span>{{item.meta && item.meta.title}}</span>
+        <div v-show="checkIsActive(item)" class="light-border"></div>
       </li>
     </ul>
     <div class="nav-wrapper" @click="navigationHandle">
@@ -167,6 +168,14 @@
         align-items :center
         justify-content :center
         cursor : pointer
+        position :relative
+        .light-border
+          height: 100%
+          width: 1px
+          position absolute
+          left :0
+          top: 0
+          background: #555CA7;
         &.active
           background: #3F4478;
           & > span

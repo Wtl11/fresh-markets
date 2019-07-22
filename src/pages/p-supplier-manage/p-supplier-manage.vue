@@ -27,7 +27,7 @@
               <div v-if="+val.type === 1" :style="{flex: val.flex}" class="item">
                 {{item[val.value] || '---'}}
               </div>
-              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item.image_url)">
+              <div v-if="+val.type === 2" :style="{flex: val.flex}" class="item" @click="showBigImg(item)">
                 <img :src="item[val.value]" alt="" class="img hand">
               </div>
               <div v-if="+val.type === 3" id="explain" :style="{flex: val.flex}" class="item">
@@ -77,7 +77,10 @@
           <span class="close" @click="$refs.imgModal.hideModal()"></span>
         </div>
         <div class="model-img-wrap">
-          <img :src="currentImgSrc" alt="" class="big-img">
+          <img v-if="currentImgList[currentImgIndex]" :src="currentImgList[currentImgIndex].url" alt="" class="big-img">
+          <img src="./icon-img_left@2x.png" alt="" class="icon-handle hand left" @click="changeImage(-1)">
+          <img src="./icon-img_right@2x.png" alt="" class="icon-handle hand right" @click="changeImage(1)">
+          <p class="indicator-wrapper">{{currentImgIndex + 1}} / {{currentImgList.length}}</p>
         </div>
       </div>
     </default-modal>
@@ -145,8 +148,9 @@
         },
         defaultIndex: 0,
         currentItem: {},
-        currentImgSrc: '',
-        confirmStatus: ''
+        currentImgList: [],
+        confirmStatus: '',
+        currentImgIndex: 0
       }
     },
     computed: {},
@@ -180,6 +184,12 @@
     },
     mounted() {},
     methods: {
+      changeImage(index) {
+        let i = this.currentImgIndex + index
+        i = Math.max(0, i)
+        i = Math.min(this.currentImgList.length - 1, i)
+        this.currentImgIndex = i
+      },
       search(keyword) {
         this.setData({page: 1, keyword})
         this.$refs.pagination.beginPage()
@@ -223,8 +233,8 @@
           })
         })
       },
-      showBigImg(src) {
-        this.currentImgSrc = src
+      showBigImg(item) {
+        this.currentImgList = item.images || []
         this.$refs.imgModal.showModal()
       },
       switchBtn(item, index) {
@@ -388,6 +398,22 @@
       width: 500px
       text-align center
       padding:20px
+      position :relative
+      .indicator-wrapper
+        row-center()
+        font-family :$font-family-medium
+        color: #333
+        font-size :20px
+        bottom :40px
+      .icon-handle
+        col-center()
+        top: 40%
+        width: 30px
+        height: @width
+        &.left
+          left :20px
+        &.right
+          right: 20px
     .big-img
       max-width: 100%
       max-height: 100%
