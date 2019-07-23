@@ -45,7 +45,7 @@
           :showCompany="false"
           :goodsInfo="item"
           class="goods-item-wrapper"
-          @toLogin="toLogin"
+          @toLogin="toLogin(item)"
         ></goods-item>
       </template>
 
@@ -101,8 +101,8 @@
       qrCodeHandle() {
         window.open(this.marketInfo.wechat_image_url, '_blank')
       },
-      toLogin() {
-        this.$emit('toLogin')
+      toLogin(item) {
+        this.$emit('toLogin', item)
       }
     }
   }
