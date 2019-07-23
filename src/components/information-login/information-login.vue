@@ -80,9 +80,12 @@
           this.$toast.show('请输入正确的手机号码')
           return
         }
-        if (this.codeText) return
-        this.codeText = 59
+        this._coding = true
+        setTimeout(() => {
+          this._coding = false
+        }, 1000)
         this._getCode(() => {
+          this.codeText = 59
           this._timer = setInterval(() => {
             this.codeText--
             if (this.codeText <= 0) {
@@ -95,6 +98,7 @@
       _getCode(cb) {
         API.Auth.getCodeInformation({mobile: this.tel}).then(res => {
           this.$toast.show('验证码已发送,请注意查收!')
+          cb()
         })
       },
       loginHandle() {
