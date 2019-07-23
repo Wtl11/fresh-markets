@@ -281,7 +281,7 @@
               return false
             }
           } else if (k === 'goods_start_num') {
-            if (+this.goodsInfo.goods_start_num < 1) {
+            if (+this.goodsInfo.goods_start_num < 1 && this.goodsInfo.goods_start_num !== '') {
               this.$toast.show(errorMsg[k])
               return false
             }
@@ -308,6 +308,7 @@
         if (this.goodsId) {
           apiName = 'editGoodsInfo'
         }
+        this.goodsInfo = {...this.goodsInfo, goods_start_num: this.goodsInfo.goods_start_num || 1}
         API.GoodsManage[apiName](this.goodsInfo, true, this.goodsId)
           .then((res) => {
             if (this.goodsId) {
@@ -511,9 +512,6 @@
                 width: 25px
                 height: 25px
   .button-con
-    position: absolute
-    bottom: 0
-    left: 0
     box-sizing: border-box
     width: 100%
     height: 80px

@@ -19,7 +19,7 @@
         if (!content) return
         this.content = content
         this.showToast = true
-        const showTime = time || 2000
+        const showTime = time || 2500
         setTimeout(() => {
           this.showToast = false
         }, showTime)
