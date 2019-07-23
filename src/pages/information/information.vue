@@ -61,7 +61,7 @@
         </article>
         <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
           <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-            <goods-item :goodsInfo="item" @toLogin="toLoginHandle(item)"></goods-item>
+            <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
           </div>
         </section>
         <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">

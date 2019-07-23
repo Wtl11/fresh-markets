@@ -80,6 +80,10 @@
           this.$toast.show('请输入正确的手机号码')
           return
         }
+        if (this._coding || this.codeText) {
+          this.$toast.show('请频繁复操作')
+          return
+        }
         this._coding = true
         setTimeout(() => {
           this._coding = false
@@ -125,7 +129,7 @@
           this.setTokenInformation(res.data.access_token)
           this.hide()
           this.$emit('refresh', 'login')
-          if (!this.shopInfo) return
+          if (!this.goodsInfo) return
           let routeUrl = this.$router.resolve({
             path: '/goods-detail',
             query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}

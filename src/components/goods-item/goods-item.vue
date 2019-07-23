@@ -42,7 +42,7 @@
     methods: {
       clickHandle() {
         if (!this.tokenInformation) {
-          this.$emit('toLogin')
+          this.$emit('toLogin', this.goodsInfo)
           return
         }
         let routeUrl = this.$router.resolve({

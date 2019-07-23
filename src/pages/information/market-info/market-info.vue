@@ -45,7 +45,7 @@
           :showCompany="false"
           :goodsInfo="item"
           class="goods-item-wrapper"
-          @toLogin="toLogin(item)"
+          @toLogin="toLogin"
         ></goods-item>
       </template>
 

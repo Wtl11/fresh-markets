@@ -59,7 +59,7 @@
             </p>
             <p class="condition">
               <span class="label">起批量</span>
-              <span class="text">≥ {{supplierDetail.goods_start_num || 0}}</span>
+              <span class="text">≥ {{goodsDetail.goods_start_num || 0}}</span>
             </p>
           </div>
           <div class="bottom-context">
