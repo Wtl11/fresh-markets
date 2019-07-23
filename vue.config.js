@@ -1,9 +1,9 @@
 const appConfig = require('./src/app.config')
 const TerserPlugin = require('terser-webpack-plugin');
-
+let toBuild = process.argv.some(val => val === 'build')
 let optimization = {}
 const splitChunks = {}
-if (process.env.VUE_APP_ENV === 'production'){
+if (toBuild){
   splitChunks.cacheGroups = {
     vendors: {
       name: 'chunk-vendors',
@@ -55,12 +55,12 @@ module.exports = {
     return config
   },
   css: {
-    sourceMap: false,
+    sourceMap: !toBuild,
     extract: true,
     loaderOptions: {},
-    modules: false
+    modules: !toBuild
   },
-  productionSourceMap: false,
+  productionSourceMap: !toBuild,
   devServer: {
     port: 8956,
     ...(process.env.VUE_APP_API

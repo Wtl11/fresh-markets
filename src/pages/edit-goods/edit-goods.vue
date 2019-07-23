@@ -83,17 +83,17 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <draggable v-if="goodsInfo.goods_main_images" v-model="goodsInfo.goods_main_images" class="draggable">
-                <div v-for="(item, index) in goodsInfo.goods_main_images" :key="index" class="show-image hand">
+              <draggable v-if="goods_main_images" v-model="goods_main_images" class="draggable">
+                <div v-for="(item, index) in goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
-                  <span v-if="!onlyCheck" class="close" @click="_delImg('goods_main_images', index)"></span>
+                  <span v-if="!onlyCheck" class="close" @click="deleteImageHandle({key: 'goods_detail_images', index: index})"></span>
                 </div>
               </draggable>
-              <div v-if="!onlyCheck && goodsInfo.goods_main_images.length < 5" class="add-image hand">
+              <div v-if="!onlyCheck && goods_main_images.length < 5" class="add-image hand">
                 <input :disabled="onlyCheck" type="file" class="sendImage hand" multiple="multiple" accept="image/*"
-                       @change="_addImg('goods_main_images', $event)"
+                       @change="addImagesHandle($event, {key: 'goods_main_images', limit: 5})"
                 >
-                <div v-if="uploadLoading && uploading === 'goods_main_images'" class="loading-mask">
+                <div v-if="uploading === 'goods_main_images'" class="loading-mask">
                   <img src="./loading.gif" class="loading">
                 </div>
               </div>
@@ -108,17 +108,20 @@
           </div>
           <div class="form-image-box">
             <div class="form-image">
-              <draggable v-if="goodsInfo.goods_detail_images" v-model="goodsInfo.goods_detail_images" class="draggable" @update="_setSort()">
-                <div v-for="(item, index) in goodsInfo.goods_detail_images" :key="index" class="show-image hand">
+              <draggable v-if="goods_detail_images" v-model="goods_detail_images" class="draggable">
+                <div v-for="(item, index) in goods_detail_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
-                  <span v-if="!onlyCheck" class="close" @click="_delImg('goods_detail_images', index)"></span>
+                  <span v-if="!onlyCheck" class="close" @click="deleteImageHandle({key: 'goods_detail_images', index: index})"></span>
                 </div>
               </draggable>
-              <div v-if="!onlyCheck && goodsInfo.goods_detail_images.length < 15" class="add-image hand">
-                <input type="file" class="sendImage hand" multiple="multiple" accept="image/*"
-                       @change="_addImg('goods_detail_images', $event)"
+              <div v-if="!onlyCheck && goods_detail_images.length < 15" class="add-image hand">
+                <input type="file"
+                       class="sendImage hand"
+                       multiple="multiple"
+                       accept="image/*"
+                       @change="addImagesHandle($event, {key: 'goods_detail_images', limit: 15})"
                 >
-                <div v-if="uploadLoading && uploading === 'goods_detail_images'" class="loading-mask">
+                <div v-if="uploading === 'goods_detail_images'" class="loading-mask">
                   <img src="./loading.gif" class="loading">
                 </div>
               </div>
@@ -169,7 +172,9 @@
         firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
         secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadLoading: false,
-        uploading: ''
+        uploading: '',
+        goods_detail_images: [],
+        goods_main_images: []
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -193,11 +198,6 @@
         })
       }
     },
-    watch: {
-      'goodsInfo.goods_start_num'(val) {
-        console.log(val)
-      }
-    },
     mounted() {
       const type = this.$route.query.type
       this.onlyCheck = !!(type === 'check')
@@ -205,6 +205,46 @@
       document.title = this.pageTitle
     },
     methods: {
+      _formatTarget(key) {
+        let target = this
+        if (key.includes('.')) {
+          key.split('.').forEach(item => {
+            target = target[`${item}`]
+          })
+        }
+        return target
+      },
+      // 删除图片
+      deleteImageHandle({key, index}) {
+        this[key].splice(index, 1)
+      },
+      // 添加图片
+      addImagesHandle(e, {key, limit}) {
+        if (this.uploading === key) {
+          this.$toast.show('图片上传中,请勿重复操作！')
+          return
+        }
+        let arr = e.target.files
+        let files = []
+        let increasedQuantity = Math.max(limit - this[key].length, 0)
+        for (let f of arr) {
+          if (files.length < increasedQuantity) {
+            files.push(f)
+          }
+        }
+        this.uploading = key
+        uploadFiles({files}).then(res => {
+          this[key] = this[key].concat(res.map(item => {
+            let data = item.data || {}
+            return {
+              image_url: data.url,
+              image_id: data.id
+            }
+          }))
+          this.uploading = ''
+          e.target.value = ''
+        })
+      },
       _setGoodsInfo(resData) {
         this.goodsId = resData.goods_supplier_id
         this._getCategoryData()
@@ -216,6 +256,8 @@
           goods_main_images: resData.goods_main_images,
           goods_detail_images: resData.goods_detail_images
         }
+        this.goods_detail_images = resData.goods_detail_images
+        this.goods_main_images = resData.goods_main_images
       },
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1, goods_id: this.goodsId || ''}).then((res) => {
@@ -274,6 +316,8 @@
           goods_detail_images: '请上传商品详情图',
           goods_start_num: '起批量不能小于1'
         }
+        this.goodsInfo.goods_detail_images = this.goods_detail_images
+        this.goodsInfo.goods_main_images = this.goods_main_images
         for (let k in this.goodsInfo) {
           if (k === 'goods_supplier_skus') {
             if (!this.goodsInfo.goods_supplier_skus[0].purchase_price.trim()) {

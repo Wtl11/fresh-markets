@@ -278,7 +278,6 @@
           this.uploading = ''
           e.target.value = ''
         })
-
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
