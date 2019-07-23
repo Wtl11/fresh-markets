@@ -55,7 +55,7 @@
         tel: '',
         code: '',
         codeText: '',
-        goodsInfo: {}
+        goodsInfo: null
       }
     },
     computed: {
@@ -125,6 +125,7 @@
           this.setTokenInformation(res.data.access_token)
           this.hide()
           this.$emit('refresh', 'login')
+          if (!this.shopInfo) return
           let routeUrl = this.$router.resolve({
             path: '/goods-detail',
             query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
