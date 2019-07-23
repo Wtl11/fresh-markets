@@ -3,7 +3,7 @@
     <p class="link-wrapper">
       <span v-for="(item, index) in linkList" :key="index" class="link-item">{{item.text}}</span>
     </p>
-    <p class="copy-right-wrapper">备案号: 粤ICP备18014657号-1<i class="space"></i>粤公网安备 44011102001247号<i class="space"></i>Copyright © 2017 - 2019赞播集团 版权所有</p>
+    <p class="copy-right-wrapper"><a href="http://www.beian.miit.gov.cn" target="_blank" class="a-link">备案号: 粤ICP备18014657号-1</a><i class="space"></i>粤公网安备 44011102001247号<i class="space"></i>Copyright © 2019赞播集团 版权所有</p>
     <div class="img-wrapper">
       <img src="./pic-wangbei@2x.png" alt="">
       <img src="./pic-jubao@2x.png" alt="">
@@ -76,6 +76,8 @@
     .copy-right-wrapper
       padding-top :14px
       opacity: 0.5;
+      .a-link
+        color: #fff
       .space
         display :inline-block
         width :20px
