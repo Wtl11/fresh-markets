@@ -52,7 +52,7 @@
       <div>
         <section v-if="tabIndex===1 && marketList.length" class="goods-list">
           <div v-for="(item, idx) in marketList" :key="idx" class="market-item-info">
-            <market-info :marketInfo="item" @toLogin="toLoginHandle"></market-info>
+            <market-info :marketInfo="item" @toLogin="toLoginHandle(item)"></market-info>
           </div>
         </section>
         <article v-else-if="tabIndex===1 && !isFirstLoadMarket" class="empty-wrapper">
