@@ -178,9 +178,9 @@
         let param = this._infoFile(e.target.files[0])
         this.$loading.show('上传中...')
         API.Alliance.importAlliance(param).then(res => {
-          e.target.value = ''
           this._getList()
         })
+        e.target.value = ''
       },
       // 格式化文件
       _infoFile(file) {
