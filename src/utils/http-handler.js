@@ -22,6 +22,7 @@ HTTP.handleError((code) => {
       APP && APP.$router.replace('/')
       break
     case AUTHORITY_LOST_INFORMATION:
+      store.dispatch('auth/setTokenInformation', undefined)
       APP && APP.$router.push('/')
       break
     default:
