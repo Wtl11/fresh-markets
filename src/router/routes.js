@@ -40,6 +40,9 @@ export default [
       {
         path: '/information',
         name: 'information',
+        meta: {
+          authority: [USER_TYPE.INFORMATION]
+        },
         component: () => import('@pages/information/information')
       },
       {
