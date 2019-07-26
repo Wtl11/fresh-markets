@@ -13,6 +13,7 @@
                  placeholder="请输入11位手机号"
                  class="input"
                  :class="{active: checkTel}"
+                 @keyup.enter="loginHandle"
           >
           <section class="code-wrapper">
             <div class="input-wrapper left">
@@ -22,6 +23,7 @@
                      placeholder="请输入验证码"
                      class="input"
                      :class="{active: code}"
+                     @keyup.enter="loginHandle"
               >
             </div>
             <p class="input-wrapper right"

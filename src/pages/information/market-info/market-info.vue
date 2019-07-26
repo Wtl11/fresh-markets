@@ -99,6 +99,10 @@
         window.open(routeUrl.href, '_blank')
       },
       qrCodeHandle() {
+        if (!this.tokenInformation) {
+          this.toLogin()
+          return
+        }
         window.open(this.marketInfo.wechat_image_url, '_blank')
       },
       toLogin(item) {

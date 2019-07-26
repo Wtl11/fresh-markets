@@ -20,7 +20,7 @@
               </div>
             </div>
           </div>
-          <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code">
+          <img :src="supplierDetail.wechat_image_url" alt="" class="qr-code hand" @click="qrCodeHandle">
         </div>
       </div>
     </section>
@@ -62,6 +62,7 @@
   import GoodsPagination from '@components/goods-pagination/goods-pagination'
   import CommonFooter from '@components/common-footer/common-footer'
   import InformationLogin from '@components/information-login/information-login'
+  import {authComputed} from '@state/helpers'
 
   const PAGE_NAME = 'BUSINESS_DETAIL'
   const TITLE = '商家信息'
@@ -94,6 +95,9 @@
         supplierDetail: {}
       }
     },
+    computed: {
+      ...authComputed,
+    },
     beforeRouteEnter(to, from, next) {
       next()
     },
@@ -103,10 +107,17 @@
       this.getGoodsList()
     },
     methods: {
+      qrCodeHandle() {
+        if (!this.tokenInformation) {
+          this.$refs.login && this.$refs.login.show()
+        }
+
+      },
       toLoginHandle(item) {
         this.$refs.login && this.$refs.login.show(item)
       },
       refreshHandle() {
+        this.getSupplierDetail()
         this.getGoodsList()
       },
       getSupplierDetail() {
