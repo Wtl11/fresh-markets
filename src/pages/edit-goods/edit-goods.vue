@@ -86,7 +86,7 @@
               <draggable v-if="goods_main_images" v-model="goods_main_images" class="draggable">
                 <div v-for="(item, index) in goods_main_images" :key="index" class="show-image hand">
                   <img class="img" :src="item.image_url" alt="">
-                  <span v-if="!onlyCheck" class="close" @click="deleteImageHandle({key: 'goods_detail_images', index: index})"></span>
+                  <span v-if="!onlyCheck" class="close" @click="deleteImageHandle({key: 'goods_main_images', index: index})"></span>
                 </div>
               </draggable>
               <div v-if="!onlyCheck && goods_main_images.length < 5" class="add-image hand">
