@@ -20,7 +20,7 @@
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">商品列表</p>
-          <base-status-tab :infoTabIndex="0" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
+          <base-status-nav :statusList="statusTab" :value="tabStatus" @change="changeStatus"></base-status-nav>
         </div>
         <div class="function-btn">
           <router-link tag="div" to="/manager/goods-manage/edit-goods?type=create" append class="btn-main g-btn-item">新建商品<span class="add-icon"></span></router-link>
@@ -234,8 +234,8 @@
       },
       // 切换tab栏
       changeStatus(selectStatus) {
-        this.tabStatus = selectStatus.value
-        this.setData({page: 1, audit_status: selectStatus.value})
+        this.tabStatus = selectStatus
+        this.setData({page: 1, audit_status: selectStatus})
         this.$refs.pagination.beginPage()
         this._getGoodsList()
       },

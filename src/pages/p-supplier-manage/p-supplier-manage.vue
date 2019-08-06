@@ -11,7 +11,7 @@
         <div class="identification-page">
           <img src="./icon-supplier_list@2x.png" class="identification-icon">
           <p class="identification-name">供应商列表</p>
-          <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
+          <base-status-nav :statusList="statusTab" :value="requestData.approve_status" @change="changeStatus"></base-status-nav>
         </div>
         <!--<div class="function-btn">
           <router-link tag="div" to="new-coupon" append class="btn-main"><span class="add-icon"></span>新建商品</router-link>
@@ -198,7 +198,7 @@
       },
       // 切换tab栏
       changeStatus(selectStatus) {
-        this.setData({page: 1, approve_status: selectStatus.value})
+        this.setData({page: 1, approve_status: selectStatus})
         this.getSupplierList()
         this.getSupplierStatus()
         this.$refs.pagination.beginPage()

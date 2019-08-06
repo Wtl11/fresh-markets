@@ -20,7 +20,7 @@
         <div class="identification-page">
           <img src="./icon-product_list@2x.png" class="identification-icon">
           <p class="identification-name">商品列表</p>
-          <base-status-tab :infoTabIndex="defaultIndex" :statusList="statusTab" @setStatus="changeStatus"></base-status-tab>
+          <base-status-nav :statusList="statusTab" :value="requestData.audit_status" @change="changeStatus"></base-status-nav>
         </div>
       </div>
       <div class="big-list">
@@ -205,7 +205,7 @@
       },
       // 切换tab栏
       changeStatus(selectStatus) {
-        this.setData({page: 1, audit_status: selectStatus.value})
+        this.setData({page: 1, audit_status: selectStatus})
         this.getGoodsList()
         this.getGoodsStatus()
         this.$refs.pagination.beginPage()

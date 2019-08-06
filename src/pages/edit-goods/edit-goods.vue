@@ -71,6 +71,22 @@
             >
           </div>
         </section>
+        <section class="form-item">
+          <div class="form-title">
+            <span class="start">*</span>
+            送货方式
+          </div>
+          <div class="form-input-box flex-center">
+            <div class="check-box hand" @click="changeCheckbox(1)">
+              <span class="icon" :class="{'active': +checkBox === 1}"></span>
+              <span class="text">一件代发</span>
+            </div>
+            <div class="check-box hand" @click="changeCheckbox(2)">
+              <span class="icon" :class="{'active': +checkBox === 2}"></span>
+              <span class="text">区域配送</span>
+            </div>
+          </div>
+        </section>
       </div>
       <div class="content-header content-padding-top">
         <div class="content-title">图文信息</div>
@@ -174,7 +190,8 @@
         uploadLoading: false,
         uploading: '',
         goods_detail_images: [],
-        goods_main_images: []
+        goods_main_images: [],
+        checkBox: 1
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -283,6 +300,9 @@
           this[childKey].data = data.list
           this[childKey].content = '二级类目'
         }
+      },
+      changeCheckbox(num) {
+        this.checkBox = num
       },
       _setSort() {},
       _addImg(key, e) {
@@ -555,6 +575,29 @@
                 all-center()
                 width: 25px
                 height: 25px
+        .flex-center
+          display: flex
+          align-items: center
+        .check-box
+          display: flex
+          align-items: center
+          .icon
+            width: 20px
+            height: 20px
+            border-radius: 5px
+            border: 1px solid #E9ECF0
+            transition: all 0.2s
+            background: url("./icon-white@2x.png")
+            background-size: 100% 100%
+            &.active
+              background: url("./icon-checkbox@2x.png")
+              background-size: 100% 100%
+              border: 1px solid $color-main
+          .text
+            color: #666
+            font-size: $font-size-14
+            margin-right: 50px
+            margin-left: 5px
   .button-con
     box-sizing: border-box
     width: 100%
