@@ -7,6 +7,10 @@
       <p v-if="goodsInfo.purchase_price >= 0" class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
       <p v-else class="un-price">登录查看采购价</p>
       <p class="goods-title">{{goodsInfo.name}}</p>
+      <p class="goods-tag">
+        <span class="tag-text">一件代发</span>
+        <span class="tag-text">区域发货</span>
+      </p>
       <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">
         <span class="company-txt">{{supplierName}}</span>
@@ -114,12 +118,29 @@
         display: -webkit-box
         -webkit-line-clamp:2
         -webkit-box-orient: vertical
+      .goods-tag
+        display: flex
+        align-items: center
+        height: 22px
+        flex: 1
+        margin-bottom: 10px
+        .tag-text
+          color: #FF520F
+          font-size: $font-size-12
+          font-family: $font-family-regular
+          border: 1px solid #FF520F
+          width: 64px
+          height: 22px
+          text-align: center
+          line-height: 22px
+          margin-right: 6px
 
       .company-msg
         flex: 1
         display: flex
         align-items: center
-        border-top: 1px solid #ECECEC
+        height: 35px
+        border-top: 1px dashed #ECECEC
         .company-icon
           width: 16px
           height: 16px

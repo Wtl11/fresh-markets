@@ -36,7 +36,13 @@
     </section>
     <!--商品信息-->
     <section class="goods-msg">
-      <h2 class="goods-title">{{goodsDetail.name}}</h2>
+      <h2 class="goods-title">
+        <p class="title">{{goodsDetail.name}}</p>
+        <p class="goods-tag">
+          <span class="tag-text">一件代发</span>
+          <span class="tag-text">区域发货</span>
+        </p>
+      </h2>
       <div class="msg-content">
         <div class="goods-image-box">
           <img :src="bigImageUrl || (imageList[0] && imageList[0].image_url)" alt="" class="goods-image">
@@ -288,6 +294,24 @@
       color: #333333
       font-family: $font-family-regular
       padding: 20px 0
+      display: flex
+      align-items: center
+      .goods-tag
+        display: flex
+        align-items: center
+        height: 22px
+        flex: 1
+        margin-left: 20px
+        .tag-text
+          color: #FF520F
+          font-size: $font-size-12
+          font-family: $font-family-regular
+          border: 1px solid #FF520F
+          width: 64px
+          height: 22px
+          text-align: center
+          line-height: 22px
+          margin-right: 6px
     .msg-content
       display: flex
     .goods-image-box
@@ -415,7 +439,7 @@
       overflow: hidden
     .goods-item-box
       width: 225px
-      height: 350px
+      height: 382px
       float: left
       margin-right: 10px
       margin-bottom: 20px

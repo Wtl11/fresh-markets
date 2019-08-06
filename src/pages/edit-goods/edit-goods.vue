@@ -77,12 +77,12 @@
             送货方式
           </div>
           <div class="form-input-box flex-center">
-            <div class="check-box hand" @click="changeCheckbox(1)">
-              <span class="icon" :class="{'active': +checkBox === 1}"></span>
+            <div class="check-box hand" @click="changeCheckbox(0)">
+              <span class="icon" :class="{'active': +goodsInfo.delivery_method === 0}"></span>
               <span class="text">一件代发</span>
             </div>
-            <div class="check-box hand" @click="changeCheckbox(2)">
-              <span class="icon" :class="{'active': +checkBox === 2}"></span>
+            <div class="check-box hand" @click="changeCheckbox(1)">
+              <span class="icon" :class="{'active': +goodsInfo.delivery_method === 1}"></span>
               <span class="text">区域配送</span>
             </div>
           </div>
@@ -182,6 +182,7 @@
           name: '',
           goods_supplier_skus: [{purchase_specs: '', purchase_price: '', goods_sku_code: '', goods_supplier_sku_id: ''}],
           goods_start_num: '',
+          delivery_method: 0,
           goods_main_images: [],
           goods_detail_images: []
         },
@@ -190,8 +191,7 @@
         uploadLoading: false,
         uploading: '',
         goods_detail_images: [],
-        goods_main_images: [],
-        checkBox: 1
+        goods_main_images: []
       }
     },
     beforeRouteEnter(to, from, next) {
@@ -302,7 +302,7 @@
         }
       },
       changeCheckbox(num) {
-        this.checkBox = num
+        this.goodsInfo.delivery_method = num
       },
       _setSort() {},
       _addImg(key, e) {

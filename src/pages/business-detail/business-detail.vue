@@ -278,7 +278,7 @@
       overflow: hidden
     .goods-item-box
       width: 225px
-      height: 350px
+      height: 382px
       float: left
       margin-right: 10px
       margin-bottom: 20px

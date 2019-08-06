@@ -48,6 +48,14 @@
           title="区域："
           @selectChange="selectChange($event, 'third')"
         ></select-classify>
+        <select-classify
+          ref="selectThird"
+          :classifyData="selectFourthArray"
+          :defaultIndex="0"
+          class="border-left-1 border-right-1 border-bottom-1"
+          title="送货方式："
+          @selectChange="selectChange($event, 'fourth')"
+        ></select-classify>
       </div>
       <div>
         <section v-if="tabIndex===1 && marketList.length" class="goods-list">
@@ -132,6 +140,7 @@
         selectArray: [],
         selectSecondArray: [],
         selectThirdArray: [],
+        selectFourthArray: [{name: '全部', type: ''}, {name: '一件代发', type: 0}, {name: '区域配送', type: 1}],
         pageDetail: {
           total: 1,
           per_page: 10,
@@ -139,7 +148,8 @@
         },
         isFirstLoadGoods: true,
         isFirstLoadMarket: true,
-        navId: -1
+        navId: -1,
+        deliveryMethod: ''
       }
     },
     computed: {},
@@ -213,7 +223,8 @@
             limit: 48,
             province: this.province,
             goods_supplier_category_id: this.category_id,
-            page: this.page
+            page: this.page,
+            delivery_method: this.deliveryMethod
           },
           loading
         }).then((res) => {
@@ -234,7 +245,8 @@
             limit: 8,
             province: this.province,
             goods_supplier_category_id: this.category_id,
-            page: this.page
+            page: this.page,
+            delivery_method: this.deliveryMethod
           },
           loading
         }).then((res) => {
@@ -299,6 +311,10 @@
         case 'third':
           let name = this.selectThirdArray[id].name
           this.province = name === '全部' ? '' : name
+          break
+        case 'fourth':
+          let shipping = this.selectFourthArray[id].type
+          this.deliveryMethod = shipping
           break
         default:
           break
@@ -400,7 +416,7 @@
         padding-top: 20px
         .goods-item-box
           width: 225px
-          height: 350px
+          height: 382px
           margin-bottom: 20px
           margin-right: 10px
           &:nth-child(6n)
