@@ -38,9 +38,8 @@
     <section class="goods-msg">
       <h2 class="goods-title">
         <p class="title">{{goodsDetail.name}}</p>
-        <p class="goods-tag">
-          <span class="tag-text">一件代发</span>
-          <span class="tag-text">区域发货</span>
+        <p v-if="goodsDetail.delivery_method && goodsDetail.delivery_method.length" class="goods-tag">
+          <span v-for="(tag, index) in goodsDetail.delivery_method" :key="index" class="tag-text">{{+tag === 0 ? '一件代发' : '区域发货'}}</span>
         </p>
       </h2>
       <div class="msg-content">
