@@ -168,8 +168,36 @@
       this._getMarketList()
       this._getGoodsList()
     },
+    mounted() {
+      window.addEventListener('scroll', this.lazyload, false)
+    },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.lazyload, false)
+    },
     methods: {
       ...authMethod,
+      lazyload() {
+        if (!this.timerRun) {
+          this.timerRun = true
+          setTimeout(() => {
+            const imgs = document.querySelectorAll('.goods-img')
+            const viewHeight = window.innerHeight || document.documentElement.clientHeight
+            let num = 0
+            for (let i = num; i < imgs.length; i++) {
+              let distance = viewHeight - imgs[i].getBoundingClientRect().top
+              if (distance >= 0) {
+                imgs[i].src = imgs[i].getAttribute('lazy-src')
+                // imgs[i].className = 'goods-img'
+                num = i + 1
+              }
+            }
+            if (num === imgs.length) {
+              window.removeEventListener('scroll', this.lazyload, false)
+            }
+            this.timerRun = false
+          }, 100)
+        }
+      },
       refreshHandle() {
         this._getMarketList()
         this._getGoodsList()
