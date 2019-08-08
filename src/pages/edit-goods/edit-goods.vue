@@ -270,6 +270,7 @@
           name: resData.name,
           goods_supplier_skus: resData.goods_supplier_skus,
           goods_start_num: resData.goods_start_num,
+          delivery_method: resData.delivery_method,
           goods_main_images: resData.goods_main_images,
           goods_detail_images: resData.goods_detail_images
         }
