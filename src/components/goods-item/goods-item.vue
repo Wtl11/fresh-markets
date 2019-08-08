@@ -8,7 +8,7 @@
       <p v-else class="un-price">登录查看采购价</p>
       <p class="goods-title">{{goodsInfo.name}}</p>
       <p v-if="goodsInfo.delivery_method && goodsInfo.delivery_method.length" class="goods-tag">
-        <span v-for="(tag, index) in goodsInfo.delivery_method" :key="index" class="tag-text">{{+tag === 0 ? '一件代发' : '区域发货'}}</span>
+        <span v-for="(tag, index) in goodsInfo.delivery_method" :key="index" class="tag-text">{{+tag === 1 ? '一件代发' : '区域发货'}}</span>
       </p>
       <div v-if="showCompany" class="company-msg">
         <img class="company-icon" src="./icon-supplier_gary@2x.png" alt="">

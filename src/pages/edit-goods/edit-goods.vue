@@ -77,12 +77,12 @@
             送货方式
           </div>
           <div class="form-input-box flex-center">
-            <div class="check-box hand" @click="changeCheckbox(0)">
-              <span class="icon" :class="{'active': +goodsInfo.delivery_method === 0}"></span>
+            <div class="check-box hand" @click="changeCheckbox(1)">
+              <span class="icon" :class="{'active': +goodsInfo.delivery_method[0] === 1 || +goodsInfo.delivery_method[1] === 1}"></span>
               <span class="text">一件代发</span>
             </div>
-            <div class="check-box hand" @click="changeCheckbox(1)">
-              <span class="icon" :class="{'active': +goodsInfo.delivery_method === 1}"></span>
+            <div class="check-box hand" @click="changeCheckbox(2)">
+              <span class="icon" :class="{'active': +goodsInfo.delivery_method[0] === 2 || +goodsInfo.delivery_method[1] === 2}"></span>
               <span class="text">区域配送</span>
             </div>
           </div>
@@ -182,7 +182,7 @@
           name: '',
           goods_supplier_skus: [{purchase_specs: '', purchase_price: '', goods_sku_code: '', goods_supplier_sku_id: ''}],
           goods_start_num: '',
-          delivery_method: 0,
+          delivery_method: [],
           goods_main_images: [],
           goods_detail_images: []
         },
@@ -302,7 +302,23 @@
         }
       },
       changeCheckbox(num) {
-        this.goodsInfo.delivery_method = num
+        let result = this.goodsInfo.delivery_method.every((item, index) => {
+          return +item !== +num
+        })
+        if (result) {
+          if (+this.goodsInfo.delivery_method[0] === 2) {
+            this.goodsInfo.delivery_method.unshift(num)
+          } else {
+            this.goodsInfo.delivery_method.push(num)
+          }
+        } else {
+          this.goodsInfo.delivery_method.map((item, index) => {
+            if (+item === +num) {
+              this.goodsInfo.delivery_method.splice(index, 1)
+            }
+          })
+        }
+        this.$forceUpdate()
       },
       _setSort() {},
       _addImg(key, e) {
@@ -555,6 +571,8 @@
               overflow: hidden
               .img
                 height: 100%
+                width: 100%
+                object-fit: cover
             .close
               icon-image('icon-delete_img')
               width: 15px

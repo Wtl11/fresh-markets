@@ -50,7 +50,6 @@
     },
     watch: {
       value(val) {
-        console.log(val)
         this.getStyle()
         return val
       },
