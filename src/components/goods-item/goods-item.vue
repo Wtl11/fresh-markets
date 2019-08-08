@@ -7,7 +7,7 @@
       <p v-if="goodsInfo.purchase_price >= 0" class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
       <p v-else class="un-price">登录查看采购价</p>
       <p class="goods-title">{{goodsInfo.name}}</p>
-      <p v-if="goodsInfo.delivery_method && goodsInfo.delivery_method.length" class="goods-tag">
+      <p class="goods-tag">
         <span v-for="(tag, index) in goodsInfo.delivery_method" :key="index" class="tag-text">{{+tag === 1 ? '一件代发' : '区域发货'}}</span>
       </p>
       <div v-if="showCompany" class="company-msg">
@@ -120,6 +120,8 @@
       .goods-tag
         display: flex
         align-items: center
+        height: 22px
+        margin-bottom: 10px
         flex: 1
         .tag-text
           color: #FF520F
@@ -131,8 +133,6 @@
           text-align: center
           line-height: 22px
           margin-right: 6px
-          margin-bottom: 10px
-
       .company-msg
         flex: 1
         display: flex
