@@ -116,7 +116,7 @@
   @import "~@design"
 
   .market-info
-    height :341px
+    height :380px
     width :100%
     box-sizing :border-box
     padding :14px 14px 14px 20px

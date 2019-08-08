@@ -220,6 +220,7 @@
     .qr-code
       width: 120px
       height: 120px
+      object-fit: cover
   .top-msg
     max-width: $maxWidth
     min-width: $minWidth
