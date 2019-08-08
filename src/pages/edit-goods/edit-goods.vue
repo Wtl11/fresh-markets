@@ -350,7 +350,8 @@
           goods_supplier_skus: '请输入采购价格',
           goods_main_images: '请上传商品封面图',
           goods_detail_images: '请上传商品详情图',
-          goods_start_num: '起批量不能小于1'
+          goods_start_num: '起批量不能小于1',
+          delivery_method: '请选择送货方式'
         }
         this.goodsInfo.goods_detail_images = this.goods_detail_images
         this.goodsInfo.goods_main_images = this.goods_main_images
@@ -365,7 +366,7 @@
               this.$toast.show(errorMsg[k])
               return false
             }
-          } else if (k === 'goods_main_images' || k === 'goods_detail_images') {
+          } else if (k === 'goods_main_images' || k === 'goods_detail_images' || k === 'delivery_method') {
             if (this.goodsInfo[k].length <= 0) {
               this.$toast.show(errorMsg[k])
               return false
