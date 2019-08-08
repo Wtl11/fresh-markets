@@ -140,7 +140,7 @@
         selectArray: [],
         selectSecondArray: [],
         selectThirdArray: [],
-        selectFourthArray: [{name: '全部', type: ''}, {name: '一件代发', type: 0}, {name: '区域配送', type: 1}],
+        selectFourthArray: [{name: '全部', type: ''}, {name: '一件代发', type: 1}, {name: '区域配送', type: 2}],
         pageDetail: {
           total: 1,
           per_page: 10,
