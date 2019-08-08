@@ -55,24 +55,6 @@
           query: {goodsId: this.goodsInfo.id, supplierId: this.goodsInfo.supplier_id}
         })
         window.open(routeUrl.href, '_blank')
-      },
-      lazyload() {
-        if (!this.timerRun) {
-          this.timerRun = true
-          setTimeout(() => {
-            const imgs = document.querySelectorAll('.goods-img')
-            const viewHeight = window.innerHeight || document.documentElement.clientHeight
-            let num = 0
-            for (let i = num; i < imgs.length; i++) {
-              let distance = viewHeight - imgs[i].getBoundingClientRect().top
-              if (distance >= 0) {
-                imgs[i].src = imgs[i].getAttribute('lazy-src')
-                num = i + 1
-              }
-            }
-            this.timerRun = false
-          }, 100)
-        }
       }
     },
   }
