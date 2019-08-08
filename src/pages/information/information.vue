@@ -319,6 +319,8 @@
         default:
           break
         }
+        this.$refs.pagination && this.$refs.pagination.beginPage()
+        this.page = 1
         this.getList()
       },
       getList() {

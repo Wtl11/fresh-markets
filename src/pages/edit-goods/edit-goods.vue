@@ -303,6 +303,7 @@
         }
       },
       changeCheckbox(num) {
+        if (this.onlyCheck) return
         let result = this.goodsInfo.delivery_method.every((item, index) => {
           return +item !== +num
         })
