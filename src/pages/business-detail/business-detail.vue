@@ -39,7 +39,7 @@
     <section class="goods-recommend">
       <div v-if="goodsList.length" class="goods-list">
         <div v-for="(item, index) in goodsList" :key="index" class="goods-item-box">
-          <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
+          <goods-item :goodsInfo="item" :lazyload="true" @toLogin="toLoginHandle"></goods-item>
         </div>
       </div>
       <div v-if="pageDetail.total_page > 1" class="pagination">
@@ -106,7 +106,46 @@
       this.getSupplierDetail()
       this.getGoodsList()
     },
+    mounted() {
+      window.addEventListener('scroll', this.lazyload, false)
+    },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.lazyload, false)
+    },
     methods: {
+      lazyload() {
+        if (!this.timerRun) {
+          this.timerRun = true
+          setTimeout(() => {
+            const imgs = document.querySelectorAll('.lazy-goods-img')
+            const viewHeight = window.innerHeight || document.documentElement.clientHeight
+            let num = 0
+            for (let i = num; i < imgs.length; i++) {
+              let distance = viewHeight - imgs[i].getBoundingClientRect().top
+              if (distance >= 0) {
+                imgs[i].src = imgs[i].getAttribute('lazy-src')
+                num = i + 1
+              }
+            }
+            // if (num === imgs.length) {
+            //   window.removeEventListener('scroll', this.lazyload, false)
+            // }
+            this.timerRun = false
+          }, 100)
+        }
+      },
+      loadImage() {
+        let imgs = document.querySelectorAll('.lazy-goods-img')
+        let viewHeight = window.innerHeight || document.documentElement.clientHeight
+        let num = 0
+        for (let i = num; i < imgs.length; i++) {
+          let distance = viewHeight - imgs[i].getBoundingClientRect().top
+          if (distance >= 0) {
+            imgs[i].src = imgs[i].getAttribute('lazy-src')
+            num = i + 1
+          }
+        }
+      },
       qrCodeHandle() {
         if (!this.tokenInformation) {
           this.$refs.login && this.$refs.login.show()
@@ -136,6 +175,9 @@
           }
           this.loaded = true
           this.pageDetail = statePageTotal
+          this.$nextTick(() => {
+            this.loadImage()
+          })
         })
       },
       addPage(page) {

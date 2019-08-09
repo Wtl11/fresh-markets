@@ -1,7 +1,8 @@
 <template>
   <div class="goods-item hand" @click="clickHandle">
     <div class="img-box">
-      <img v-if="goodsInfo.goods_cover_image" class="goods-img" src="./loading.png" :lazy-src="goodsInfo.goods_cover_image" alt="">
+      <img v-if="lazyload && goodsInfo.goods_cover_image" class="lazy-goods-img" src="./loading.png" :lazy-src="goodsInfo.goods_thumb_image" alt="">
+      <img v-if="!lazyload && goodsInfo.goods_cover_image" class="goods-img" :src="goodsInfo.goods_thumb_image" alt="">
     </div>
     <div class="msg-box">
       <p v-if="goodsInfo.purchase_price >= 0" class="price-txt"><span class="price-icon">¥</span>{{goodsInfo.purchase_price}}</p>
@@ -30,6 +31,10 @@
       goodsInfo: {
         type: Object,
         default: () => {}
+      },
+      lazyload: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -78,7 +83,7 @@
       height: 223px
       overflow: hidden
       position: relative
-      .goods-img
+      .lazy-goods-img,.goods-img
         width: 100%
         height: 100%
         position: absolute
@@ -157,7 +162,7 @@
           color: #999999
     &:hover
       border: 1px solid #FF520F
-      .img-box .goods-img
+      .img-box .goods-img,.img-box .lazy-goods-img
         width: 232px
         height: 232px
   .test

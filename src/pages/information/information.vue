@@ -69,7 +69,7 @@
         </article>
         <section v-else-if="tabIndex===0 && goodsList.length" class="goods-list">
           <div v-for="(item, idx) in goodsList" :key="idx" class="goods-item-box">
-            <goods-item :goodsInfo="item" @toLogin="toLoginHandle"></goods-item>
+            <goods-item :goodsInfo="item" :lazyload="true" @toLogin="toLoginHandle"></goods-item>
           </div>
         </section>
         <article v-else-if="tabIndex===0 && !isFirstLoadGoods" class="empty-wrapper">
@@ -180,14 +180,13 @@
         if (!this.timerRun) {
           this.timerRun = true
           setTimeout(() => {
-            const imgs = document.querySelectorAll('.goods-img')
+            const imgs = document.querySelectorAll('.lazy-goods-img')
             const viewHeight = window.innerHeight || document.documentElement.clientHeight
             let num = 0
             for (let i = num; i < imgs.length; i++) {
               let distance = viewHeight - imgs[i].getBoundingClientRect().top
               if (distance >= 0) {
                 imgs[i].src = imgs[i].getAttribute('lazy-src')
-                // imgs[i].className = 'goods-img'
                 num = i + 1
               }
             }
@@ -199,7 +198,9 @@
         }
       },
       loadImage() {
-        let imgs = document.querySelectorAll('.goods-img')
+        // window.removeEventListener('scroll', this.lazyload, false)
+        // window.addEventListener('scroll', this.lazyload, false)
+        let imgs = document.querySelectorAll('.lazy-goods-img')
         let viewHeight = window.innerHeight || document.documentElement.clientHeight
         let num = 0
         for (let i = num; i < imgs.length; i++) {
