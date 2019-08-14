@@ -1,18 +1,12 @@
 <template>
   <div class="apply-suppliers">
-    <div class="logo hand" @click="_goToMain"></div>
-    <div v-if="!subModify" class="title-con">
-      <div class="icon"></div>
-      <div class="title">申请成为供应商</div>
+    <div class="top-bg">
+      <img src="./pic-h5top@2x.png" alt="" class="bg-img">
     </div>
     <div v-if="!subModify" class="content">
-      <div class="content-header content-padding-top">
-        <div class="content-title">基本信息</div>
-      </div>
       <div class="form-con">
         <div class="form-item">
           <div class="form-title">
-            <span class="start">*</span>
             供应商名称
           </div>
           <div class="form-input-box">
@@ -23,7 +17,6 @@
         </div>
         <div class="form-item">
           <div class="form-title">
-            <span class="start">*</span>
             区域
           </div>
           <div class="form-input-box mini-form-input-box">
@@ -32,7 +25,6 @@
         </div>
         <div class="form-item  form-image-box">
           <div class="form-title">
-            <span class="start">*</span>
             营业执照
           </div>
           <div class="form-image-box">
@@ -66,7 +58,6 @@
         </div>
         <div class="form-item">
           <div class="form-title">
-            <span class="start">*</span>
             主营品类
           </div>
           <div class="form-input-box mini-form-input-box">
@@ -76,7 +67,6 @@
         </div>
         <div class="form-item">
           <div class="form-title">
-            <span class="start">*</span>
             联系人
           </div>
           <div class="form-input-box">
@@ -87,7 +77,6 @@
         </div>
         <div class="form-item">
           <div class="form-title">
-            <span class="start">*</span>
             联系电话
           </div>
           <div class="form-input-box">
@@ -98,7 +87,6 @@
         </div>
         <div class="form-item  form-image-box">
           <div class="form-title">
-            <span class="start">*</span>
             微信二维码
           </div>
           <div class="form-image-box">
@@ -126,13 +114,13 @@
         </div>
       </div>
     </div>
-    <div v-if="!subModify" class="button-con">
-      <div class="hand button cancel" @click="_goBack">取消</div>
-      <div class="hand button confirm" @click="_subApply">提交审核</div>
-    </div>
+    <!--<div v-if="!subModify" class="button-con">-->
+      <!--<div class="hand button cancel" @click="_goBack">取消</div>-->
+      <!--<div class="hand button confirm" @click="_subApply">提交审核</div>-->
+    <!--</div>-->
     <div v-if="subModify" class="approve-tips-model">
       <div class="tips-con">
-        <img src="./icon-success@2x.png" class="tips-img">
+        <!--<img src="./icon-success@2x.png" class="tips-img">-->
         <div class="tips-title">提交审核成功，请耐心等待</div>
         <div class="tips-text">审核结果会在72小时内以短信形式通知您，请留意手机</div>
       </div>
@@ -321,84 +309,54 @@
 
   .apply-suppliers
     box-sizing: border-box
-    position: absolute
-    width: 100%
-    min-height: 100%
-    background: #fff
-    padding-bottom: 120px
-    .logo
-      width: 150px
-      height: 48px
-      margin: 26px 15px 33px
-      bg-image('./pic-apply_logo')
-      background-size: 100%
-    .title-con
-      height: 18px
-      margin-left: 30px
-      margin-bottom: 25px
-      layout(row)
-      align-items: center
-      .icon
-        width: 16px
-        height: @width
-        margin-right: 5px
-        icon-image('./icon-newly_build')
-      .title
-        font-family: $font-family-medium
-        font-size: 18px
-        color: $color-text-main
-        letter-spacing: 0
-        line-height: 1
-
+    width: 100vw
+    min-height: 100vh
+    background: #cecece
+    padding: 47.466vw 16px 16px
+    .top-bg
+      position: absolute
+      top: 0
+      left: 0
+      width: 100vw
+      height: 54.667vw
+      .bg-img
+        width: 100%
+        height: 100%
   .content
     position: relative
-    flex: 1
-    background: $color-white
-    padding: 0 30px
+    padding: 0 15px
     box-sizing: border-box
-    .content-header
-      line-height: 1
-      padding: 16px 0
-      display: flex
-      align-items: center
-      justify-content: space-between
-      position: relative
-      box-sizing: border-box
-      border-bottom: 0.5px solid $color-line
-      &:before
-        content: ''
-        position: absolute
-        width: 34px
-        height: 2px
-        background: $color-main
-        border-radius: 2px
-        bottom: 0
-        left: 0
-      .content-title
-        color: #333333
-        font-family: $font-family-regular
-        font-size: $font-size-16
+    background: #FFFFFF
+    box-shadow: 0 6px 20px 0 rgba(17,17,17,0.06)
+    border-radius: 4px
     .form-con
       box-sizing: border-box
       .form-item
         display: flex
-        color: #2A2A2A
-        min-height: 40px
-        margin-top: 24px
+        color: #111111
+        height: 48px
+        position: relative
+        &:after
+          display: block
+          content: ""
+          position: absolute
+          bottom: 0
+          right: 0
+          width: 100%
+          transform: scaleY(.5) translateZ(0)
+          border-bottom: 1px solid #e6e6e6
         .form-title
-          width: 94px
-          height: 40px
-          line-height: 40px
+          width: 86px
+          min-width: 86px
+          height: 48px
+          line-height: 48px
+          color: #333333
           font-size: $font-size-14
           font-family: $font-family-regular
           white-space: nowrap
-          text-align: right
-        .start
-          display: inline-block
-          margin-right: -2px
-          color: #F52424
+          text-align: left
         .form-input-box
-          margin-left: 40px
+          flex: 1
           position: relative
           &.mini-form-input-box
             layout(row)
@@ -407,32 +365,14 @@
         .form-input
           box-sizing: border-box
           font-size: $font-size-14
-          padding: 0 14px
-          border-radius: 2px
-          width: 400px
-          height: 40px
-          border: 0.5px solid $color-line
+          padding: 0 10px
+          height: 100%
           transition: all 0.3s
-          &:disabled
-            color: $color-text-assist
-            background: $color-white
           &::-webkit-inner-spin-button
             appearance: none
-          &:hover
-            border: 0.5px solid #ACACAC
           &::placeholder
             font-family: $font-family-regular
-            color: $color-text-assist
-          &:focus
-            border-color: $color-main !important
-        .form-input-unit
-          width: 134px
-          height: 40px
-          line-height: 40px
-          margin: 0 10px
-          font-size: $font-size-14
-          font-family: $font-family-regular
-          color: $color-text-main
+            color: #b7b7b7
         .form-tip
           font-family: $font-family-regular
           font-size: 14px
@@ -448,7 +388,7 @@
               display: flex
             .add-image
               margin-bottom: 20px
-              icon-image('pic-choice_img')
+              icon-image('icon-add_img')
               height: 90px
               width: @height
               position: relative
@@ -476,7 +416,7 @@
               .img
                 height: 100%
             .close
-              icon-image('icon-delete_img')
+              icon-image('icon-delpic')
               width: 15px
               height: 15px
               position: absolute

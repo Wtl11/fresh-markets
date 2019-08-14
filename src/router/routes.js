@@ -28,6 +28,12 @@ export default [
         path: '/user/apply-suppliers',
         name: 'apply-suppliers',
         component: () => import('@pages/apply-suppliers/apply-suppliers')
+      },
+      // 成为供应商-h5
+      {
+        path: '/user/apply-suppliers-h5',
+        name: 'apply-suppliers-h5',
+        component: () => import('@pages/apply-suppliers-h5/apply-suppliers-h5')
       }
     ]
   },
