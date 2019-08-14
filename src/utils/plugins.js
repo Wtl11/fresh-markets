@@ -6,6 +6,7 @@ import base from '@mixins/base'
 // import * as cos from './cos/cos'
 // import * as vod from './vod/vod'
 // import createQrCode from './create-qr-code'
+import AwesomePicker from 'vue-awesome-picker'
 
 // const ERR_OK = 0
 
@@ -24,4 +25,4 @@ export const Plugins = {
   }
 }
 // 使用插件
-// Vue.use(AwesomePicker) todo
+Vue.use(AwesomePicker)

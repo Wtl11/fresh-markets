@@ -6,29 +6,45 @@
     <div v-if="!subModify" class="content">
       <div class="form-con">
         <div class="form-item">
-          <div class="form-title">
-            供应商名称
-          </div>
+          <div class="form-title">供应商名称</div>
           <div class="form-input-box">
-            <input v-model="shopInfo.name" type="text" class="form-input" maxlength="25"
-                   @mousewheel.native.prevent
+            <input v-model="shopInfo.name" type="text" class="form-input" placeholder="请输入供应商名称"
+                   maxlength="25" @mousewheel.native.prevent
             >
           </div>
         </div>
         <div class="form-item">
-          <div class="form-title">
-            区域
-          </div>
-          <div class="form-input-box mini-form-input-box">
-            <city-select ref="city" :height="44" :width="195" @setValue="_setCityValue"></city-select>
+          <div class="form-title">联系人</div>
+          <div class="form-input-box">
+            <input v-model="shopInfo.contact" type="text" class="form-input" placeholder="请输入联系人信息"
+                   maxlength="20" @mousewheel.native.prevent
+            >
           </div>
         </div>
-        <div class="form-item  form-image-box">
-          <div class="form-title">
-            营业执照
+        <div class="form-item">
+          <div class="form-title">联系电话</div>
+          <div class="form-input-box">
+            <input v-model="shopInfo.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
+                   maxlength="11" @mousewheel.native.prevent
+            >
           </div>
+        </div>
+        <div class="form-item" @click="_showPicker('category')">
+          <div class="form-title">主营品类</div>
+          <div v-if="category" class="form-input-box">{{category}}</div>
+          <div v-else class="form-input-box ph-text">请选择品类</div>
+          <img src="./icon-right_arrow@2x.png" class="item-arrow">
+        </div>
+        <div class="form-item" @click="_showPicker('city')">
+          <div class="form-title">区域</div>
+          <div v-if="shopInfo.province" class="form-input-box">{{shopInfo.province}} {{shopInfo.city}} {{shopInfo.district}}</div>
+          <div v-else class="form-input-box ph-text">请选择区域</div>
+          <img src="./icon-right_arrow@2x.png" class="item-arrow">
+        </div>
+        <div class="form-item  form-img-item">
+          <div class="form-title">营业执照</div>
           <div class="form-image-box">
-            <section style="display: flex; align-items: center">
+            <section class="img-con">
               <draggable v-model="uploadCertificateList">
                 <article v-for="(item, index) in uploadCertificateList" :key="item.id" class="form-image more">
                   <div v-if="item.url" class="draggable">
@@ -47,48 +63,14 @@
                          accept="image/*"
                          @change="addImagesHandle($event, {key: 'uploadCertificateList', limit: 5})"
                   >
-                  <div v-if="uploading === 'uploadCertificateList'" class="loading-mask">
-                    <img src="./loading.gif" class="loading">
-                  </div>
                 </div>
               </article>
             </section>
-            <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片, 最多可上传5张图片</div>
+            <div class="form-tip">最多可上传5张图片。</div>
           </div>
         </div>
-        <div class="form-item">
-          <div class="form-title">
-            主营品类
-          </div>
-          <div class="form-input-box mini-form-input-box">
-            <base-drop-down :height="44" :width="195" :select="firstSelect" @setValue="_setSelectValue($event, 'category_id', 'secondSelect')"></base-drop-down>
-            <base-drop-down :height="44" :width="195" :select="secondSelect" @setValue="_setSelectValue($event, 'category_id')"></base-drop-down>
-          </div>
-        </div>
-        <div class="form-item">
-          <div class="form-title">
-            联系人
-          </div>
-          <div class="form-input-box">
-            <input v-model="shopInfo.contact" type="text" class="form-input" placeholder="请输入联系人信息"
-                   maxlength="20" @mousewheel.native.prevent
-            >
-          </div>
-        </div>
-        <div class="form-item">
-          <div class="form-title">
-            联系电话
-          </div>
-          <div class="form-input-box">
-            <input v-model="shopInfo.mobile" type="text" class="form-input" placeholder="请输入联系人手机号码"
-                   maxlength="11" @mousewheel.native.prevent
-            >
-          </div>
-        </div>
-        <div class="form-item  form-image-box">
-          <div class="form-title">
-            微信二维码
-          </div>
+        <div class="form-item  form-img-item">
+          <div class="form-title">微信二维码</div>
           <div class="form-image-box">
             <div class="form-image">
               <div v-if="shopInfo.wechat_image_id && uploadImg.QRCode" class="draggable">
@@ -104,36 +86,31 @@
                        accept="image/*"
                        @change="_addImg('wechat_image_id', 'QRCode', $event)"
                 >
-                <div v-if="uploadLoading && uploading === 'wechat_image_id'" class="loading-mask">
-                  <img src="./loading.gif" class="loading">
-                </div>
               </div>
             </div>
             <div class="form-tip">请上传小于5MB的jpg/jpeg/png格式的图片</div>
           </div>
         </div>
+        <div class="form-btn" @click="_subApply">提交申请</div>
       </div>
     </div>
-    <!--<div v-if="!subModify" class="button-con">-->
-      <!--<div class="hand button cancel" @click="_goBack">取消</div>-->
-      <!--<div class="hand button confirm" @click="_subApply">提交审核</div>-->
-    <!--</div>-->
     <div v-if="subModify" class="approve-tips-model">
       <div class="tips-con">
-        <!--<img src="./icon-success@2x.png" class="tips-img">-->
-        <div class="tips-title">提交审核成功，请耐心等待</div>
-        <div class="tips-text">审核结果会在72小时内以短信形式通知您，请留意手机</div>
+        <img src="./icon-pay_success@2x.png" class="tips-img">
+        <div class="tips-title">提交申请供应商成功</div>
+        <div class="tips-text">审核结果会在 48小时内 短信通知，请留意手机</div>
       </div>
     </div>
+    <awesome-picker ref="categoryPicker" :data="awPickerData" @confirm="_pickerConfirm"></awesome-picker>
+    <awesome-picker ref="cityPicker" :data="cityPickerData" @confirm="_cityPickerConfirm"></awesome-picker>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import * as Helpers from './helpers'
   import API from '@api'
   import {uploadFiles} from '../../utils/cos/cos'
-  import CitySelect from '@components/city-select/city-select'
   import Draggable from 'vuedraggable'
+  import CITY_JSON from 'china-division/dist/pca.json'
 
   const PAGE_NAME = 'APPLY_SUPPLIERS_H5'
   const TITLE = '申请成为供应商'
@@ -145,51 +122,95 @@
       title: TITLE
     },
     components: {
-      CitySelect,
       Draggable
     },
     data() {
       return {
         shopInfo: {
           name: '',
+          contact: '',
+          mobile: '',
+          category_id: '',
           province: '',
           city: '',
           district: '',
           images: [],
-          category_id: '',
-          contact: '',
-          mobile: '',
           wechat_image_id: '',
         },
-        firstSelect: {check: false, show: false, content: '一级类目', type: 'default', data: []},
-        secondSelect: {check: false, show: false, content: '二级类目', type: 'default', data: []},
         uploadImg: {license:'',QRCode:''},
         uploadLoading: false,
         uploading: '',
         subModify: false,
-        uploadCertificateList: []
+        uploadCertificateList: [],
+        cityPickerData: [],
+        awPickerData: [],
+        pickData: [],
+        category: ''
       }
     },
     mounted() {
       this._getCategoryData()
+      let cityData = []
+      for(let proName in CITY_JSON) {
+        const _cityData = CITY_JSON[proName]
+        let provinceItem = {
+          value: proName,
+          children: []
+        }
+        for(let cityName in _cityData) {
+          const _areaData = _cityData[cityName]
+          let cityItem = {
+            value: cityName,
+            children: []
+          }
+          _areaData.forEach((areaName) => {
+            cityItem.children.push({value: areaName})
+          })
+          provinceItem.children.push(cityItem)
+        }
+        cityData.push(provinceItem)
+      }
+      this.cityPickerData = cityData
     },
     methods: {
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
-            this.firstSelect.data = res.data
+            this.pickData = res.data
+            let categoryArr = []
+            res.data.forEach((item) => {
+              let categoryItem = {
+                value: item.name,
+                children: [{value: ''}]
+              }
+              item.list.forEach((child) => {
+                categoryItem.children.push({value: child.name})
+              })
+              categoryArr.push(categoryItem)
+            })
+            this.awPickerData = categoryArr
           })
       },
-      _setSelectValue(data, key, childKey = false) {
-        this.shopInfo[key] = data.id
-        if(childKey) {
-          this[childKey].data = data.list
+      _showPicker(item) {
+        this.$refs[`${item}Picker`] && this.$refs[`${item}Picker`].show()
+      },
+      _pickerConfirm(data) {
+        console.log(data)
+        const firstIdx = data[0].index
+        const secondIdx = data[1].index
+        if (data[1].value === '') {
+          this.shopInfo.category_id = this.pickData[firstIdx].id
+          this.category = data[0].value
+        } else {
+          this.shopInfo.category_id = this.pickData[firstIdx].list[secondIdx-1].id
+          this.category = data[1].value
         }
       },
-      _setCityValue(data) {
-        this.shopInfo.province = data[0].includes('请选择') ? '' : data[0]
-        this.shopInfo.city = data[1].includes('请选择') ? '' : data[1]
-        this.shopInfo.district = data[2].includes('请选择') ? '' : data[2]
+      _cityPickerConfirm(data) {
+        console.log(data)
+        this.shopInfo.province = data[0].value
+        this.shopInfo.city = data[1].value
+        this.shopInfo.district = data[2].value
       },
       _addImg(applyKey, uploadKey, e) {
         this.uploading = applyKey
@@ -246,28 +267,16 @@
         }
         let errorMsg = {
           name: '请输入供应商名称',
+          contact: '请输入联系人',
+          mobile: '请输入联系电话',
+          category_id: '请选择主营品类',
           province: '请选择省份',
           city: '请选择城市',
           district: '请选择区/县',
           images: '请上传营业执照',
-          category_id: '请选择主营品类',
-          contact: '请输入联系人',
-          mobile: '请输入联系电话',
           wechat_image_id: '请上传微信二维码'
         }
         this.shopInfo.images = this.uploadCertificateList
-        // for (let k in this.shopInfo) {
-        //   console.log(k)
-        //   if (this.shopInfo[k].map) {
-        //     this.shopInfo[k].length < 1 && this.$toast.show(errorMsg[k])
-        //     return this.shopInfo[k].length
-        //   } else {
-        //     if (!(this.shopInfo[k]+'').trim()) {
-        //       this.$toast.show(errorMsg[k])
-        //       return false
-        //     }
-        //   }
-        // }
         for (let k in errorMsg) {
           let flag = this.shopInfo[k].toString().trim()
           if (!flag) {
@@ -311,7 +320,7 @@
     box-sizing: border-box
     width: 100vw
     min-height: 100vh
-    background: #cecece
+    background: #f3f3f3
     padding: 47.466vw 16px 16px
     .top-bg
       position: absolute
@@ -324,7 +333,7 @@
         height: 100%
   .content
     position: relative
-    padding: 0 15px
+    padding: 0 15px 15px
     box-sizing: border-box
     background: #FFFFFF
     box-shadow: 0 6px 20px 0 rgba(17,17,17,0.06)
@@ -332,7 +341,9 @@
     .form-con
       box-sizing: border-box
       .form-item
-        display: flex
+        layout(row)
+        justify-content: space-between
+        align-items: center
         color: #111111
         height: 48px
         position: relative
@@ -356,16 +367,19 @@
           white-space: nowrap
           text-align: left
         .form-input-box
+          padding: 0 10px
           flex: 1
           position: relative
-          &.mini-form-input-box
-            layout(row)
-            div
-              margin-right: 10px
+          font-size: $font-size-14
+          color: #111111
+          font-family: $font-family-regular
+          &.ph-text
+            color: #b7b7b7
         .form-input
           box-sizing: border-box
           font-size: $font-size-14
-          padding: 0 10px
+          font-family: $font-family-regular
+          color: #111111
           height: 100%
           transition: all 0.3s
           &::-webkit-inner-spin-button
@@ -373,13 +387,29 @@
           &::placeholder
             font-family: $font-family-regular
             color: #b7b7b7
+        .item-arrow
+          width: 10.5px
+          height: @width
         .form-tip
+          padding-top: 10px
           font-family: $font-family-regular
           font-size: 14px
           color: #ACACAC
-          line-height: 14px
-        .form-image-box
-          margin-left: 40px
+          line-height: 1
+        &.form-img-item
+          height: 134px
+          flex-direction: column
+          align-items: flex-start
+          justify-content: flex-start
+          .form-image-box
+            width: 100%
+          .form-title
+            width: 100%
+            height: 46px
+            line-height: 46px
+          .img-con
+            display: flex
+            align-items: center
           .form-image
             flex-wrap: wrap
             display: flex
@@ -387,12 +417,11 @@
               flex-wrap: wrap
               display: flex
             .add-image
-              margin-bottom: 20px
               icon-image('icon-add_img')
-              height: 90px
+              height: 50px
               width: @height
               position: relative
-              border-radius: 2px
+              border-radius: 3px
               overflow: hidden
               .sendImage
                 height: 100%
@@ -403,14 +432,13 @@
                 z-index: 1
                 position: absolute
             .show-image
-              margin-bottom: 20px
               background-repeat: no-repeat
               background-size: cover
               background-position: center
-              height: 90px
-              margin-right: 20px
+              height: 50px
+              margin-right: 2.667vw
               width: @height
-              border-radius: 2px
+              border-radius: 3px
               position: relative
               overflow: hidden
               .img
@@ -435,39 +463,48 @@
                 all-center()
                 width: 25px
                 height: 25px
+      .form-btn
+        width: 100%
+        height: 45px
+        line-height: 45px
+        background: #343870
+        color: #fff
+        font-size: 16px
+        font-family: $font-family-regular
+        text-align: center
+        border-radius: 2px
+        opacity: 0.7
+        &.active
+          opacity: 1
 
   .approve-tips-model
+    box-sizing: border-box
     position: absolute
-    top: 74px
+    top: 0
     left: 0
-    bottom: 74px
     right: 0
     z-index: 101
-    layout()
-    align-items: center
-    justify-content: center
-
+    width: 100vw
+    height: 100vh
+    padding-top: 10.4vh
+    background: #fff
     .tips-con
       layout()
       align-items: center
       justify-content: center
-
+      color: #333333
       .tips-img
         width: 114px
         height: @width
-
       .tips-title
-        margin: 18px 0
+        margin: 22px 0 15px
         font-family: $font-family-medium
-        font-size: 22px
-        color: $color-text-main
+        font-size: 18px
         text-align: center
         line-height: 1
-
       .tips-text
         font-family: $font-family-regular
         font-size: 14px
-        color: #666666
         text-align: center
         line-height: 1
   .button-con
