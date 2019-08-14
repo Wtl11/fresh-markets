@@ -150,29 +150,32 @@
     },
     mounted() {
       this._getCategoryData()
-      let cityData = []
-      for(let proName in CITY_JSON) {
-        const _cityData = CITY_JSON[proName]
-        let provinceItem = {
-          value: proName,
-          children: []
-        }
-        for(let cityName in _cityData) {
-          const _areaData = _cityData[cityName]
-          let cityItem = {
-            value: cityName,
-            children: []
-          }
-          _areaData.forEach((areaName) => {
-            cityItem.children.push({value: areaName})
-          })
-          provinceItem.children.push(cityItem)
-        }
-        cityData.push(provinceItem)
-      }
-      this.cityPickerData = cityData
+      this._getCityData()
     },
     methods: {
+      _getCityData() {
+        let cityData = []
+        for (let proName in CITY_JSON) {
+          const _cityData = CITY_JSON[proName]
+          let provinceItem = {
+            value: proName,
+            children: []
+          }
+          for (let cityName in _cityData) {
+            const _areaData = _cityData[cityName]
+            let cityItem = {
+              value: cityName,
+              children: []
+            }
+            _areaData.forEach((areaName) => {
+              cityItem.children.push({value: areaName})
+            })
+            provinceItem.children.push(cityItem)
+          }
+          cityData.push(provinceItem)
+        }
+        this.cityPickerData = cityData
+      },
       _getCategoryData() {
         API.GoodsManage.getCategoryData({parent_id: -1})
           .then((res) => {
@@ -195,7 +198,6 @@
         this.$refs[`${item}Picker`] && this.$refs[`${item}Picker`].show()
       },
       _pickerConfirm(data) {
-        console.log(data)
         const firstIdx = data[0].index
         const secondIdx = data[1].index
         if (data[1].value === '') {
@@ -207,12 +209,12 @@
         }
       },
       _cityPickerConfirm(data) {
-        console.log(data)
         this.shopInfo.province = data[0].value
         this.shopInfo.city = data[1].value
         this.shopInfo.district = data[2].value
       },
       _addImg(applyKey, uploadKey, e) {
+        this.$loading.show('图片上传中')
         this.uploading = applyKey
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then(res => {
@@ -220,6 +222,7 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+          this.$loading.hide()
         }).catch(() => {
           this.uploadLoading = false
         })
@@ -235,6 +238,7 @@
           this.$toast.show('图片上传中,请勿重复操作！')
           return
         }
+        this.$loading.show('图片上传中')
         let arr = e.target.files
         let files = []
         let increasedQuantity = Math.max(limit - this[key].length, 0)
@@ -254,6 +258,7 @@
           }))
           this.uploading = ''
           e.target.value = ''
+          this.$loading.hide()
         })
 
       },
@@ -320,7 +325,7 @@
     box-sizing: border-box
     width: 100vw
     min-height: 100vh
-    background: #f3f3f3
+    background: #f7f7f7
     padding: 47.466vw 16px 16px
     .top-bg
       position: absolute

@@ -204,6 +204,7 @@
         this.shopInfo.district = data[2].includes('请选择') ? '' : data[2]
       },
       _addImg(applyKey, uploadKey, e) {
+        this.$loading.show('图片上传中')
         this.uploading = applyKey
         this.uploadLoading = true
         uploadFiles({files: [e.target.files[0]]}).then(res => {
@@ -211,6 +212,7 @@
           const resData = res[0].data
           this.shopInfo[applyKey] = resData.id
           this.uploadImg[uploadKey] = resData.url
+          this.$loading.hide()
         }).catch(() => {
           this.uploadLoading = false
         })
@@ -226,6 +228,7 @@
           this.$toast.show('图片上传中,请勿重复操作！')
           return
         }
+        this.$loading.show('图片上传中')
         let arr = e.target.files
         let files = []
         let increasedQuantity = Math.max(limit - this[key].length, 0)
@@ -245,6 +248,7 @@
           }))
           this.uploading = ''
           e.target.value = ''
+          this.$loading.hide()
         })
 
       },
